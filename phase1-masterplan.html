@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildIntel — Phase 1: Strategy & Master Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c10;
+  --surface: #111318;
+  --surface2: #1a1d24;
+  --border: #252830;
+  --border2: #2e3240;
+  --text: #e8eaf0;
+  --muted: #7a7f8e;
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #a8ff3e;
+  --accent4: #ffd60a;
+  --red: #ff3b5c;
+  --purple: #b06eff;
+  --syne: 'Syne', sans-serif;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--syne); line-height:1.6; overflow-x:hidden; }
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999; opacity:.4;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 60px 40px 40px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content:'';
+  position:absolute;
+  top:-200px; right:-200px;
+  width:600px; height:600px;
+  background: radial-gradient(circle, rgba(0,212,255,.07) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before {
+  content:'';
+  width: 32px; height: 1px;
+  background: var(--accent);
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  max-width: 900px;
+}
+.hero h1 span { color: var(--accent); font-style: italic; }
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 700px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hero-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid;
+  border-radius: 2px;
+}
+.badge-blue { color: var(--accent); border-color: var(--accent); background: rgba(0,212,255,.05); }
+.badge-orange { color: var(--accent2); border-color: var(--accent2); background: rgba(255,107,53,.05); }
+.badge-green { color: var(--accent3); border-color: var(--accent3); background: rgba(168,255,62,.05); }
+.badge-yellow { color: var(--accent4); border-color: var(--accent4); background: rgba(255,214,10,.05); }
+
+/* ── SIDEBAR NAV ── */
+.layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+.sidebar-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 20px;
+  margin-top: 12px;
+}
+.sidebar a {
+  display: block;
+  padding: 8px 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all .15s;
+  line-height: 1.4;
+}
+.sidebar a:hover, .sidebar a.active {
+  color: var(--text);
+  border-left-color: var(--accent);
+  background: rgba(0,212,255,.04);
+}
+.sidebar a.active { color: var(--accent); }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 0; }
+
+/* ── SECTION WRAPPER ── */
+.section {
+  padding: 48px 48px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(0,212,255,.08);
+  border: 1px solid rgba(0,212,255,.2);
+  padding: 4px 10px;
+  border-radius: 2px;
+  letter-spacing: .1em;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+/* ── ARCHITECTURE FLOW DIAGRAM ── */
+.flow-diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.flow-diagram::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(135deg, rgba(0,212,255,.02) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+/* Flow layers */
+.flow-layer {
+  margin-bottom: 8px;
+}
+.flow-layer-title {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  padding-left: 4px;
+  border-left: 2px solid var(--border2);
+  padding-left: 8px;
+}
+.flow-nodes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.flow-arrow {
+  text-align: center;
+  color: var(--muted);
+  font-size: 18px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.flow-arrow span { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+.node {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  position: relative;
+  transition: border-color .2s, background .2s;
+  cursor: default;
+}
+.node:hover { border-color: var(--accent); background: rgba(0,212,255,.04); }
+.node-label { font-size: 9px; color: var(--muted); display: block; margin-top: 2px; }
+.node.source { border-left: 3px solid var(--accent2); }
+.node.process { border-left: 3px solid var(--accent); }
+.node.store { border-left: 3px solid var(--purple); }
+.node.output { border-left: 3px solid var(--accent3); }
+.node.ai { border-left: 3px solid var(--accent4); }
+.node.api { border-left: 3px solid var(--red); }
+
+/* ── GRID LAYOUTS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.card::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2px;
+}
+.card.blue::after { background: var(--accent); }
+.card.orange::after { background: var(--accent2); }
+.card.green::after { background: var(--accent3); }
+.card.yellow::after { background: var(--accent4); }
+.card.purple::after { background: var(--purple); }
+.card.red::after { background: var(--red); }
+.card-icon { font-size: 24px; margin-bottom: 10px; }
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.card-body {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.tag.blue { background: rgba(0,212,255,.1); color: var(--accent); }
+.tag.orange { background: rgba(255,107,53,.1); color: var(--accent2); }
+.tag.green { background: rgba(168,255,62,.1); color: var(--accent3); }
+.tag.yellow { background: rgba(255,214,10,.1); color: var(--accent4); }
+.tag.purple { background: rgba(176,110,255,.1); color: var(--purple); }
+.tag.red { background: rgba(255,59,92,.1); color: var(--red); }
+
+/* ── COMPARISON TABLE ── */
+.compare-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.compare-table th {
+  background: var(--surface);
+  padding: 12px 16px;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border2);
+}
+.compare-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.compare-table tr:hover td { background: rgba(255,255,255,.015); }
+.check { color: var(--accent3); font-weight: 700; }
+.cross { color: var(--red); font-weight: 700; }
+.warn { color: var(--accent4); font-weight: 700; }
+.col-them { color: var(--muted); }
+.col-us { color: var(--text); font-weight: 600; }
+
+/* ── TECH STACK ── */
+.stack-row {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+.stack-label {
+  width: 140px;
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+}
+.stack-items {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.stack-item {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  padding: 8px 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 100px;
+}
+.stack-item .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before {
+  content:'';
+  position:absolute;
+  left:0; top:8px; bottom:8px;
+  width:2px;
+  background: linear-gradient(to bottom, var(--accent), var(--purple), var(--accent2));
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 28px;
+}
+.timeline-item::before {
+  content:'';
+  position:absolute;
+  left:-28px; top:6px;
+  width:10px; height:10px;
+  border-radius:50%;
+  background: var(--accent);
+  border:2px solid var(--bg);
+}
+.timeline-item:nth-child(2)::before { background: var(--purple); }
+.timeline-item:nth-child(3)::before { background: var(--accent2); }
+.timeline-item:nth-child(4)::before { background: var(--accent3); }
+.timeline-item:nth-child(5)::before { background: var(--accent4); }
+.timeline-phase {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.timeline-item:nth-child(2) .timeline-phase { color: var(--purple); }
+.timeline-item:nth-child(3) .timeline-phase { color: var(--accent2); }
+.timeline-item:nth-child(4) .timeline-phase { color: var(--accent3); }
+.timeline-item:nth-child(5) .timeline-phase { color: var(--accent4); }
+.timeline-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.timeline-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.timeline-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  padding: 3px 9px;
+  color: var(--text);
+}
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.code-block .comment { color: #6e7681; }
+.code-block .key { color: #79c0ff; }
+.code-block .val { color: #a5d6ff; }
+.code-block .str { color: #a8ff3e; }
+.code-block .num { color: #ffa657; }
+.code-block .kw { color: var(--purple); }
+
+/* ── URL STRUCTURE ── */
+.url-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-left: 3px solid;
+}
+.url-block.green { border-left-color: var(--accent3); }
+.url-block.blue { border-left-color: var(--accent); }
+.url-block.orange { border-left-color: var(--accent2); }
+.url-block.yellow { border-left-color: var(--accent4); }
+.url-path { color: var(--text); flex: 1; }
+.url-path .seg { color: var(--accent); }
+.url-path .seg2 { color: var(--accent4); }
+.url-path .seg3 { color: var(--accent3); }
+.url-desc { font-size: 10px; color: var(--muted); letter-spacing: .05em; }
+
+/* ── RADAR ── */
+.issue-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.issue-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 3px;
+}
+.issue-card.bad { border-left: 3px solid var(--red); }
+.issue-card.fix { border-left: 3px solid var(--accent3); }
+.issue-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.issue-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.label-bad { color: var(--red); }
+.label-fix { color: var(--accent3); }
+.issue-title { font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+.issue-body { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+
+/* ── MCP / API SCHEMA ── */
+.endpoint {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.endpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.method {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: .05em;
+}
+.method.get { background: rgba(168,255,62,.15); color: var(--accent3); }
+.method.post { background: rgba(0,212,255,.15); color: var(--accent); }
+.method.ws { background: rgba(176,110,255,.15); color: var(--purple); }
+.endpoint-path { font-family: var(--mono); font-size: 12px; color: var(--text); flex: 1; }
+.endpoint-desc { font-size: 11px; color: var(--muted); }
+.endpoint-body {
+  padding: 12px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── VISIBILITY STRATEGY ── */
+.vis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.vis-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 3px;
+}
+.vis-rank {
+  font-family: var(--mono);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.vis-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.vis-body { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+
+/* ── SCHEMA MARKUP BLOCK ── */
+.schema-box {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px 24px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.9;
+  overflow-x: auto;
+}
+.s-key { color: #79c0ff; }
+.s-val { color: #a8ff3e; }
+.s-str { color: #ffa657; }
+.s-punc { color: var(--muted); }
+
+/* ── TOP NAV ── */
+.top-nav-sticky {
+  background: rgba(10,12,16,.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--text);
+}
+.brand span { color: var(--accent); font-style: italic; }
+.nav-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 2px;
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover { color: var(--text); background: var(--surface); }
+.nav-progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent), var(--purple));
+  transition: width .1s;
+  width: 0%;
+  id: progress-bar;
+}
+
+/* ── FULL-WIDTH HERO (no sidebar) ── */
+.full-hero {
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .section { padding: 32px 24px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .vis-grid { grid-template-columns: 1fr 1fr; }
+  .issue-grid { grid-template-columns: 1fr; }
+}
+
+/* ── SCROLL ANIMATION ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.stagger-1 { transition-delay: .05s; }
+.stagger-2 { transition-delay: .1s; }
+.stagger-3 { transition-delay: .15s; }
+.stagger-4 { transition-delay: .2s; }
+</style>
+
+<style>
+.pnav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(6,7,10,0.96);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(255,255,255,0.06);height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-family:'JetBrains Mono','Space Mono',monospace;}
+.pnav-brand{font-size:13px;font-weight:700;color:#f0efe8;text-decoration:none;letter-spacing:-0.01em;flex-shrink:0;}
+.pnav-brand em{color:#e8863a;font-style:italic;}
+.pnav-phases{display:flex;align-items:center;gap:3px;flex:1;justify-content:center;}
+.pnav-btn{padding:4px 13px;font-family:inherit;font-size:9px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,239,232,0.3);background:transparent;border:1px solid transparent;border-radius:100px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;white-space:nowrap;}
+.pnav-btn:hover{color:rgba(240,239,232,0.75);background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.09);}
+.pnav-btn.active{color:#e8863a;background:rgba(232,134,58,0.1);border-color:rgba(232,134,58,0.28);}
+.pnav-btn.done{color:rgba(92,184,122,0.65);}
+.pnav-btn.done:hover{color:#5cb87a;background:rgba(92,184,122,0.06);border-color:rgba(92,184,122,0.15);}
+.pnav-btn.locked{color:rgba(240,239,232,0.2);pointer-events:none;}
+.pnav-dot{width:5px;height:5px;border-radius:50%;background:#e8863a;flex-shrink:0;animation:pnd 2s ease-in-out infinite;}
+@keyframes pnd{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}
+.pnav-sep{width:18px;height:1px;background:rgba(255,255,255,0.07);flex-shrink:0;}
+.pnav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.pnav-arrow{padding:4px 11px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,239,232,0.35);border:1px solid rgba(255,255,255,0.07);border-radius:100px;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px;}
+.pnav-arrow:hover{color:#f0efe8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);}
+.pnav-arrow.off{opacity:0.15;pointer-events:none;}
+.pnav-md{padding:4px 11px;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(58,184,160,0.75);border:1px solid rgba(58,184,160,0.22);border-radius:100px;text-decoration:none;transition:all 0.2s;background:rgba(58,184,160,0.05);}
+.pnav-md:hover{color:#3ab8a0;border-color:rgba(58,184,160,0.45);background:rgba(58,184,160,0.1);}
+body{padding-top:50px!important;}
+</style>
+</head>
+<body>
+
+<nav class="pnav">
+  <a href="phase1-masterplan.html" class="pnav-brand">Build<em>Intel</em></a>
+  <div class="pnav-phases"><span class="pnav-btn active"> P1 — Strategy</span><div class="pnav-sep"></div><a href="phase2-agents.html" class="pnav-btn">P2 — Agents</a><div class="pnav-sep"></div><a href="phase3-website.html" class="pnav-btn">P3 — Website</a><div class="pnav-sep"></div><span class="pnav-btn locked">🔒 P4 — Build</span></div>
+  <div class="pnav-right">
+    <span class="pnav-arrow off">← Prev</span>
+    <a href="phase2-agents.html" class="pnav-arrow">Next →</a>
+    <a href="phase1-masterplan.md" class="pnav-md" download>⬇ MD</a>
+  </div>
+</nav>
+
+
+<!-- TOP NAV -->
+<nav class="top-nav-sticky">
+  <div class="brand">Build<span>Intel</span> — Master Blueprint</div>
+  <ul class="nav-links">
+    <li><a href="#data-flow">Data Flow</a></li>
+    <li><a href="#tech-stack">Tech Stack</a></li>
+    <li><a href="#ui-audit">UI Audit</a></li>
+    <li><a href="#seo">SEO</a></li>
+    <li><a href="#gpt">GPT-Ready</a></li>
+    <li><a href="#mcp">MCP/API</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ul>
+  <div class="nav-progress" id="progressBar"></div>
+</nav>
+
+<!-- HERO -->
+<div class="full-hero">
+  <div style="padding: 56px 48px 40px; max-width:1400px; margin:0 auto;">
+    <div class="hero-eyebrow">AI + ACEM News Platform — Technical Master Plan</div>
+    <h1 style="font-family:var(--serif);font-size:clamp(36px,4.5vw,58px);line-height:1.1;margin-bottom:16px;max-width:900px;">
+      How to Build the <span style="color:var(--accent);font-style:italic;">Definitive</span> Automated News Platform for Architecture, Construction, Engineering & Manufacturing
+    </h1>
+    <p style="font-size:15px;color:var(--muted);max-width:780px;line-height:1.75;margin-bottom:32px;">
+      A complete blueprint covering automated data ingestion, real-time publishing pipeline, GPT-readable architecture, AI-powered content layer, structured SEO, and a future-ready MCP server — all built to outperform GovExec in niche authority.
+    </p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <span class="hero-badge badge-blue">7 Architecture Layers</span>
+      <span class="hero-badge badge-orange">14 Data Sources</span>
+      <span class="hero-badge badge-green">GPT + MCP Ready</span>
+      <span class="hero-badge badge-yellow">Full SEO Blueprint</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout" style="max-width:1400px;margin:0 auto;">
+
+<!-- SIDEBAR NAV -->
+<nav class="sidebar">
+  <div class="sidebar-label">Architecture</div>
+  <a href="#data-flow" class="active">01 — Data Flow Pipeline</a>
+  <a href="#tech-stack">02 — Full Tech Stack</a>
+  <a href="#automation">03 — Automation Engine</a>
+
+  <div class="sidebar-label">UI & Design</div>
+  <a href="#ui-audit">04 — GovExec UI Audit</a>
+  <a href="#url-structure">05 — URL & Structure</a>
+  <a href="#schema">06 — Schema Markup</a>
+
+  <div class="sidebar-label">Visibility</div>
+  <a href="#seo">07 — SEO Strategy</a>
+  <a href="#visibility">08 — Growth Playbook</a>
+
+  <div class="sidebar-label">AI Layer</div>
+  <a href="#gpt">09 — GPT-Readable Design</a>
+  <a href="#mcp">10 — MCP Server Plan</a>
+  <a href="#agents">11 — AI Agents</a>
+
+  <div class="sidebar-label">Execution</div>
+  <a href="#roadmap">12 — Build Roadmap</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 01 — DATA FLOW PIPELINE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="data-flow">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div>
+      <div class="section-title">Automated Data Flow Pipeline</div>
+      <div class="section-desc">How live news gets from the world into your website automatically — ingestion, processing, scoring, enrichment, and publishing without manual intervention.</div>
+    </div>
+  </div>
+
+  <div class="flow-diagram fade-up">
+
+    <!-- LAYER 1: SOURCES -->
+    <div class="flow-layer">
+      <div class="flow-layer-title">Layer 1 — Live Data Sources (14 feed types)</div>
+      <div class="flow-nodes">
+        <div class="node source">📡 RSS Feeds<span class="node-label">Construction Dive, ENR, AEC Mag</span></div>
+        <div class="node source">🐦 X/Twitter API<span class="node-label">Industry keywords + accounts</span></div>
+        <div class="node source">📰 News APIs<span class="node-label">NewsAPI, GDELT, Bing News</span></div>
+        <div class="node source">🏛️ Gov Feeds<span class="node-label">Regulations.gov, Federal Register, EU EUR-Lex</span></div>
+        <div class="node source">💰 Funding DBs<span class="node-label">Crunchbase, PitchBook webhook</span></div>
+        <div class="node source">📄 ArXiv/Research<span class="node-label">AI+construction papers feed</span></div>
+        <div class="node source">🌐 Web Scraper<span class="node-label">Playwright / Bright Data</span></div>
+        <div class="node source">🎙️ Podcast RSS<span class="node-label">ConTech podcasts auto-transcribed</span></div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ <span>Raw data streams → Message Queue (Apache Kafka / Upstash)</span></div>
+
+    <!-- LAYER 2: PROCESSING -->
+    <div class="flow-layer">
+      <div class="flow-layer-title">Layer 2 — AI Processing & Enrichment Engine</div>
+      <div class="flow-nodes">
+        <div class="node ai">🤖 Relevance Scorer<span class="node-label">Claude/GPT-4o classifies ACEM relevance 0–100</span></div>
+        <div class="node ai">🏷️ Auto-Tagger<span class="node-label">Extracts sector, topic, companies, people</span></div>
+        <div class="node ai">📝 Summarizer<span class="node-label">Generates 3-sentence summary + "Why it matters"</span></div>
+        <div class="node ai">🔗 Deduplicator<span class="node-label">Semantic similarity → prevents duplicate stories</span></div>
+        <div class="node ai">📊 Trend Detector<span class="node-label">Clusters related stories → identifies breaking trends</span></div>
+        <div class="node ai">🌍 Geo + Org NER<span class="node-label">Extracts locations, companies, regulations cited</span></div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ <span>Enriched structured articles → Content Queue (priority-ordered)</span></div>
+
+    <!-- LAYER 3: EDITORIAL GATE -->
+    <div class="flow-layer">
+      <div class="flow-layer-title">Layer 3 — Editorial Gate (Human-in-the-Loop + Auto-Publish Rules)</div>
+      <div class="flow-nodes">
+        <div class="node process">⚡ Auto-Publish Queue<span class="node-label">Score ≥ 85 + verified source → live in 2 min</span></div>
+        <div class="node process">📋 Editor Review Queue<span class="node-label">Score 60–84 → editor approval UI (Slack/web dashboard)</span></div>
+        <div class="node process">🚫 Filter Queue<span class="node-label">Score &lt; 60 or uncategorized → archived, not published</span></div>
+        <div class="node process">🔥 Breaking News Flag<span class="node-label">High-velocity stories trigger top-of-site alert banner</span></div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ <span>Approved articles → CMS Content API</span></div>
+
+    <!-- LAYER 4: CMS + STORAGE -->
+    <div class="flow-layer">
+      <div class="flow-layer-title">Layer 4 — Content Management & Storage</div>
+      <div class="flow-nodes">
+        <div class="node store">🗄️ Sanity.io CMS<span class="node-label">Headless CMS — structured content + rich text</span></div>
+        <div class="node store">🐘 PostgreSQL<span class="node-label">Articles, authors, taxonomy, analytics events</span></div>
+        <div class="node store">🔴 Redis Cache<span class="node-label">Homepage feed, trending topics, real-time counters</span></div>
+        <div class="node store">🔍 Meilisearch<span class="node-label">Full-text search index — sub-50ms queries</span></div>
+        <div class="node store">🗃️ S3/R2<span class="node-label">Images, PDFs, podcast audio, archives</span></div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ <span>Content served via CDN + API layer</span></div>
+
+    <!-- LAYER 5: DELIVERY -->
+    <div class="flow-layer">
+      <div class="flow-layer-title">Layer 5 — Delivery & Publishing Layer</div>
+      <div class="flow-nodes">
+        <div class="node output">🌐 Next.js Website<span class="node-label">ISR + SSG — fast, SEO-perfect pages</span></div>
+        <div class="node output">📧 Newsletter Engine<span class="node-label">Auto-curated daily briefing via Resend/Mailchimp</span></div>
+        <div class="node output">📡 RSS/Atom Feeds<span class="node-label">Section feeds + topic feeds for external syndication</span></div>
+        <div class="node output">🤖 JSON-LD API<span class="node-label">Machine-readable structured data for GPT crawlers</span></div>
+        <div class="node output">🔔 Push Notifications<span class="node-label">Web push for breaking news via Service Worker</span></div>
+        <div class="node api">🔌 Public REST API<span class="node-label">Future MCP server endpoint — /api/v1/articles</span></div>
+      </div>
+    </div>
+
+  </div><!-- end flow-diagram -->
+
+  <!-- KEY METRICS CARDS -->
+  <div class="grid-4" style="margin-top:20px;">
+    <div class="card blue fade-up stagger-1">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Auto-publish latency</div>
+      <div class="card-body">From source feed → live article: under 4 minutes for high-scored stories</div>
+    </div>
+    <div class="card orange fade-up stagger-2">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">ACEM relevance filter</div>
+      <div class="card-body">AI classifier trained on ACEM taxonomy rejects non-relevant news before it enters queue</div>
+    </div>
+    <div class="card green fade-up stagger-3">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Publishing volume target</div>
+      <div class="card-body">15–25 auto-published briefs/day + 3–5 editor-written deep dives/week</div>
+    </div>
+    <div class="card yellow fade-up stagger-4">
+      <div class="card-icon">🔄</div>
+      <div class="card-title">Feed refresh rate</div>
+      <div class="card-body">RSS/API sources polled every 5 min; Gov/regulatory feeds polled every 15 min</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 02 — TECH STACK -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="tech-stack">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div>
+      <div class="section-title">Full Technology Stack</div>
+      <div class="section-desc">Every layer from infrastructure to frontend — chosen for performance, SEO, and future-proof AI extensibility.</div>
+    </div>
+  </div>
+
+  <div class="stack-row fade-up">
+    <div class="stack-label">Frontend</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Next.js 15 (App Router)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent2)"></span>TypeScript</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>Tailwind CSS</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent4)"></span>Framer Motion</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">CMS</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Sanity.io (headless)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--purple)"></span>GROQ query lang</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent2)"></span>Portable Text (rich text)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">Database</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>PostgreSQL (Neon/Supabase)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--red)"></span>Redis (Upstash)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Meilisearch</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent4)"></span>Cloudflare R2 (storage)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">AI Layer</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent4)"></span>Claude 3.5 Sonnet (classification + summaries)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>OpenAI text-embedding-3</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>Langchain (orchestration)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">Ingestion</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent2)"></span>Playwright (scraping)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--purple)"></span>Inngest (background jobs)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Upstash Kafka (queue)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>Cheerio (RSS parse)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">Newsletter</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Resend (transactional)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>Listmonk (self-hosted list mgmt)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent4)"></span>React Email (templates)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">Search & SEO</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Meilisearch (site search)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--red)"></span>next-sitemap (XML sitemaps)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>JSON-LD Schema</div>
+      <div class="stack-item"><span class="dot" style="background:var(--purple)"></span>Vercel OG (auto og:image)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">Infrastructure</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>Vercel (frontend + ISR)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent2)"></span>Railway (backend workers)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>Cloudflare (CDN + DNS)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent4)"></span>Sentry (monitoring)</div>
+    </div>
+  </div>
+  <div class="stack-row fade-up">
+    <div class="stack-label">MCP / API</div>
+    <div class="stack-items">
+      <div class="stack-item"><span class="dot" style="background:var(--purple)"></span>tRPC (type-safe API)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent)"></span>MCP SDK (future server)</div>
+      <div class="stack-item"><span class="dot" style="background:var(--accent3)"></span>OpenAPI spec (REST docs)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 03 — AUTOMATION ENGINE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="automation">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div>
+      <div class="section-title">Automation Engine — How Stories Get Written</div>
+      <div class="section-desc">Three tiers of content: fully automated briefs, AI-assisted deep dives, and human-written features. Each has a distinct pipeline.</div>
+    </div>
+  </div>
+
+  <div class="grid-3 fade-up">
+    <div class="card blue">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:10px;letter-spacing:.15em;">TIER 1 — FULLY AUTOMATED</div>
+      <div class="card-title">⚡ News Briefs (15–25/day)</div>
+      <div class="card-body">
+        Source detected → AI relevance check → NER extraction (companies, regulations, people) → 3-sentence summary generated → "Why it matters for ACEM" paragraph → auto-tags assigned → SEO title + meta generated → published to site + queued for daily newsletter
+      </div>
+      <div class="card-tags" style="margin-top:12px;">
+        <span class="tag blue">0 human hours</span>
+        <span class="tag green">4-min latency</span>
+      </div>
+    </div>
+    <div class="card orange">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--accent2);margin-bottom:10px;letter-spacing:.15em;">TIER 2 — AI-ASSISTED</div>
+      <div class="card-title">📋 Analysis Pieces (3–5/week)</div>
+      <div class="card-body">
+        AI drafts 800-word structured article from multiple sources (Semafor format: What Happened / Why It Matters / Room for Disagreement / View From Industry) → editor reviews + edits in CMS → editor adds original reporting / expert quotes → published with full byline
+      </div>
+      <div class="card-tags" style="margin-top:12px;">
+        <span class="tag orange">30-min editor time</span>
+        <span class="tag yellow">high SEO value</span>
+      </div>
+    </div>
+    <div class="card green">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--accent3);margin-bottom:10px;letter-spacing:.15em;">TIER 3 — HUMAN-LED</div>
+      <div class="card-title">🔬 Deep Dives (1–2/week)</div>
+      <div class="card-body">
+        Reporter identifies angle → AI provides research briefing (related articles, data points, regulatory context, company background) → reporter writes full 1,500+ word piece → editor review → published as premium flagship content + newsletter feature
+      </div>
+      <div class="card-tags" style="margin-top:12px;">
+        <span class="tag purple">full editorial</span>
+        <span class="tag blue">authority builder</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;" class="fade-up">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Newsletter Auto-Curation Logic</div>
+    <div class="code-block">
+<span class="comment">// Daily Newsletter Curation — runs at 5:30am ET</span>
+<span class="kw">const</span> <span class="key">dailyBriefing</span> = {
+  <span class="key">format</span>: <span class="str">"ACEM AI Daily Briefing"</span>,
+  <span class="key">time</span>: <span class="str">"06:00 ET"</span>,
+  <span class="key">selection</span>: {
+    <span class="key">topStory</span>: <span class="comment">// highest relevance score from last 24h</span>
+    <span class="key">sectionPicks</span>: <span class="comment">// 1 from each: Architecture, Construction, Engineering, Mfg, Policy</span>
+    <span class="key">fundingRound</span>: <span class="comment">// latest AI+ACEM investment if published</span>
+    <span class="key">regulationAlert</span>: <span class="comment">// any gov/regulatory story published ≥ 12h ago</span>
+  },
+  <span class="key">generation</span>: <span class="str">"AI writes subject line, 2-line preview per story"</span>,
+  <span class="key">personalization</span>: <span class="str">"future: segment by sector preference"</span>
+}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 04 — GOVEXEC UI AUDIT -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="ui-audit">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div>
+      <div class="section-title">GovExec UI Audit — What Works, What Doesn't, What We Build Better</div>
+      <div class="section-desc">A systematic audit of GovExec's interface decisions: the wins to replicate, the problems to solve, and the improvements that will make your site demonstrably better.</div>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto;margin-bottom:24px;" class="fade-up">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>UI Element</th>
+          <th>GovExec's Approach</th>
+          <th>Problem</th>
+          <th>Our Improvement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Homepage hero</strong></td>
+          <td class="col-them">Single hero story + 4-story skybox carousel</td>
+          <td><span class="warn">⚠</span> Skybox carousel is ad-heavy, slow, auto-rotates (UX dark pattern)</td>
+          <td class="col-us"><span class="check">✓</span> Static 3-story hero grid with category labels — no auto-rotation, faster load</td>
+        </tr>
+        <tr>
+          <td><strong>Typography</strong></td>
+          <td class="col-them">Standard serif headline + body — decent but generic</td>
+          <td><span class="warn">⚠</span> No visual hierarchy differentiation between story types</td>
+          <td class="col-us"><span class="check">✓</span> Display serif for headlines, mono for metadata, distinct sizes signal story weight</td>
+        </tr>
+        <tr>
+          <td><strong>Breaking news banner</strong></td>
+          <td class="col-them">Red static bar at top — just "Breaking" label with no content</td>
+          <td><span class="cross">✗</span> Not informational — decorative only, doesn't auto-update</td>
+          <td class="col-us"><span class="check">✓</span> Live scrolling ticker with actual breaking headline text, auto-refreshes via SWR</td>
+        </tr>
+        <tr>
+          <td><strong>Section navigation</strong></td>
+          <td class="col-them">Dark nav bar with text category links</td>
+          <td><span class="warn">⚠</span> No visual indication of active section or article count</td>
+          <td class="col-us"><span class="check">✓</span> Active section highlighted + live article count badge, sticky on scroll</td>
+        </tr>
+        <tr>
+          <td><strong>Article layout</strong></td>
+          <td class="col-them">2-column: article body + sidebar with ads + related</td>
+          <td><span class="warn">⚠</span> Sidebar collapses poorly on mobile; ads interrupt read flow</td>
+          <td class="col-us"><span class="check">✓</span> Floating progress indicator, sticky "key facts" sidebar, related stories BELOW article not beside</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile experience</strong></td>
+          <td class="col-them">Responsive but not mobile-first designed</td>
+          <td><span class="cross">✗</span> Navigation is collapsed behind hamburger — bad for SEO + UX</td>
+          <td class="col-us"><span class="check">✓</span> Bottom tab bar on mobile (Home, Search, Sections, Newsletter, Bookmarks) — native app feel</td>
+        </tr>
+        <tr>
+          <td><strong>Search</strong></td>
+          <td class="col-them">Basic top-of-page search input</td>
+          <td><span class="cross">✗</span> No instant results, no filters, poor discovery for older articles</td>
+          <td class="col-us"><span class="check">✓</span> Command-palette search (⌘K) with instant results, filters by section/date/type</td>
+        </tr>
+        <tr>
+          <td><strong>Load speed</strong></td>
+          <td class="col-them">~3.2s LCP on mobile (GTmetrix data)</td>
+          <td><span class="cross">✗</span> Heavy ad scripts delay content — Core Web Vitals penalty from Google</td>
+          <td class="col-us"><span class="check">✓</span> Target LCP &lt;1.5s via ISR, lazy-loaded ads, next/image, Cloudflare CDN</td>
+        </tr>
+        <tr>
+          <td><strong>Dark mode</strong></td>
+          <td class="col-them">None — forced light theme only</td>
+          <td><span class="cross">✗</span> Poor experience for 82% of users who prefer dark mode (2025 stat)</td>
+          <td class="col-us"><span class="check">✓</span> Automatic system-preference dark mode + manual toggle, stored in localStorage</td>
+        </tr>
+        <tr>
+          <td><strong>Personalization</strong></td>
+          <td class="col-them">Segment-based newsletter signup wizard</td>
+          <td><span class="warn">⚠</span> No content personalization on site itself</td>
+          <td class="col-us"><span class="check">✓</span> "My Sections" preference saved to cookie — homepage reorders based on preference</td>
+        </tr>
+        <tr>
+          <td><strong>Data & trackers</strong></td>
+          <td class="col-them">Special report pages with static content</td>
+          <td><span class="cross">✗</span> No live updating data — workforce tracker is manually updated</td>
+          <td class="col-us"><span class="check">✓</span> Live-updating data dashboards (AI adoption tracker, funding tracker, regulation map) via API</td>
+        </tr>
+        <tr>
+          <td><strong>Social sharing</strong></td>
+          <td class="col-them">Standard share buttons below article</td>
+          <td><span class="warn">⚠</span> No native share, no pre-populated Twitter text with key stat</td>
+          <td class="col-us"><span class="check">✓</span> Web Share API on mobile, pre-populated tweet with article stat, LinkedIn article link</td>
+        </tr>
+        <tr>
+          <td><strong>AI/GPT readability</strong></td>
+          <td class="col-them">Standard HTML with basic meta tags</td>
+          <td><span class="cross">✗</span> No structured data API, no LLMs.txt, no machine-readable content layer</td>
+          <td class="col-us"><span class="check">✓</span> Full JSON-LD NewsArticle schema, LLMs.txt, /api/articles REST endpoint, MCP server (Phase 2)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="issue-grid fade-up">
+    <div class="issue-card fix">
+      <div class="issue-header">
+        <div class="issue-label label-fix">✓ UI WIN — Replicate This</div>
+      </div>
+      <div class="issue-title">GovExec's editorial hierarchy is excellent</div>
+      <div class="issue-body">The visual weight system — large hero → skybox → article grid → rail stories — creates a clear reading path. Keep this hierarchy but execute with better typography and faster rendering.</div>
+    </div>
+    <div class="issue-card fix">
+      <div class="issue-header">
+        <div class="issue-label label-fix">✓ UI WIN — Replicate This</div>
+      </div>
+      <div class="issue-title">Section tag + byline + timestamp system</div>
+      <div class="issue-body">Every article displays section tag in accent color + author name + timestamp prominently. This builds trust and signals recency. Use the same pattern with mono font for technical credibility.</div>
+    </div>
+    <div class="issue-card bad">
+      <div class="issue-header">
+        <div class="issue-label label-bad">✗ Critical Issue — Fix This</div>
+      </div>
+      <div class="issue-title">Ad-first layout kills reading experience</div>
+      <div class="issue-body">GovExec shows 3+ ad units before article body on mobile. This is a CLS killer (Core Web Vitals) and reader hostile. Our site should load content first — ads deferred to after first contentful paint.</div>
+    </div>
+    <div class="issue-card bad">
+      <div class="issue-header">
+        <div class="issue-label label-bad">✗ Critical Issue — Fix This</div>
+      </div>
+      <div class="issue-title">No AI-readable data layer exists</div>
+      <div class="issue-body">GovExec has no public API, no structured JSON-LD on all pages, and no LLMs.txt. This is your 2026 competitive moat: building the first ACEM news site designed to be consumed by AI agents and GPT tools from day one.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 05 — URL STRUCTURE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="url-structure">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div>
+      <div class="section-title">URL Architecture & Site Structure</div>
+      <div class="section-desc">Every URL is an SEO signal. Semantic, hierarchical URLs telling Google exactly what each page is about.</div>
+    </div>
+  </div>
+
+  <div class="fade-up">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Article Pages</div>
+    <div class="url-block green">
+      <div class="url-path">yourdomain.com/<span class="seg">construction</span>/<span class="seg2">2026</span>/<span class="seg2">03</span>/<span class="seg3">built-robotics-autonomous-excavator-ai-safety</span>/</div>
+      <div class="url-desc">→ section / year / month / keyword-rich slug</div>
+    </div>
+    <div class="url-block blue">
+      <div class="url-path">yourdomain.com/<span class="seg">manufacturing</span>/<span class="seg2">2026</span>/<span class="seg2">03</span>/<span class="seg3">siemens-nvidia-ai-factory-partnership</span>/</div>
+      <div class="url-desc">→ manufacturing section article</div>
+    </div>
+  </div>
+  <div class="fade-up" style="margin-top:16px;">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Section Landing Pages (pillar pages)</div>
+    <div class="url-block orange">
+      <div class="url-path">yourdomain.com/<span class="seg">architecture</span>/</div>
+      <div class="url-desc">→ AI in Architecture section — latest news + pillar guide + tools</div>
+    </div>
+    <div class="url-block orange">
+      <div class="url-path">yourdomain.com/<span class="seg">policy</span>/</div>
+      <div class="url-desc">→ Government & Regulation section — highest-opportunity SEO gap</div>
+    </div>
+  </div>
+  <div class="fade-up" style="margin-top:16px;">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Topic Tag Pages (SEO clusters)</div>
+    <div class="url-block yellow">
+      <div class="url-path">yourdomain.com/<span class="seg">topic</span>/<span class="seg3">eu-ai-act-construction</span>/</div>
+      <div class="url-desc">→ aggregates ALL articles tagged with "EU AI Act" + "construction"</div>
+    </div>
+    <div class="url-block yellow">
+      <div class="url-path">yourdomain.com/<span class="seg">topic</span>/<span class="seg3">digital-twins</span>/</div>
+      <div class="url-desc">→ cross-sector topic page spanning all 4 ACEM industries</div>
+    </div>
+  </div>
+  <div class="fade-up" style="margin-top:16px;">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Special Pages</div>
+    <div class="url-block blue">
+      <div class="url-path">yourdomain.com/<span class="seg">data</span>/<span class="seg3">ai-adoption-tracker</span>/</div>
+      <div class="url-desc">→ live data dashboard — earns backlinks from trade publications citing your data</div>
+    </div>
+    <div class="url-block green">
+      <div class="url-path">yourdomain.com/<span class="seg">api</span>/<span class="seg3">v1/articles</span>?sector=construction&limit=10</div>
+      <div class="url-desc">→ public REST API — future MCP server endpoint</div>
+    </div>
+    <div class="url-block orange">
+      <div class="url-path">yourdomain.com/<span class="seg">llms.txt</span></div>
+      <div class="url-desc">→ machine-readable site manifest for LLM crawlers (new emerging standard)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 06 — SCHEMA MARKUP -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="schema">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div>
+      <div class="section-title">Structured Data & Schema Markup</div>
+      <div class="section-desc">JSON-LD schema on every page makes your content readable by Google, Bing News, AI crawlers, and your own MCP server. This is the foundation of GPT-readability.</div>
+    </div>
+  </div>
+
+  <div class="grid-2 fade-up">
+    <div>
+      <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Article Page Schema (NewsArticle)</div>
+      <div class="schema-box">
+<span class="s-punc">{</span>
+  <span class="s-key">"@context"</span><span class="s-punc">:</span> <span class="s-val">"https://schema.org"</span><span class="s-punc">,</span>
+  <span class="s-key">"@type"</span><span class="s-punc">:</span> <span class="s-val">"NewsArticle"</span><span class="s-punc">,</span>
+  <span class="s-key">"headline"</span><span class="s-punc">:</span> <span class="s-str">"{{article.title}}"</span><span class="s-punc">,</span>
+  <span class="s-key">"datePublished"</span><span class="s-punc">:</span> <span class="s-str">"{{article.publishedAt}}"</span><span class="s-punc">,</span>
+  <span class="s-key">"dateModified"</span><span class="s-punc">:</span> <span class="s-str">"{{article.updatedAt}}"</span><span class="s-punc">,</span>
+  <span class="s-key">"articleSection"</span><span class="s-punc">:</span> <span class="s-str">"{{article.section}}"</span><span class="s-punc">,</span>
+  <span class="s-key">"keywords"</span><span class="s-punc">:</span> <span class="s-str">"{{article.tags.join(', ')}}"</span><span class="s-punc">,</span>
+  <span class="s-key">"author"</span><span class="s-punc">:</span> <span class="s-punc">{</span>
+    <span class="s-key">"@type"</span><span class="s-punc">:</span> <span class="s-val">"Person"</span><span class="s-punc">,</span>
+    <span class="s-key">"name"</span><span class="s-punc">:</span> <span class="s-str">"{{author.name}}"</span><span class="s-punc">,</span>
+    <span class="s-key">"sameAs"</span><span class="s-punc">:</span> <span class="s-str">"{{author.linkedinUrl}}"</span>
+  <span class="s-punc">},</span>
+  <span class="s-key">"publisher"</span><span class="s-punc">:</span> <span class="s-punc">{</span>
+    <span class="s-key">"@type"</span><span class="s-punc">:</span> <span class="s-val">"Organization"</span><span class="s-punc">,</span>
+    <span class="s-key">"name"</span><span class="s-punc">:</span> <span class="s-str">"BuildIntel"</span><span class="s-punc">,</span>
+    <span class="s-key">"logo"</span><span class="s-punc">:</span> <span class="s-punc">{ </span><span class="s-key">"@type"</span><span class="s-punc">:</span> <span class="s-val">"ImageObject"</span><span class="s-punc"> }</span>
+  <span class="s-punc">},</span>
+  <span class="s-key">"description"</span><span class="s-punc">:</span> <span class="s-str">"{{article.summary}}"</span><span class="s-punc">,</span>
+  <span class="s-key">"about"</span><span class="s-punc">:</span> <span class="s-punc">[</span><span class="s-val">"{{article.aiTopics}}"</span><span class="s-punc">]</span>
+<span class="s-punc">}</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--accent3);margin-bottom:10px;">LLMs.txt — Machine Manifest</div>
+      <div class="schema-box">
+<span class="comment"># BuildIntel — AI + ACEM News Platform</span>
+<span class="comment"># This file follows the llms.txt standard</span>
+<span class="comment"># for LLM-readable site metadata</span>
+
+<span class="s-key">name:</span> <span class="s-str">BuildIntel</span>
+<span class="s-key">description:</span> <span class="s-str">Daily AI news covering Architecture,
+  Construction, Engineering & Manufacturing</span>
+<span class="s-key">api:</span> <span class="s-str">https://yourdomain.com/api/v1</span>
+<span class="s-key">rss:</span> <span class="s-str">https://yourdomain.com/rss.xml</span>
+<span class="s-key">sitemap:</span> <span class="s-str">https://yourdomain.com/sitemap.xml</span>
+<span class="s-key">sections:</span>
+  - <span class="s-str">/architecture</span>
+  - <span class="s-str">/construction</span>
+  - <span class="s-str">/engineering</span>
+  - <span class="s-str">/manufacturing</span>
+  - <span class="s-str">/policy</span>
+<span class="s-key">content_license:</span> <span class="s-str">All Rights Reserved</span>
+<span class="s-key">robots_policy:</span> <span class="s-str">AI summaries permitted,
+  reproduction requires attribution</span>
+<span class="s-key">mcp_server:</span> <span class="s-str">https://mcp.yourdomain.com/sse</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 07 — SEO STRATEGY -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="seo">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div>
+      <div class="section-title">SEO Strategy — How You Rank on Google</div>
+      <div class="section-desc">Three-phase SEO approach: first own the uncontested regulatory keywords, then build topical authority per sector, then compete on broad AI+ACEM terms.</div>
+    </div>
+  </div>
+
+  <div class="grid-3 fade-up">
+    <div class="card red">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">Phase 1 — Quick Wins (0–3 months)</div>
+      <div class="card-title">🎯 Zero-Competition Keywords</div>
+      <div class="card-body" style="font-size:11px;">
+        <strong style="color:var(--text);display:block;margin-bottom:6px;">Target first:</strong>
+        • "EU AI Act construction compliance"<br>
+        • "OSHA AI regulations manufacturing"<br>
+        • "AI construction site safety OSHA"<br>
+        • "Building AI Act high-risk systems"<br>
+        • "CHIPS Act construction workers"<br>
+        • "physical AI construction 2026"
+      </div>
+      <div class="card-tags">
+        <span class="tag red">~0 quality competitors</span>
+      </div>
+    </div>
+    <div class="card yellow">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent4);margin-bottom:8px;">Phase 2 — Pillar Authority (3–9 months)</div>
+      <div class="card-title">🏛️ Topic Cluster Strategy</div>
+      <div class="card-body" style="font-size:11px;">
+        <strong style="color:var(--text);display:block;margin-bottom:6px;">Build 5 pillar pages + 10 supporting articles each:</strong>
+        • "AI in construction" (pillar) + safety/robots/BIM/costs...<br>
+        • "AI in architecture" + generative design/rendering...<br>
+        • "AI in manufacturing" + predictive maintenance/cobots...<br>
+        • "Digital twins" + cross-sector cluster<br>
+        • "Construction robotics" + company profiles
+      </div>
+      <div class="card-tags">
+        <span class="tag yellow">medium competition</span>
+      </div>
+    </div>
+    <div class="card blue">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Phase 3 — Authority (9–18 months)</div>
+      <div class="card-title">📈 Broad + Brand Keywords</div>
+      <div class="card-body" style="font-size:11px;">
+        <strong style="color:var(--text);display:block;margin-bottom:6px;">Compete once domain authority is built:</strong>
+        • "AI construction news"<br>
+        • "construction technology news"<br>
+        • "AI manufacturing news"<br>
+        • "ACEM industry AI"<br>
+        • "Autodesk AI news"<br>
+        • "construction robotics news"
+      </div>
+      <div class="card-tags">
+        <span class="tag blue">high competition, high volume</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;" class="fade-up">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Google News & Discover Optimization</div>
+    <div class="grid-2">
+      <div class="card green">
+        <div class="card-title">📰 Google News Publisher Registration</div>
+        <div class="card-body">Submit to Google News Publisher Center on launch day. Requirements: original reporting, clear bylines, publication date, NewsArticle schema, news XML sitemap updated every 2 minutes. This puts articles in news carousels — biggest single traffic driver.</div>
+      </div>
+      <div class="card purple">
+        <div class="card-title">🔍 Google Discover Optimization</div>
+        <div class="card-body">Discover sends traffic based on topical interest signals. Key: high-quality featured images (1200×628px minimum), fast mobile LCP, E-E-A-T signals (expert authors, about pages, external citations of your work). Aim for 1,000+ articles indexed within 90 days.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 08 — VISIBILITY GROWTH -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="visibility">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div>
+      <div class="section-title">Visibility Growth Playbook</div>
+      <div class="section-desc">How GovExec grew from a print magazine to 1M+ monthly visitors — and how you replicate that with a 10x faster modern playbook.</div>
+    </div>
+  </div>
+
+  <div class="vis-grid fade-up">
+    <div class="vis-card">
+      <div class="vis-rank">01</div>
+      <div class="vis-title">Newsletter-first growth engine</div>
+      <div class="vis-body">Your newsletter is your moat. GovExec's 300k+ subscriber list is their primary distribution asset. Launch with just the daily briefing. Every article page has an inline signup. Target: 10k subscribers in 90 days before you worry about any other channel.</div>
+    </div>
+    <div class="vis-card">
+      <div class="vis-rank">02</div>
+      <div class="vis-title">LinkedIn as primary social channel</div>
+      <div class="vis-body">ACEM professionals are on LinkedIn, not Twitter. Post every article as a LinkedIn native post (not link) with a 3-line hook + key stat + "full story in comments." Algorithm rewards native content. Build the publication page + founder personal brand simultaneously.</div>
+    </div>
+    <div class="vis-card">
+      <div class="vis-rank">03</div>
+      <div class="vis-title">Original data as backlink bait</div>
+      <div class="vis-body">The AI Adoption Tracker and Funding Database will earn backlinks from trade publications, law firms, and VC newsletters citing your data. This is how you build Domain Authority 40+ in under 12 months — one well-designed data dashboard can earn 50+ backlinks.</div>
+    </div>
+    <div class="vis-card">
+      <div class="vis-rank">04</div>
+      <div class="vis-title">Regulatory content timing strategy</div>
+      <div class="vis-body">EU AI Act high-risk deadline is August 2, 2026. Colorado AI Act effective June 30, 2026. Publish comprehensive compliance guides 60–90 days before each deadline. Searches for these terms spike dramatically as deadlines approach — you'll capture enormous traffic.</div>
+    </div>
+    <div class="vis-card">
+      <div class="vis-rank">05</div>
+      <div class="vis-title">Conference + event presence</div>
+      <div class="vis-body">CONEXPO-CON/AGG, Autodesk University, NVIDIA GTC, and AEC Next are the major industry conferences. Live-blog and publish same-day coverage faster than competitors. Reach out to conference organizers as a media partner — you get credentials, they get coverage.</div>
+    </div>
+    <div class="vis-card">
+      <div class="vis-rank">06</div>
+      <div class="vis-title">AI tool as traffic driver</div>
+      <div class="vis-body">Build a free "AI Regulation Checker" tool — users input their company type and get a report on which EU AI Act / OSHA / state regulations apply. This type of interactive tool consistently drives enormous organic traffic and backlinks from law firm blogs.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 09 — GPT-READABLE DESIGN -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="gpt">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div>
+      <div class="section-title">GPT-Readable Architecture</div>
+      <div class="section-desc">Designing your site so that ChatGPT, Perplexity, Claude, Gemini, and other AI systems can discover, index, and cite your content accurately. This is your 2026 moat — GovExec has none of this.</div>
+    </div>
+  </div>
+
+  <div class="grid-2 fade-up">
+    <div class="card blue">
+      <div class="card-title">🤖 Semantic HTML structure</div>
+      <div class="card-body">Every article uses proper semantic HTML: &lt;article&gt;, &lt;header&gt;, &lt;time datetime=""&gt;, &lt;address rel="author"&gt;, &lt;section&gt; headings in order. LLM crawlers parse DOM structure, not just meta tags. Clean HTML = accurate AI citations.</div>
+    </div>
+    <div class="card green">
+      <div class="card-title">📄 /llms.txt standard</div>
+      <div class="card-body">The emerging llms.txt specification (like robots.txt but for AI) tells LLMs how to use your content. Include: site description, section URLs, API endpoint, content license, citation policy. Perplexity and Claude already honor these hints.</div>
+    </div>
+    <div class="card yellow">
+      <div class="card-title">🔌 Public Content API</div>
+      <div class="card-body">REST endpoint returning structured JSON for every article, section, and topic. Required fields: id, headline, summary, section, tags, author, published_at, url, full_text. This is what your MCP server will expose to AI agents in Phase 2.</div>
+    </div>
+    <div class="card purple">
+      <div class="card-title">🗺️ AI-Optimized Sitemap</div>
+      <div class="card-body">Google News XML sitemap updated every 2 minutes. Separate /sitemap-articles.xml (last 48h), /sitemap-guides.xml (evergreen), /sitemap-data.xml (dashboards). Perplexity and Bing AI crawl sitemaps to discover fresh content.</div>
+    </div>
+    <div class="card orange">
+      <div class="card-title">✍️ Content structure for AI comprehension</div>
+      <div class="card-body">Articles should always include: Who/What/When/Where in first paragraph, numeric facts cited with sources, clear section headings (H2/H3), and a "Key Takeaway" at end. These patterns dramatically improve how AI summarizes your content when users ask about ACEM topics.</div>
+    </div>
+    <div class="card red">
+      <div class="card-title">📊 Structured data for all content types</div>
+      <div class="card-body">NewsArticle schema for news, FAQPage for guides (earns featured snippets), Dataset schema for data trackers, Event schema for conference coverage, Person schema for author pages. Each schema type unlocks different Google rich results.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 10 — MCP SERVER PLAN -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="mcp">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div>
+      <div class="section-title">MCP Server Architecture (Phase 2)</div>
+      <div class="section-desc">Your future MCP (Model Context Protocol) server lets any AI agent — Claude, GPT, custom agents — fetch live ACEM news data directly. This makes your site the data source for the AI ecosystem, not just a reader destination.</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px;" class="fade-up">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">MCP Server Endpoints (future: mcp.yourdomain.com/sse)</div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">get_latest_news</span>
+        <span class="endpoint-desc">Fetch latest ACEM AI news articles</span>
+      </div>
+      <div class="endpoint-body">
+        params: sector ("architecture" | "construction" | "engineering" | "manufacturing" | "policy")<br>
+        params: limit (1–20), since (ISO date), tags (array)<br>
+        returns: [{id, headline, summary, why_it_matters, section, tags, published_at, url}]
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">get_regulation_tracker</span>
+        <span class="endpoint-desc">Query AI regulation status by sector + jurisdiction</span>
+      </div>
+      <div class="endpoint-body">
+        params: jurisdiction ("US" | "EU" | "UK" | "state_name"), sector (optional)<br>
+        returns: [{regulation_name, status, effective_date, acem_impact, articles_count, latest_article_url}]
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">get_funding_deals</span>
+        <span class="endpoint-desc">Fetch AI+ACEM investment deals</span>
+      </div>
+      <div class="endpoint-body">
+        params: sector, deal_type ("funding" | "acquisition" | "ipo"), since, min_amount_usd<br>
+        returns: [{company, amount, round, investors, sector, date, article_url}]
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">search_articles</span>
+        <span class="endpoint-desc">Semantic search across all published articles</span>
+      </div>
+      <div class="endpoint-body">
+        body: {query: string, sector?: string, date_range?: {from, to}, limit?: number}<br>
+        returns: semantically ranked [{id, headline, summary, relevance_score, url}]
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method ws">WS</span>
+        <span class="endpoint-path">subscribe_breaking_news</span>
+        <span class="endpoint-desc">Real-time stream — new articles as published</span>
+      </div>
+      <div class="endpoint-body">
+        WebSocket stream: emits new article event within 30 seconds of publication<br>
+        payload: {event: "new_article", article: {id, headline, summary, section, tags, url}}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2 fade-up">
+    <div class="card blue">
+      <div class="card-title">🔑 API Access Tiers</div>
+      <div class="card-body">
+        <strong style="color:var(--text)">Free tier:</strong> 100 requests/day, last 7 days of articles, no search<br><br>
+        <strong style="color:var(--text)">Pro tier ($49/mo):</strong> 10k req/day, full archive, semantic search, deals tracker<br><br>
+        <strong style="color:var(--text)">Enterprise:</strong> unlimited, WebSocket stream, custom sector filters, white-label
+      </div>
+    </div>
+    <div class="card orange">
+      <div class="card-title">🛠️ Implementation Stack</div>
+      <div class="card-body">
+        MCP SDK (@anthropic-ai/mcp-sdk) for tool definitions<br>
+        tRPC router exposed as both REST + MCP transport<br>
+        Server-Sent Events (SSE) transport at /mcp endpoint<br>
+        API keys via Unkey.dev (rate limiting, analytics)<br>
+        OpenAPI spec auto-generated from tRPC schema
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 11 — AI AGENTS -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="agents">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <div>
+      <div class="section-title">Your Own AI Agents — Running the Newsroom</div>
+      <div class="section-desc">Five specialized AI agents that run autonomously to keep the site populated, relevant, and growing — each with a distinct role and toolset.</div>
+    </div>
+  </div>
+
+  <div class="grid-3 fade-up">
+    <div class="card blue">
+      <div class="card-icon">🕷️</div>
+      <div class="card-title">Scout Agent</div>
+      <div class="card-body">Crawls 40+ RSS feeds, news APIs, X/Twitter, and government portals every 5 minutes. Scores each item for ACEM-AI relevance (0–100). Routes to appropriate queue. Flags breaking news for immediate attention.</div>
+      <div class="card-tags"><span class="tag blue">runs 24/7</span><span class="tag green">Inngest cron</span></div>
+    </div>
+    <div class="card orange">
+      <div class="card-icon">✍️</div>
+      <div class="card-title">Writer Agent</div>
+      <div class="card-body">Takes scored stories from queue, generates structured article in Semafor format: summary → context → why it matters → ACEM sector impact → sources. Assigns tags, generates SEO title + meta description, suggests featured image query.</div>
+      <div class="card-tags"><span class="tag orange">Claude API</span><span class="tag yellow">Sanity CMS write</span></div>
+    </div>
+    <div class="card green">
+      <div class="card-icon">📧</div>
+      <div class="card-title">Briefing Agent</div>
+      <div class="card-body">Runs at 5:30am ET. Selects top 5–7 stories from last 24h, generates newsletter subject line (A/B tested), writes Axios-style previews for each story, assembles email template, queues for 6am send via Resend.</div>
+      <div class="card-tags"><span class="tag green">daily 5:30am</span><span class="tag blue">Resend API</span></div>
+    </div>
+    <div class="card yellow">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Data Agent</div>
+      <div class="card-body">Monitors Crunchbase/PitchBook webhooks for funding events, checks Regulations.gov and EUR-Lex for new ACEM-relevant filings, updates the AI regulation tracker and funding database automatically, triggers alerts for major developments.</div>
+      <div class="card-tags"><span class="tag yellow">hourly run</span><span class="tag purple">DB updates</span></div>
+    </div>
+    <div class="card purple">
+      <div class="card-icon">🔗</div>
+      <div class="card-title">SEO Agent</div>
+      <div class="card-body">Weekly: audits internal linking gaps (articles that should link to each other), identifies underperforming articles that need updating, generates new FAQ schema from common search queries, submits new URLs to IndexNow for instant crawling.</div>
+      <div class="card-tags"><span class="tag purple">weekly run</span><span class="tag blue">IndexNow API</span></div>
+    </div>
+    <div class="card red">
+      <div class="card-icon">🔮</div>
+      <div class="card-title">Trend Detector Agent</div>
+      <div class="card-body">Analyzes story clusters over 72-hour windows to identify emerging topics before they go mainstream. Flags "rising topics" for human editor attention. Powers the site's trending topics bar and newsletter editor's picks suggestions.</div>
+      <div class="card-tags"><span class="tag red">every 6h</span><span class="tag orange">NLP clustering</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 12 — BUILD ROADMAP -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="roadmap">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <div>
+      <div class="section-title">Build Roadmap — Phase by Phase</div>
+      <div class="section-desc">A realistic 5-phase build plan from zero to fully operational AI-powered ACEM news platform with MCP server.</div>
+    </div>
+  </div>
+
+  <div class="timeline fade-up">
+    <div class="timeline-item">
+      <div class="timeline-phase">Phase 1 — Foundation (Weeks 1–4)</div>
+      <div class="timeline-title">Core site live with manual publishing</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Get the site up, the CMS configured, and the first 50 articles published. Start SEO clock ticking.</div>
+      <div class="timeline-items">
+        <span class="timeline-tag">Next.js + Sanity setup</span>
+        <span class="timeline-tag">5 section pages</span>
+        <span class="timeline-tag">Article template (full schema)</span>
+        <span class="timeline-tag">Newsletter signup</span>
+        <span class="timeline-tag">Google News submission</span>
+        <span class="timeline-tag">Cloudflare CDN</span>
+        <span class="timeline-tag">50 hand-written articles</span>
+        <span class="timeline-tag">LLMs.txt</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-phase">Phase 2 — Data Pipeline (Weeks 5–8)</div>
+      <div class="timeline-title">Scout + Writer agents live — 15–20 auto-briefs/day</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Automate the news ingestion and first-draft generation pipeline. Editor reviews queue becomes daily workflow.</div>
+      <div class="timeline-items">
+        <span class="timeline-tag">RSS/API feed ingestion</span>
+        <span class="timeline-tag">Claude relevance classifier</span>
+        <span class="timeline-tag">Auto-article generation</span>
+        <span class="timeline-tag">Editor review dashboard</span>
+        <span class="timeline-tag">Auto-publish rules</span>
+        <span class="timeline-tag">Breaking news banner (live)</span>
+        <span class="timeline-tag">Meilisearch (site search)</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-phase">Phase 3 — Growth Layer (Weeks 9–14)</div>
+      <div class="timeline-title">Newsletter, data trackers, and SEO acceleration</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">All five newsletter products launched. First two data dashboards live. Pillar SEO pages built.</div>
+      <div class="timeline-items">
+        <span class="timeline-tag">5 newsletters live</span>
+        <span class="timeline-tag">Briefing agent automation</span>
+        <span class="timeline-tag">AI Adoption Tracker v1</span>
+        <span class="timeline-tag">Funding Deal Tracker v1</span>
+        <span class="timeline-tag">5 pillar SEO pages</span>
+        <span class="timeline-tag">Author pages + E-E-A-T</span>
+        <span class="timeline-tag">Dark mode</span>
+        <span class="timeline-tag">Command-K search</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-phase">Phase 4 — AI Intelligence (Weeks 15–20)</div>
+      <div class="timeline-title">All 5 agents running, public REST API live</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Full newsroom automation. Public API for third-party integrations. Regulation map live before EU AI Act deadline.</div>
+      <div class="timeline-items">
+        <span class="timeline-tag">All 5 AI agents live</span>
+        <span class="timeline-tag">Public REST API /v1</span>
+        <span class="timeline-tag">AI Regulation Map</span>
+        <span class="timeline-tag">Semantic search API</span>
+        <span class="timeline-tag">Podcast launch</span>
+        <span class="timeline-tag">Trend Detector live</span>
+        <span class="timeline-tag">API key system (Unkey)</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-phase">Phase 5 — MCP + Community (Weeks 21–28)</div>
+      <div class="timeline-title">MCP server live — AI agents can query your site</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">The full vision: a news platform that powers both human readers and AI agents across the ACEM ecosystem.</div>
+      <div class="timeline-items">
+        <span class="timeline-tag">MCP server launch</span>
+        <span class="timeline-tag">WebSocket real-time stream</span>
+        <span class="timeline-tag">Community Slack/Discord</span>
+        <span class="timeline-tag">Monthly virtual events</span>
+        <span class="timeline-tag">AI Tools Directory</span>
+        <span class="timeline-tag">Job board</span>
+        <span class="timeline-tag">Pro API tier ($49/mo)</span>
+        <span class="timeline-tag">First annual summit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY METRICS -->
+  <div class="grid-4" style="margin-top:32px;" class="fade-up">
+    <div class="card blue">
+      <div style="font-size:28px;font-weight:800;font-family:var(--mono);color:var(--accent);">~$800</div>
+      <div class="card-title">Monthly infra cost (Phase 1)</div>
+      <div class="card-body" style="font-size:11px;">Vercel Pro + Sanity + Railway + Resend + Cloudflare + Meilisearch (scales with traffic)</div>
+    </div>
+    <div class="card green">
+      <div style="font-size:28px;font-weight:800;font-family:var(--mono);color:var(--accent3);">15–25</div>
+      <div class="card-title">Auto-published articles per day</div>
+      <div class="card-body" style="font-size:11px;">After Phase 2 — 400–750 articles/month building search authority fast</div>
+    </div>
+    <div class="card orange">
+      <div style="font-size:28px;font-weight:800;font-family:var(--mono);color:var(--accent2);">90 days</div>
+      <div class="card-title">To Google News indexed</div>
+      <div class="card-body" style="font-size:11px;">From launch to appearing in news carousels — the biggest single traffic multiplier</div>
+    </div>
+    <div class="card yellow">
+      <div style="font-size:28px;font-weight:800;font-family:var(--mono);color:var(--accent4);">28 wks</div>
+      <div class="card-title">To full MCP server launch</div>
+      <div class="card-body" style="font-size:11px;">First ACEM news platform with AI-queryable content — a durable competitive moat</div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div><!-- end layout -->
+
+<!-- FOOTER -->
+<footer style="background:var(--surface);border-top:1px solid var(--border);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted);">
+  <div style="font-family:var(--serif);font-size:18px;color:var(--text);">Build<span style="color:var(--accent);font-style:italic;">Intel</span> — AI + ACEM Master Blueprint</div>
+  <div>Generated March 2026 · All 12 sections complete · Ready to build</div>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Intersection Observer for fade animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Sidebar active link on scroll
+const sections = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.sidebar a');
+const scrollSpy = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const activeLink = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => scrollSpy.observe(s));
+</script>
+
+</body>
+</html>
