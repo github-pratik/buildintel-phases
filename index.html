@@ -1,338 +1,501 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BuildIntel — Phase Dashboard</title>
-<meta name="description" content="BuildIntel project phases — Strategy, AI Agents, Website Design, and Build execution for the automated ACEM news platform.">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0d0f14;
-  --glass: rgba(255,255,255,0.04);
-  --glass2: rgba(255,255,255,0.06);
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0efe8;
-  --muted: rgba(240,239,232,0.45);
-  --dim: rgba(240,239,232,0.22);
-  --orange: #e8863a;
-  --teal: #3ab8a0;
-  --green: #5cb87a;
-  --grey: rgba(240,239,232,0.25);
-  --blue: #5b9bd5;
-  --display: 'Cormorant Garamond', serif;
-  --body: 'DM Sans', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--body);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 70% 50% at 30% 30%, rgba(232,134,58,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 80% 70%, rgba(58,184,160,0.04) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.4;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildIntel — Phase Dashboard</title>
+  <meta name="description"
+    content="BuildIntel project phases — Strategy, AI Agents, Website Design, and Build execution for the automated ACEM news platform.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass2: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.12);
+      --text: #f0efe8;
+      --muted: rgba(240, 239, 232, 0.45);
+      --dim: rgba(240, 239, 232, 0.22);
+      --orange: #e8863a;
+      --teal: #3ab8a0;
+      --green: #5cb87a;
+      --grey: rgba(240, 239, 232, 0.25);
+      --blue: #5b9bd5;
+      --display: 'Cormorant Garamond', serif;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
 
-/* ── LAYOUT ── */
-.wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 80px 40px 120px;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* ── HEADER ── */
-.brand {
-  font-family: var(--display);
-  font-size: clamp(48px, 8vw, 72px);
-  font-weight: 700;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
-}
-.brand em {
-  font-style: italic;
-  color: var(--orange);
-}
-.tagline {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-.sub {
-  font-size: 16px;
-  color: var(--muted);
-  max-width: 560px;
-  line-height: 1.75;
-  font-weight: 300;
-  margin-bottom: 56px;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ── DIVIDER ── */
-.divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--border2), transparent);
-  margin-bottom: 48px;
-}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* ── SECTION LABEL ── */
-.section-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 24px;
-}
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 30% 30%, rgba(232, 134, 58, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(58, 184, 160, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-/* ── PHASE CARDS ── */
-.cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-}
-.card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  padding: 32px 28px;
-  text-decoration: none;
-  color: var(--text);
-  position: relative;
-  overflow: hidden;
-  transition: background 0.25s, border-color 0.25s, transform 0.25s;
-  display: flex;
-  flex-direction: column;
-}
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  opacity: 0.7;
-  transition: opacity 0.25s;
-}
-.card:hover {
-  background: var(--glass2);
-  border-color: var(--border2);
-  transform: translateY(-2px);
-}
-.card:hover::before { opacity: 1; }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
 
-/* Card accent lines */
-.card-done::before { background: linear-gradient(to right, var(--green), transparent); }
-.card-progress::before { background: linear-gradient(to right, var(--orange), transparent); }
-.card-planned::before { background: linear-gradient(to right, var(--grey), transparent); }
+    /* ── LIGHT MODE ── */
+    [data-theme="light"] {
+      --bg: #f4f3ef;
+      --glass: rgba(0, 0, 0, 0.03);
+      --glass2: rgba(0, 0, 0, 0.05);
+      --border: rgba(0, 0, 0, 0.08);
+      --border2: rgba(0, 0, 0, 0.14);
+      --text: #1a1814;
+      --muted: rgba(26, 24, 20, 0.5);
+      --dim: rgba(26, 24, 20, 0.3);
+      --orange: #c96b1a;
+      --teal: #2a9080;
+      --green: #3a8f54;
+      --grey: rgba(26, 24, 20, 0.3);
+      --blue: #3a72a8;
+      --display: 'Cormorant Garamond', serif;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
 
-/* ── CARD CONTENT ── */
-.card-phase {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 14px;
-}
-.card-title {
-  font-family: var(--display);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  margin-bottom: 10px;
-}
-.card-desc {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.7;
-  font-weight: 300;
-  margin-bottom: 16px;
-  flex: 1;
-}
+    [data-theme="light"] body::before {
+      background:
+        radial-gradient(ellipse 70% 50% at 30% 30%, rgba(201, 107, 26, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(42, 144, 128, 0.05) 0%, transparent 60%);
+    }
 
-/* ── STATUS BADGES ── */
-.status {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 100px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  width: fit-content;
-}
-.status-done {
-  color: var(--green);
-  background: rgba(92,184,122,0.08);
-  border: 1px solid rgba(92,184,122,0.2);
-}
-.status-progress {
-  color: var(--orange);
-  background: rgba(232,134,58,0.08);
-  border: 1px solid rgba(232,134,58,0.2);
-}
-.status-planned {
-  color: var(--grey);
-  background: rgba(240,239,232,0.03);
-  border: 1px solid rgba(240,239,232,0.08);
-}
+    [data-theme="light"] body::after {
+      opacity: 0.12;
+    }
 
-/* ── PULSING DOT ── */
-.pulse-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--orange);
-  flex-shrink: 0;
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(0.6); }
-}
+    [data-theme="light"] .card {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
 
-/* ── CHECK ICON ── */
-.check-icon { flex-shrink: 0; }
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
 
-/* ── CARD ARROW ── */
-.card-arrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--dim);
-  margin-top: 14px;
-  transition: color 0.2s;
-}
-.card:hover .card-arrow { color: var(--orange); }
+    .theme-toggle:hover {
+      color: var(--text);
+      border-color: var(--orange);
+      background: var(--glass2);
+    }
 
-/* ── FOOTER ── */
-.footer {
-  margin-top: 64px;
-  text-align: center;
-}
-.footer-text {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
+    /* ── LAYOUT ── */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 40px 120px;
+    }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 700px) {
-  .wrap { padding: 48px 20px 80px; }
-  .cards { grid-template-columns: 1fr; }
-  .card-title { font-size: 22px; }
-}
+    /* ── HEADER ── */
+    .brand {
+      font-family: var(--display);
+      font-size: clamp(48px, 8vw, 72px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
 
-/* ── ENTRANCE ANIMATION ── */
-.card {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: fadeIn 0.5s ease forwards;
-}
-.card:nth-child(1) { animation-delay: 0.1s; }
-.card:nth-child(2) { animation-delay: 0.2s; }
-.card:nth-child(3) { animation-delay: 0.3s; }
-.card:nth-child(4) { animation-delay: 0.4s; }
-@keyframes fadeIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
+    .brand em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .tagline {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 56px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border2), transparent);
+      margin-bottom: 48px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 24px;
+    }
+
+    /* ── PHASE CARDS ── */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+    }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 32px 28px;
+      text-decoration: none;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      opacity: 0.7;
+      transition: opacity 0.25s;
+    }
+
+    .card:hover {
+      background: var(--glass2);
+      border-color: var(--border2);
+      transform: translateY(-2px);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    /* Card accent lines */
+    .card-done::before {
+      background: linear-gradient(to right, var(--green), transparent);
+    }
+
+    .card-progress::before {
+      background: linear-gradient(to right, var(--orange), transparent);
+    }
+
+    .card-planned::before {
+      background: linear-gradient(to right, var(--grey), transparent);
+    }
+
+    /* ── CARD CONTENT ── */
+    .card-phase {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    /* ── STATUS BADGES ── */
+    .status {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+    }
+
+    .status-done {
+      color: var(--green);
+      background: rgba(92, 184, 122, 0.08);
+      border: 1px solid rgba(92, 184, 122, 0.2);
+    }
+
+    .status-progress {
+      color: var(--orange);
+      background: rgba(232, 134, 58, 0.08);
+      border: 1px solid rgba(232, 134, 58, 0.2);
+    }
+
+    .status-planned {
+      color: var(--grey);
+      background: rgba(240, 239, 232, 0.03);
+      border: 1px solid rgba(240, 239, 232, 0.08);
+    }
+
+    /* ── PULSING DOT ── */
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.3;
+        transform: scale(0.6);
+      }
+    }
+
+    /* ── CHECK ICON ── */
+    .check-icon {
+      flex-shrink: 0;
+    }
+
+    /* ── CARD ARROW ── */
+    .card-arrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      margin-top: 14px;
+      transition: color 0.2s;
+    }
+
+    .card:hover .card-arrow {
+      color: var(--orange);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 64px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .wrap {
+        padding: 48px 20px 80px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .card-title {
+        font-size: 22px;
+      }
+    }
+
+    /* ── ENTRANCE ANIMATION ── */
+    .card {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .card:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="wrap">
+  <div class="wrap">
 
-  <div class="tagline">AI + ACEM News Platform</div>
-  <h1 class="brand">Build<em>Intel</em></h1>
-  <p class="sub">The complete blueprint for an automated news intelligence platform — from strategy through AI agents, website design, and production build.</p>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"
+      title="Toggle light/dark mode">☀️</button>
+    <div class="tagline">AI + ACEM News Platform</div>
+    <h1 class="brand">Build<em>Intel</em></h1>
+    <p class="sub">The complete blueprint for an automated news intelligence platform — from strategy through AI agents,
+      website design, and production build.</p>
 
-  <div class="divider"></div>
-  <div class="section-label">Project Phases</div>
+    <div class="divider"></div>
+    <div class="section-label">Project Phases</div>
 
-  <div class="cards">
+    <div class="cards">
 
-    <!-- Phase 1 — Done -->
-    <a href="/phase1-masterplan.html" class="card card-done" id="phase1-card">
-      <div class="card-phase">Phase 01</div>
-      <div class="card-title">Strategy &amp; Master Plan</div>
-      <div class="card-desc">Complete technical blueprint — data pipeline architecture, tech stack selection, SEO strategy, GPT-readable design, MCP server plan, and build roadmap.</div>
-      <div class="status status-done">
-        <span class="check-icon">✓</span>
-        Done
-      </div>
-      <div class="card-arrow">View Phase →</div>
-    </a>
+      <!-- Phase 1 — Done -->
+      <a href="/phase1-masterplan.html" class="card card-done" id="phase1-card">
+        <div class="card-phase">Phase 01</div>
+        <div class="card-title">Strategy &amp; Master Plan</div>
+        <div class="card-desc">Complete technical blueprint — data pipeline architecture, tech stack selection, SEO
+          strategy, GPT-readable design, MCP server plan, and build roadmap.</div>
+        <div class="status status-done">
+          <span class="check-icon">✓</span>
+          Done
+        </div>
+        <div class="card-arrow">View Phase →</div>
+      </a>
 
-    <!-- Phase 2 — In Progress -->
-    <a href="/phase2-agents.html" class="card card-progress" id="phase2-card">
-      <div class="card-phase">Phase 02</div>
-      <div class="card-title">AI Agent Architecture</div>
-      <div class="card-desc">9-agent system design — ingestion, enrichment, classification, publishing, and monitoring agents with full data flow and technology mapping.</div>
-      <div class="status status-progress">
-        <span class="pulse-dot"></span>
-        In Progress
-      </div>
-      <div class="card-arrow">View Phase →</div>
-    </a>
+      <!-- Phase 2 — In Progress -->
+      <a href="/phase2-agents.html" class="card card-progress" id="phase2-card">
+        <div class="card-phase">Phase 02</div>
+        <div class="card-title">AI Agent Architecture</div>
+        <div class="card-desc">9-agent system design — ingestion, enrichment, classification, publishing, and monitoring
+          agents with full data flow and technology mapping.</div>
+        <div class="status status-progress">
+          <span class="pulse-dot"></span>
+          In Progress
+        </div>
+        <div class="card-arrow">View Phase →</div>
+      </a>
 
-    <!-- Phase 3 — Planned -->
-    <a href="/phase3-website.html" class="card card-planned" id="phase3-card">
-      <div class="card-phase">Phase 03</div>
-      <div class="card-title">Website Design &amp; UI</div>
-      <div class="card-desc">Reader experience design — glassmorphism UI, mobile-first layout, ad placement strategy, MCP connection panel, and hot keyword system.</div>
-      <div class="status status-planned">
-        Planned
-      </div>
-      <div class="card-arrow">View Phase →</div>
-    </a>
+      <!-- Phase 3 — Planned -->
+      <a href="/phase3-website.html" class="card card-planned" id="phase3-card">
+        <div class="card-phase">Phase 03</div>
+        <div class="card-title">Website Design &amp; UI</div>
+        <div class="card-desc">Reader experience design — glassmorphism UI, mobile-first layout, ad placement strategy,
+          MCP connection panel, and hot keyword system.</div>
+        <div class="status status-planned">
+          Planned
+        </div>
+        <div class="card-arrow">View Phase →</div>
+      </a>
 
-    <!-- Phase 4 — Planned -->
-    <a href="/phase4-build.html" class="card card-planned" id="phase4-card">
-      <div class="card-phase">Phase 04</div>
-      <div class="card-title">Build &amp; Execution</div>
-      <div class="card-desc">Production build plan — Next.js setup, Supabase integration, agent deployment, CI/CD pipeline, and launch checklist.</div>
-      <div class="status status-planned">
-        Planned
-      </div>
-      <div class="card-arrow">View Phase →</div>
-    </a>
+      <!-- Phase 4 — Planned -->
+      <a href="/phase4-build.html" class="card card-planned" id="phase4-card">
+        <div class="card-phase">Phase 04</div>
+        <div class="card-title">Build &amp; Execution</div>
+        <div class="card-desc">Production build plan — Next.js setup, Supabase integration, agent deployment, CI/CD
+          pipeline, and launch checklist.</div>
+        <div class="status status-planned">
+          Planned
+        </div>
+        <div class="card-arrow">View Phase →</div>
+      </a>
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-text">BuildIntel — Automated News Intelligence</div>
+    </div>
 
   </div>
 
-  <div class="footer">
-    <div class="footer-text">BuildIntel — Automated News Intelligence</div>
-  </div>
-
-</div>
-
+  <script>
+    (function () {
+      var saved = localStorage.getItem('bi-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      var btn = document.getElementById('themeToggle');
+      if (btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';
+      function toggle() {
+        var cur = document.documentElement.getAttribute('data-theme');
+        var next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('bi-theme', next);
+        btn.textContent = next === 'light' ? '🌙' : '☀️';
+      }
+      if (btn) btn.addEventListener('click', toggle);
+    })();
+  </script>
 </body>
+
 </html>

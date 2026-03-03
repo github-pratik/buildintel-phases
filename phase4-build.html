@@ -1,150 +1,682 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BuildIntel — Phase 4: Build & Deploy</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d0f14;--glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.07);--text:#f0efe8;--muted:rgba(240,239,232,0.45);--dim:rgba(240,239,232,0.22);--orange:#e8863a;--teal:#3ab8a0;--gold:#d4a843;--blue:#5b9bd5;--green:#5cb87a;--display:'Cormorant Garamond',serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);padding-top:50px;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 40%,rgba(92,184,122,0.04) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 60%,rgba(91,155,213,0.04) 0%,transparent 60%);pointer-events:none;z-index:0;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildIntel — Phase 4: Build & Deploy</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --glass: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #f0efe8;
+      --muted: rgba(240, 239, 232, 0.45);
+      --dim: rgba(240, 239, 232, 0.22);
+      --orange: #e8863a;
+      --teal: #3ab8a0;
+      --gold: #d4a843;
+      --blue: #5b9bd5;
+      --green: #5cb87a;
+      --display: 'Cormorant Garamond', serif;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
 
-.pnav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(6,7,10,0.96);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(255,255,255,0.06);height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-family:'JetBrains Mono',monospace;}
-.pnav-brand{font-size:13px;font-weight:700;color:#f0efe8;text-decoration:none;letter-spacing:-0.01em;flex-shrink:0;}
-.pnav-brand em{color:#e8863a;font-style:italic;}
-.pnav-phases{display:flex;align-items:center;gap:3px;flex:1;justify-content:center;}
-.pnav-btn{padding:4px 13px;font-family:inherit;font-size:9px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,239,232,0.3);background:transparent;border:1px solid transparent;border-radius:100px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;white-space:nowrap;}
-.pnav-btn:hover{color:rgba(240,239,232,0.75);background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.09);}
-.pnav-btn.active{color:#e8863a;background:rgba(232,134,58,0.1);border-color:rgba(232,134,58,0.28);}
-.pnav-btn.done{color:rgba(92,184,122,0.65);}
-.pnav-btn.done:hover{color:#5cb87a;background:rgba(92,184,122,0.06);border-color:rgba(92,184,122,0.15);}
-.pnav-sep{width:18px;height:1px;background:rgba(255,255,255,0.07);flex-shrink:0;}
-.pnav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.pnav-arrow{padding:4px 11px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,239,232,0.35);border:1px solid rgba(255,255,255,0.07);border-radius:100px;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px;}
-.pnav-arrow:hover{color:#f0efe8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);}
-.pnav-arrow.off{opacity:0.15;pointer-events:none;}
-.pnav-md{padding:4px 11px;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(58,184,160,0.75);border:1px solid rgba(58,184,160,0.22);border-radius:100px;text-decoration:none;transition:all 0.2s;background:rgba(58,184,160,0.05);}
-.pnav-md:hover{color:#3ab8a0;border-color:rgba(58,184,160,0.45);background:rgba(58,184,160,0.1);}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 48px;}
-.phase-badge{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--green);background:rgba(92,184,122,0.08);border:1px solid rgba(92,184,122,0.2);padding:5px 16px;border-radius:100px;display:inline-block;margin-bottom:28px;}
-h1{font-family:var(--display);font-size:clamp(48px,7vw,80px);font-weight:700;line-height:1.0;letter-spacing:-0.02em;margin-bottom:16px;}
-h1 em{font-style:italic;color:var(--green);}
-.sub{font-size:17px;color:var(--muted);max-width:580px;line-height:1.75;font-weight:300;margin-bottom:56px;}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      padding-top: 50px;
+      min-height: 100vh;
+    }
 
-.locked-card{background:rgba(92,184,122,0.03);border:1px solid rgba(92,184,122,0.1);padding:40px;text-align:center;margin-bottom:4px;}
-.lc-icon{font-size:48px;margin-bottom:16px;}
-.lc-title{font-family:var(--display);font-size:26px;font-weight:700;margin-bottom:10px;color:var(--green);}
-.lc-body{font-size:14px;color:var(--muted);line-height:1.75;max-width:560px;margin:0 auto;}
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 20% 40%, rgba(92, 184, 122, 0.04) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 60%, rgba(91, 155, 213, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.prereqs{margin-top:4px;}
-.pr-card{background:var(--glass);border:1px solid var(--border);padding:22px 24px;display:flex;align-items:flex-start;gap:16px;margin-bottom:3px;}
-.pr-num{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--dim);flex-shrink:0;width:28px;}
-.pr-title{font-family:var(--display);font-size:17px;font-weight:700;margin-bottom:4px;}
-.pr-body{font-size:12.5px;color:var(--muted);line-height:1.6;}
-.pr-tag{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid;}
+    .pnav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: rgba(6, 7, 10, 0.96);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-family: 'JetBrains Mono', monospace;
+    }
 
-.roadmap{margin-top:48px;}
-.rm-title{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
-.rm-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.rm-week{font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0;width:80px;padding-top:2px;}
-.rm-content{}
-.rm-label{font-size:13.5px;font-weight:600;margin-bottom:3px;}
-.rm-desc{font-size:12px;color:var(--dim);line-height:1.5;}
+    .pnav-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f0efe8;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
 
-.metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:48px;}
-.metric{background:var(--glass);border:1px solid var(--border);padding:20px;text-align:center;}
-.m-val{font-family:var(--display);font-size:32px;font-weight:700;line-height:1;margin-bottom:4px;}
-.m-label{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+    .pnav-brand em {
+      color: #e8863a;
+      font-style: italic;
+    }
 
-@media(max-width:700px){.wrap{padding:48px 20px;}.metric-row{grid-template-columns:1fr 1fr;}.pnav-phases .pnav-btn:not(.active){display:none;}}
-</style>
+    .pnav-phases {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .pnav-btn {
+      padding: 4px 13px;
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(240, 239, 232, 0.3);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .pnav-btn:hover {
+      color: rgba(240, 239, 232, 0.75);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+
+    .pnav-btn.active {
+      color: #e8863a;
+      background: rgba(232, 134, 58, 0.1);
+      border-color: rgba(232, 134, 58, 0.28);
+    }
+
+    .pnav-btn.done {
+      color: rgba(92, 184, 122, 0.65);
+    }
+
+    .pnav-btn.done:hover {
+      color: #5cb87a;
+      background: rgba(92, 184, 122, 0.06);
+      border-color: rgba(92, 184, 122, 0.15);
+    }
+
+    .pnav-sep {
+      width: 18px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.07);
+      flex-shrink: 0;
+    }
+
+    .pnav-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .pnav-arrow {
+      padding: 4px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240, 239, 232, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pnav-arrow:hover {
+      color: #f0efe8;
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .pnav-arrow.off {
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .pnav-md {
+      padding: 4px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(58, 184, 160, 0.75);
+      border: 1px solid rgba(58, 184, 160, 0.22);
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.2s;
+      background: rgba(58, 184, 160, 0.05);
+    }
+
+    .pnav-md:hover {
+      color: #3ab8a0;
+      border-color: rgba(58, 184, 160, 0.45);
+      background: rgba(58, 184, 160, 0.1);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
+    .phase-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(92, 184, 122, 0.08);
+      border: 1px solid rgba(92, 184, 122, 0.2);
+      padding: 5px 16px;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 56px;
+    }
+
+    .locked-card {
+      background: rgba(92, 184, 122, 0.03);
+      border: 1px solid rgba(92, 184, 122, 0.1);
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .lc-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .lc-title {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--green);
+    }
+
+    .lc-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .prereqs {
+      margin-top: 4px;
+    }
+
+    .pr-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 22px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 3px;
+    }
+
+    .pr-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dim);
+      flex-shrink: 0;
+      width: 28px;
+    }
+
+    .pr-title {
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .pr-body {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .pr-tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+
+    .roadmap {
+      margin-top: 48px;
+    }
+
+    .rm-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .rm-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .rm-week {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      flex-shrink: 0;
+      width: 80px;
+      padding-top: 2px;
+    }
+
+    .rm-content {}
+
+    .rm-label {
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .rm-desc {
+      font-size: 12px;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      margin-top: 48px;
+    }
+
+    .metric {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .m-val {
+      font-family: var(--display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .m-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    @media(max-width:700px) {
+      .wrap {
+        padding: 48px 20px;
+      }
+
+      .metric-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .pnav-phases .pnav-btn:not(.active) {
+        display: none;
+      }
+    }
+
+    /* ── LIGHT MODE ── */
+    [data-theme="light"] {
+      --bg: #f4f3ef;
+      --glass: rgba(0, 0, 0, 0.03);
+      --border: rgba(0, 0, 0, 0.07);
+      --text: #1a1814;
+      --muted: rgba(26, 24, 20, 0.5);
+      --dim: rgba(26, 24, 20, 0.28);
+      --orange: #c96b1a;
+      --teal: #2a9080;
+      --gold: #b08a2a;
+      --blue: #3a72a8;
+      --green: #3a8f54;
+    }
+
+    [data-theme="light"] body {
+      background: #f4f3ef;
+      color: #1a1814;
+    }
+
+    [data-theme="light"] body::before {
+      background: radial-gradient(ellipse 60% 40% at 20% 40%, rgba(58, 143, 84, 0.05) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 60%, rgba(58, 114, 168, 0.05) 0%, transparent 60%);
+    }
+
+    [data-theme="light"] .pnav {
+      background: rgba(244, 243, 239, 0.96);
+      border-bottom-color: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="light"] .pnav-brand {
+      color: #1a1814;
+    }
+
+    [data-theme="light"] .locked-card {
+      background: rgba(58, 143, 84, 0.04);
+      border-color: rgba(58, 143, 84, 0.12);
+    }
+
+    [data-theme="light"] .pr-card,
+    .metric {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.07);
+    }
+
+    [data-theme="light"] .rm-item {
+      border-bottom-color: rgba(0, 0, 0, 0.06);
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(240, 239, 232, 0.5);
+      font-size: 13px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .theme-toggle {
+      border-color: rgba(0, 0, 0, 0.15);
+      color: rgba(26, 24, 20, 0.5);
+    }
+
+    .theme-toggle:hover {
+      border-color: rgba(232, 134, 58, 0.5);
+      color: #e8863a;
+      background: rgba(232, 134, 58, 0.08);
+    }
+  </style>
 </head>
+
 <body>
 
-<nav class="pnav">
-  <a href="/phase1-masterplan.html" class="pnav-brand">Build<em>Intel</em></a>
-  <div class="pnav-phases">
-    <a href="/phase1-masterplan.html" class="pnav-btn done">✓ P1 — Strategy</a>
-    <div class="pnav-sep"></div>
-    <a href="/phase2-agents.html" class="pnav-btn done">✓ P2 — Agents</a>
-    <div class="pnav-sep"></div>
-    <a href="/phase3-website.html" class="pnav-btn done">✓ P3 — Website</a>
-    <div class="pnav-sep"></div>
-    <span class="pnav-btn active"><span style="width:5px;height:5px;border-radius:50%;background:#5cb87a;flex-shrink:0;animation:pnd 2s ease-in-out infinite;display:inline-block;"></span> P4 — Build</span>
-  </div>
-  <div class="pnav-right">
-    <a href="/phase3-website.html" class="pnav-arrow">← Prev</a>
-    <span class="pnav-arrow off">Next →</span>
-    <a href="/phase4-build.md" class="pnav-md" download>⬇ MD</a>
-  </div>
-</nav>
-<style>@keyframes pnd{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}</style>
+  <nav class="pnav">
+    <a href="/phase1-masterplan.html" class="pnav-brand">Build<em>Intel</em></a>
+    <div class="pnav-phases">
+      <a href="/phase1-masterplan.html" class="pnav-btn done">✓ P1 — Strategy</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase2-agents.html" class="pnav-btn done">✓ P2 — Agents</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase3-website.html" class="pnav-btn done">✓ P3 — Website</a>
+      <div class="pnav-sep"></div>
+      <span class="pnav-btn active"><span
+          style="width:5px;height:5px;border-radius:50%;background:#5cb87a;flex-shrink:0;animation:pnd 2s ease-in-out infinite;display:inline-block;"></span>
+        P4 — Build</span>
+    </div>
+    <div class="pnav-right">
+      <a href="/phase3-website.html" class="pnav-arrow">← Prev</a>
+      <span class="pnav-arrow off">Next →</span>
+      <a href="/phase4-build.md" class="pnav-md" download>⬇ MD</a>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">☀️</button>
+    </div>
+  </nav>
+  <style>
+    @keyframes pnd {
 
-<div class="wrap">
-  <div class="phase-badge">Phase 04 — Build & Deploy</div>
-  <h1>Ship<br><em>Everything</em></h1>
-  <p class="sub">The execution phase. Cursor + Claude Code write the code. n8n agents are deployed. The website goes live. First automated article publishes. First newsletter sends. ~28 weeks end-to-end.</p>
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
 
-  <div class="locked-card">
-    <div class="lc-icon">🔒</div>
-    <div class="lc-title">Unlocks After Phase 3</div>
-    <p class="lc-body">Phase 4 begins once the website design is finalized in Phase 3. The build sequence is fully documented in the MD memory file — ready to hand to Cursor or Claude Code and start building immediately.</p>
-  </div>
+      50% {
+        opacity: 0.3;
+        transform: scale(0.6);
+      }
+    }
+  </style>
 
-  <div class="prereqs">
-    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin:28px 0 16px;">Prerequisites Before Starting</div>
-    <div class="pr-card">
-      <div class="pr-num">01</div>
-      <div>
-        <div class="pr-title">Phase 3 Website Mockup Complete</div>
-        <div class="pr-body">All page layouts, components, mobile views, ad zones, and MCP panel finalized before writing a single line of production code.</div>
-        <span class="pr-tag" style="color:var(--blue);border-color:rgba(91,155,213,0.3);background:rgba(91,155,213,0.08);">In Phase 3</span>
+  <div class="wrap">
+    <div class="phase-badge">Phase 04 — Build & Deploy</div>
+    <h1>Ship<br><em>Everything</em></h1>
+    <p class="sub">The execution phase. Cursor + Claude Code write the code. n8n agents are deployed. The website goes
+      live. First automated article publishes. First newsletter sends. ~28 weeks end-to-end.</p>
+
+    <div class="locked-card">
+      <div class="lc-icon">🔒</div>
+      <div class="lc-title">Unlocks After Phase 3</div>
+      <p class="lc-body">Phase 4 begins once the website design is finalized in Phase 3. The build sequence is fully
+        documented in the MD memory file — ready to hand to Cursor or Claude Code and start building immediately.</p>
+    </div>
+
+    <div class="prereqs">
+      <div
+        style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin:28px 0 16px;">
+        Prerequisites Before Starting</div>
+      <div class="pr-card">
+        <div class="pr-num">01</div>
+        <div>
+          <div class="pr-title">Phase 3 Website Mockup Complete</div>
+          <div class="pr-body">All page layouts, components, mobile views, ad zones, and MCP panel finalized before
+            writing a single line of production code.</div>
+          <span class="pr-tag"
+            style="color:var(--blue);border-color:rgba(91,155,213,0.3);background:rgba(91,155,213,0.08);">In Phase
+            3</span>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-num">02</div>
+        <div>
+          <div class="pr-title">All Accounts Created</div>
+          <div class="pr-body">Railway, Supabase, Vercel, Cloudflare, Sanity, Beehiiv, Claude API, Crunchbase API,
+            domain registrar — all set up before Week 1.</div>
+          <span class="pr-tag"
+            style="color:var(--teal);border-color:rgba(58,184,160,0.3);background:rgba(58,184,160,0.08);">1 day
+            setup</span>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-num">03</div>
+        <div>
+          <div class="pr-title">Development Environment Ready</div>
+          <div class="pr-body">Cursor IDE installed, Claude Code CLI installed, GitHub repo created, n8n running on
+            Railway, all API keys saved securely.</div>
+          <span class="pr-tag"
+            style="color:var(--orange);border-color:rgba(232,134,58,0.3);background:rgba(232,134,58,0.08);">1 day
+            setup</span>
+        </div>
       </div>
     </div>
-    <div class="pr-card">
-      <div class="pr-num">02</div>
-      <div>
-        <div class="pr-title">All Accounts Created</div>
-        <div class="pr-body">Railway, Supabase, Vercel, Cloudflare, Sanity, Beehiiv, Claude API, Crunchbase API, domain registrar — all set up before Week 1.</div>
-        <span class="pr-tag" style="color:var(--teal);border-color:rgba(58,184,160,0.3);background:rgba(58,184,160,0.08);">1 day setup</span>
+
+    <div class="roadmap">
+      <div class="rm-title">28-Week Build Sequence</div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 1–2</div>
+        <div class="rm-content">
+          <div class="rm-label">Infrastructure</div>
+          <div class="rm-desc">Railway (n8n), Supabase, Vercel, Cloudflare, Sanity, Beehiiv, domain, all API keys</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 3–4</div>
+        <div class="rm-content">
+          <div class="rm-label">Sanity CMS Schema</div>
+          <div class="rm-desc">Article, Author, Section, Tag, DataPoint content types defined</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 5–6</div>
+        <div class="rm-content">
+          <div class="rm-label">Scout + Memory Agent</div>
+          <div class="rm-desc">First 10 RSS feeds live, Supabase state, deduplication tested</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 7–8</div>
+        <div class="rm-content">
+          <div class="rm-label">Writer + Hallucination Checker</div>
+          <div class="rm-desc">Claude Sonnet rewriting, confidence scoring, threshold calibration</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 9–10</div>
+        <div class="rm-content">
+          <div class="rm-label">Dept Heads + SEO Agent</div>
+          <div class="rm-desc">5 sector agents, scoring prompts, full chain tested end-to-end</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 11–12</div>
+        <div class="rm-content">
+          <div class="rm-label">Human Approval + Publisher</div>
+          <div class="rm-desc">Slack bot, approve/edit/reject flow, article live in &lt;60s of approval</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 13–14</div>
+        <div class="rm-content">
+          <div class="rm-label">Next.js Website</div>
+          <div class="rm-desc">Homepage, article pages, mobile tab bar, Meilisearch, Vercel deploy</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 15–16</div>
+        <div class="rm-content">
+          <div class="rm-label">Newsletter Automation</div>
+          <div class="rm-desc">Curator agent, Beehiiv API, 5:30am cron, 6am send automated</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 17–18</div>
+        <div class="rm-content">
+          <div class="rm-label">Orchestrator + Monitor</div>
+          <div class="rm-desc">System health checks, 9am daily summary, load test 24h run</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 19–20</div>
+        <div class="rm-content">
+          <div class="rm-label">SEO & Launch Prep</div>
+          <div class="rm-desc">Google News submission, 20 seed articles, 5 pillar pages, LLMs.txt</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 21–24</div>
+        <div class="rm-content">
+          <div class="rm-label">MCP Server</div>
+          <div class="rm-desc">Public REST API, Unkey rate limiting, MCP SDK, tested with Claude Desktop</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-week">Wk 25–28</div>
+        <div class="rm-content">
+          <div class="rm-label">Community + Monetization</div>
+          <div class="rm-desc">Beehiiv paid tiers, ad network application, media kit, community Slack</div>
+        </div>
       </div>
     </div>
-    <div class="pr-card">
-      <div class="pr-num">03</div>
-      <div>
-        <div class="pr-title">Development Environment Ready</div>
-        <div class="pr-body">Cursor IDE installed, Claude Code CLI installed, GitHub repo created, n8n running on Railway, all API keys saved securely.</div>
-        <span class="pr-tag" style="color:var(--orange);border-color:rgba(232,134,58,0.3);background:rgba(232,134,58,0.08);">1 day setup</span>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="m-val" style="color:var(--orange);">$109</div>
+        <div class="m-label">Monthly Op Cost</div>
+      </div>
+      <div class="metric">
+        <div class="m-val" style="color:var(--teal);">28 wk</div>
+        <div class="m-label">Full MCP Launch</div>
+      </div>
+      <div class="metric">
+        <div class="m-val" style="color:var(--gold);">Day 90</div>
+        <div class="m-label">Google News Live</div>
+      </div>
+      <div class="metric">
+        <div class="m-val" style="color:var(--green);">500+</div>
+        <div class="m-label">Subs Target Day 90</div>
       </div>
     </div>
   </div>
 
-  <div class="roadmap">
-    <div class="rm-title">28-Week Build Sequence</div>
-    <div class="rm-item"><div class="rm-week">Wk 1–2</div><div class="rm-content"><div class="rm-label">Infrastructure</div><div class="rm-desc">Railway (n8n), Supabase, Vercel, Cloudflare, Sanity, Beehiiv, domain, all API keys</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 3–4</div><div class="rm-content"><div class="rm-label">Sanity CMS Schema</div><div class="rm-desc">Article, Author, Section, Tag, DataPoint content types defined</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 5–6</div><div class="rm-content"><div class="rm-label">Scout + Memory Agent</div><div class="rm-desc">First 10 RSS feeds live, Supabase state, deduplication tested</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 7–8</div><div class="rm-content"><div class="rm-label">Writer + Hallucination Checker</div><div class="rm-desc">Claude Sonnet rewriting, confidence scoring, threshold calibration</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 9–10</div><div class="rm-content"><div class="rm-label">Dept Heads + SEO Agent</div><div class="rm-desc">5 sector agents, scoring prompts, full chain tested end-to-end</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 11–12</div><div class="rm-content"><div class="rm-label">Human Approval + Publisher</div><div class="rm-desc">Slack bot, approve/edit/reject flow, article live in &lt;60s of approval</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 13–14</div><div class="rm-content"><div class="rm-label">Next.js Website</div><div class="rm-desc">Homepage, article pages, mobile tab bar, Meilisearch, Vercel deploy</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 15–16</div><div class="rm-content"><div class="rm-label">Newsletter Automation</div><div class="rm-desc">Curator agent, Beehiiv API, 5:30am cron, 6am send automated</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 17–18</div><div class="rm-content"><div class="rm-label">Orchestrator + Monitor</div><div class="rm-desc">System health checks, 9am daily summary, load test 24h run</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 19–20</div><div class="rm-content"><div class="rm-label">SEO & Launch Prep</div><div class="rm-desc">Google News submission, 20 seed articles, 5 pillar pages, LLMs.txt</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 21–24</div><div class="rm-content"><div class="rm-label">MCP Server</div><div class="rm-desc">Public REST API, Unkey rate limiting, MCP SDK, tested with Claude Desktop</div></div></div>
-    <div class="rm-item"><div class="rm-week">Wk 25–28</div><div class="rm-content"><div class="rm-label">Community + Monetization</div><div class="rm-desc">Beehiiv paid tiers, ad network application, media kit, community Slack</div></div></div>
-  </div>
-
-  <div class="metric-row">
-    <div class="metric"><div class="m-val" style="color:var(--orange);">$109</div><div class="m-label">Monthly Op Cost</div></div>
-    <div class="metric"><div class="m-val" style="color:var(--teal);">28 wk</div><div class="m-label">Full MCP Launch</div></div>
-    <div class="metric"><div class="m-val" style="color:var(--gold);">Day 90</div><div class="m-label">Google News Live</div></div>
-    <div class="metric"><div class="m-val" style="color:var(--green);">500+</div><div class="m-label">Subs Target Day 90</div></div>
-  </div>
-</div>
-
+  <script>(function () { var s = localStorage.getItem('bi-theme') || 'dark'; document.documentElement.setAttribute('data-theme', s); var b = document.getElementById('themeToggle'); if (b) b.textContent = s === 'light' ? '🌙' : '☀️'; if (b) b.onclick = function () { var c = document.documentElement.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n); localStorage.setItem('bi-theme', n); b.textContent = n === 'light' ? '🌙' : '☀️'; }; })();</script>
 </body>
+
 </html>

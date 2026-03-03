@@ -1,157 +1,607 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BuildIntel — Phase 3: Website Design & UI</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d0f14;--glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.07);--text:#f0efe8;--muted:rgba(240,239,232,0.45);--dim:rgba(240,239,232,0.22);--orange:#e8863a;--teal:#3ab8a0;--gold:#d4a843;--blue:#5b9bd5;--display:'Cormorant Garamond',serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);padding-top:50px;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 30% 30%,rgba(232,134,58,0.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 70%,rgba(58,184,160,0.04) 0%,transparent 60%);pointer-events:none;z-index:0;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildIntel — Phase 3: Website Design & UI</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --glass: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #f0efe8;
+      --muted: rgba(240, 239, 232, 0.45);
+      --dim: rgba(240, 239, 232, 0.22);
+      --orange: #e8863a;
+      --teal: #3ab8a0;
+      --gold: #d4a843;
+      --blue: #5b9bd5;
+      --display: 'Cormorant Garamond', serif;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
 
-/* NAV */
-.pnav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(6,7,10,0.96);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(255,255,255,0.06);height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-family:'JetBrains Mono',monospace;}
-.pnav-brand{font-size:13px;font-weight:700;color:#f0efe8;text-decoration:none;letter-spacing:-0.01em;flex-shrink:0;}
-.pnav-brand em{color:#e8863a;font-style:italic;}
-.pnav-phases{display:flex;align-items:center;gap:3px;flex:1;justify-content:center;}
-.pnav-btn{padding:4px 13px;font-family:inherit;font-size:9px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,239,232,0.3);background:transparent;border:1px solid transparent;border-radius:100px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;white-space:nowrap;}
-.pnav-btn:hover{color:rgba(240,239,232,0.75);background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.09);}
-.pnav-btn.active{color:#e8863a;background:rgba(232,134,58,0.1);border-color:rgba(232,134,58,0.28);}
-.pnav-btn.done{color:rgba(92,184,122,0.65);}
-.pnav-btn.done:hover{color:#5cb87a;background:rgba(92,184,122,0.06);border-color:rgba(92,184,122,0.15);}
-.pnav-btn.locked{color:rgba(240,239,232,0.2);pointer-events:none;}
-.pnav-dot{width:5px;height:5px;border-radius:50%;background:#e8863a;flex-shrink:0;animation:pnd 2s ease-in-out infinite;}
-@keyframes pnd{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}
-.pnav-sep{width:18px;height:1px;background:rgba(255,255,255,0.07);flex-shrink:0;}
-.pnav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.pnav-arrow{padding:4px 11px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,239,232,0.35);border:1px solid rgba(255,255,255,0.07);border-radius:100px;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px;}
-.pnav-arrow:hover{color:#f0efe8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);}
-.pnav-arrow.off{opacity:0.15;pointer-events:none;}
-.pnav-md{padding:4px 11px;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(58,184,160,0.75);border:1px solid rgba(58,184,160,0.22);border-radius:100px;text-decoration:none;transition:all 0.2s;background:rgba(58,184,160,0.05);}
-.pnav-md:hover{color:#3ab8a0;border-color:rgba(58,184,160,0.45);background:rgba(58,184,160,0.1);}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* PAGE */
-.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 48px;}
-.phase-badge{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue);background:rgba(91,155,213,0.08);border:1px solid rgba(91,155,213,0.2);padding:5px 16px;border-radius:100px;display:inline-block;margin-bottom:28px;}
-h1{font-family:var(--display);font-size:clamp(48px,7vw,80px);font-weight:700;line-height:1.0;letter-spacing:-0.02em;margin-bottom:16px;}
-h1 em{font-style:italic;color:var(--orange);}
-.sub{font-size:17px;color:var(--muted);max-width:580px;line-height:1.75;font-weight:300;margin-bottom:56px;}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      padding-top: 50px;
+      min-height: 100vh;
+    }
 
-.status-card{background:var(--glass);border:1px solid var(--border);padding:32px 36px;margin-bottom:4px;position:relative;overflow:hidden;}
-.status-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.sc-blue::before{background:linear-gradient(to right,var(--blue),transparent);}
-.sc-gold::before{background:linear-gradient(to right,var(--gold),transparent);}
-.sc-teal::before{background:linear-gradient(to right,var(--teal),transparent);}
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 30% 30%, rgba(232, 134, 58, 0.05) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(58, 184, 160, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.sc-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
-.sc-title{font-family:var(--display);font-size:22px;font-weight:700;margin-bottom:10px;letter-spacing:-0.01em;}
-.sc-body{font-size:13px;color:var(--muted);line-height:1.75;font-weight:300;}
+    /* NAV */
+    .pnav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: rgba(6, 7, 10, 0.96);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-family: 'JetBrains Mono', monospace;
+    }
 
-.what-inside{margin-top:48px;}
-.wi-title{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
-.wi-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
-.wi-item{background:var(--glass);border:1px solid var(--border);padding:20px 22px;}
-.wi-num{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--dim);margin-bottom:6px;}
-.wi-label{font-family:var(--display);font-size:17px;font-weight:700;margin-bottom:5px;}
-.wi-desc{font-size:12px;color:var(--dim);line-height:1.6;}
+    .pnav-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f0efe8;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
 
-.coming-soon{margin-top:56px;background:rgba(91,155,213,0.04);border:1px solid rgba(91,155,213,0.12);padding:40px;text-align:center;}
-.cs-icon{font-size:40px;margin-bottom:16px;}
-.cs-title{font-family:var(--display);font-size:28px;font-weight:700;margin-bottom:10px;color:var(--blue);}
-.cs-body{font-size:14px;color:var(--muted);line-height:1.7;max-width:500px;margin:0 auto 24px;}
-.cs-cta{font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);background:rgba(58,184,160,0.08);border:1px solid rgba(58,184,160,0.2);padding:8px 20px;border-radius:100px;display:inline-block;text-decoration:none;}
+    .pnav-brand em {
+      color: #e8863a;
+      font-style: italic;
+    }
 
-@media(max-width:700px){.wrap{padding:48px 20px;}.wi-grid{grid-template-columns:1fr;}.pnav-phases .pnav-btn:not(.active){display:none;}}
-</style>
+    .pnav-phases {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .pnav-btn {
+      padding: 4px 13px;
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(240, 239, 232, 0.3);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .pnav-btn:hover {
+      color: rgba(240, 239, 232, 0.75);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+
+    .pnav-btn.active {
+      color: #e8863a;
+      background: rgba(232, 134, 58, 0.1);
+      border-color: rgba(232, 134, 58, 0.28);
+    }
+
+    .pnav-btn.done {
+      color: rgba(92, 184, 122, 0.65);
+    }
+
+    .pnav-btn.done:hover {
+      color: #5cb87a;
+      background: rgba(92, 184, 122, 0.06);
+      border-color: rgba(92, 184, 122, 0.15);
+    }
+
+    .pnav-btn.locked {
+      color: rgba(240, 239, 232, 0.2);
+      pointer-events: none;
+    }
+
+    .pnav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #e8863a;
+      flex-shrink: 0;
+      animation: pnd 2s ease-in-out infinite;
+    }
+
+    @keyframes pnd {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.3;
+        transform: scale(0.6);
+      }
+    }
+
+    .pnav-sep {
+      width: 18px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.07);
+      flex-shrink: 0;
+    }
+
+    .pnav-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .pnav-arrow {
+      padding: 4px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240, 239, 232, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pnav-arrow:hover {
+      color: #f0efe8;
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .pnav-arrow.off {
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .pnav-md {
+      padding: 4px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(58, 184, 160, 0.75);
+      border: 1px solid rgba(58, 184, 160, 0.22);
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.2s;
+      background: rgba(58, 184, 160, 0.05);
+    }
+
+    .pnav-md:hover {
+      color: #3ab8a0;
+      border-color: rgba(58, 184, 160, 0.45);
+      background: rgba(58, 184, 160, 0.1);
+    }
+
+    /* PAGE */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
+    .phase-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(91, 155, 213, 0.08);
+      border: 1px solid rgba(91, 155, 213, 0.2);
+      padding: 5px 16px;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 56px;
+    }
+
+    .status-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 32px 36px;
+      margin-bottom: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+
+    .sc-blue::before {
+      background: linear-gradient(to right, var(--blue), transparent);
+    }
+
+    .sc-gold::before {
+      background: linear-gradient(to right, var(--gold), transparent);
+    }
+
+    .sc-teal::before {
+      background: linear-gradient(to right, var(--teal), transparent);
+    }
+
+    .sc-eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+
+    .sc-title {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .sc-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .what-inside {
+      margin-top: 48px;
+    }
+
+    .wi-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .wi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+
+    .wi-item {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 20px 22px;
+    }
+
+    .wi-num {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      margin-bottom: 6px;
+    }
+
+    .wi-label {
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .wi-desc {
+      font-size: 12px;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    .coming-soon {
+      margin-top: 56px;
+      background: rgba(91, 155, 213, 0.04);
+      border: 1px solid rgba(91, 155, 213, 0.12);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .cs-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .cs-title {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--blue);
+    }
+
+    .cs-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto 24px;
+    }
+
+    .cs-cta {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(58, 184, 160, 0.08);
+      border: 1px solid rgba(58, 184, 160, 0.2);
+      padding: 8px 20px;
+      border-radius: 100px;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    @media(max-width:700px) {
+      .wrap {
+        padding: 48px 20px;
+      }
+
+      .wi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pnav-phases .pnav-btn:not(.active) {
+        display: none;
+      }
+    }
+
+    /* ── LIGHT MODE ── */
+    [data-theme="light"] {
+      --bg: #f4f3ef;
+      --glass: rgba(0, 0, 0, 0.04);
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #1a1814;
+      --muted: rgba(26, 24, 20, 0.5);
+      --dim: rgba(26, 24, 20, 0.28);
+      --orange: #c96b1a;
+      --teal: #2a9080;
+      --gold: #b08a2a;
+      --blue: #3a72a8;
+    }
+
+    [data-theme="light"] body {
+      background: #f4f3ef;
+      color: #1a1814;
+    }
+
+    [data-theme="light"] body::before {
+      background: radial-gradient(ellipse 70% 50% at 30% 30%, rgba(201, 107, 26, 0.06) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(42, 144, 128, 0.05) 0%, transparent 60%);
+    }
+
+    [data-theme="light"] .pnav {
+      background: rgba(244, 243, 239, 0.96);
+      border-bottom-color: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="light"] .pnav-brand {
+      color: #1a1814;
+    }
+
+    [data-theme="light"] .status-card {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="light"] .wi-item {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="light"] .coming-soon {
+      background: rgba(58, 114, 168, 0.04);
+      border-color: rgba(58, 114, 168, 0.12);
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(240, 239, 232, 0.5);
+      font-size: 13px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .theme-toggle {
+      border-color: rgba(0, 0, 0, 0.15);
+      color: rgba(26, 24, 20, 0.5);
+    }
+
+    .theme-toggle:hover {
+      border-color: rgba(232, 134, 58, 0.5);
+      color: #e8863a;
+      background: rgba(232, 134, 58, 0.08);
+    }
+  </style>
 </head>
+
 <body>
 
-<nav class="pnav">
-  <a href="/phase1-masterplan.html" class="pnav-brand">Build<em>Intel</em></a>
-  <div class="pnav-phases">
-    <a href="/phase1-masterplan.html" class="pnav-btn done">✓ P1 — Strategy</a>
-    <div class="pnav-sep"></div>
-    <a href="/phase2-agents.html" class="pnav-btn done">✓ P2 — Agents</a>
-    <div class="pnav-sep"></div>
-    <span class="pnav-btn active"><span class="pnav-dot"></span> P3 — Website</span>
-    <div class="pnav-sep"></div>
-    <span class="pnav-btn locked">🔒 P4 — Build</span>
-  </div>
-  <div class="pnav-right">
-    <a href="/phase2-agents.html" class="pnav-arrow">← Prev</a>
-    <a href="/phase4-build.html" class="pnav-arrow">Next →</a>
-    <a href="/phase3-website.md" class="pnav-md" download>⬇ MD</a>
-  </div>
-</nav>
+  <nav class="pnav">
+    <a href="/phase1-masterplan.html" class="pnav-brand">Build<em>Intel</em></a>
+    <div class="pnav-phases">
+      <a href="/phase1-masterplan.html" class="pnav-btn done">✓ P1 — Strategy</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase2-agents.html" class="pnav-btn done">✓ P2 — Agents</a>
+      <div class="pnav-sep"></div>
+      <span class="pnav-btn active"><span class="pnav-dot"></span> P3 — Website</span>
+      <div class="pnav-sep"></div>
+      <span class="pnav-btn locked">🔒 P4 — Build</span>
+    </div>
+    <div class="pnav-right">
+      <a href="/phase2-agents.html" class="pnav-arrow">← Prev</a>
+      <a href="/phase4-build.html" class="pnav-arrow">Next →</a>
+      <a href="/phase3-website.md" class="pnav-md" download>⬇ MD</a>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">☀️</button>
+    </div>
+  </nav>
 
-<div class="wrap">
-  <div class="phase-badge">Phase 03 — Website Design & UI</div>
-  <h1>The <em>Reader</em><br>Experience</h1>
-  <p class="sub">Where all the automated content surfaces to readers, advertisers, and AI agents. Apple-level polish meets federal executive authority — glassmorphism, hot keyword highlighting, mobile-first, MCP-connected.</p>
+  <div class="wrap">
+    <div class="phase-badge">Phase 03 — Website Design & UI</div>
+    <h1>The <em>Reader</em><br>Experience</h1>
+    <p class="sub">Where all the automated content surfaces to readers, advertisers, and AI agents. Apple-level polish
+      meets federal executive authority — glassmorphism, hot keyword highlighting, mobile-first, MCP-connected.</p>
 
-  <div class="status-card sc-blue">
-    <div class="sc-eyebrow">Current Status</div>
-    <div class="sc-title">📐 Design Decisions Locked — Build Starting</div>
-    <div class="sc-body">Aesthetic direction confirmed: modern glassmorphism + editorial serif typography. Layout strategy defined. Ad placement zones mapped. MCP connection panel designed. Mobile bottom tab bar specified. Ready to build with Cursor + Next.js.</div>
-  </div>
+    <div class="status-card sc-blue">
+      <div class="sc-eyebrow">Current Status</div>
+      <div class="sc-title">📐 Design Decisions Locked — Build Starting</div>
+      <div class="sc-body">Aesthetic direction confirmed: modern glassmorphism + editorial serif typography. Layout
+        strategy defined. Ad placement zones mapped. MCP connection panel designed. Mobile bottom tab bar specified.
+        Ready to build with Cursor + Next.js.</div>
+    </div>
 
-  <div class="status-card sc-gold">
-    <div class="sc-eyebrow">Design Mandate</div>
-    <div class="sc-title">"Apple-level polish meets federal executive authority"</div>
-    <div class="sc-body">Dark neutral base. Soft glass cards with backdrop blur. Cormorant Garamond editorial headlines. Hot keywords highlighted with accent glow. Sub-1.5s LCP on mobile. Subtle entrance animations. Never flashy — always credible.</div>
-  </div>
+    <div class="status-card sc-gold">
+      <div class="sc-eyebrow">Design Mandate</div>
+      <div class="sc-title">"Apple-level polish meets federal executive authority"</div>
+      <div class="sc-body">Dark neutral base. Soft glass cards with backdrop blur. Cormorant Garamond editorial
+        headlines. Hot keywords highlighted with accent glow. Sub-1.5s LCP on mobile. Subtle entrance animations. Never
+        flashy — always credible.</div>
+    </div>
 
-  <div class="status-card sc-teal">
-    <div class="sc-eyebrow">Key Differentiators vs GovExec</div>
-    <div class="sc-title">13 Improvements Already Identified</div>
-    <div class="sc-body">No auto-rotating carousel. Bottom tab bar on mobile (not hamburger). Dark mode as default. Command-K instant search. Live data dashboards (not static). Web Share API. JSON-LD on every page. LLMs.txt. MCP connection panel in footer. All improvements documented in Phase 1.</div>
-  </div>
+    <div class="status-card sc-teal">
+      <div class="sc-eyebrow">Key Differentiators vs GovExec</div>
+      <div class="sc-title">13 Improvements Already Identified</div>
+      <div class="sc-body">No auto-rotating carousel. Bottom tab bar on mobile (not hamburger). Dark mode as default.
+        Command-K instant search. Live data dashboards (not static). Web Share API. JSON-LD on every page. LLMs.txt. MCP
+        connection panel in footer. All improvements documented in Phase 1.</div>
+    </div>
 
-  <div class="what-inside">
-    <div class="wi-title">What Phase 3 Contains</div>
-    <div class="wi-grid">
-      <div class="wi-item">
-        <div class="wi-num">01</div>
-        <div class="wi-label">Homepage Layout</div>
-        <div class="wi-desc">Hero 3-col grid, breaking ticker, trending topics bar, section blocks, ad zones, newsletter signup, data widgets. Desktop + mobile.</div>
+    <div class="what-inside">
+      <div class="wi-title">What Phase 3 Contains</div>
+      <div class="wi-grid">
+        <div class="wi-item">
+          <div class="wi-num">01</div>
+          <div class="wi-label">Homepage Layout</div>
+          <div class="wi-desc">Hero 3-col grid, breaking ticker, trending topics bar, section blocks, ad zones,
+            newsletter signup, data widgets. Desktop + mobile.</div>
+        </div>
+        <div class="wi-item">
+          <div class="wi-num">02</div>
+          <div class="wi-label">Article Page</div>
+          <div class="wi-desc">Semafor format display, hot keyword highlights, sticky sidebar with key facts, confidence
+            score badge, MCP "Use in AI" button.</div>
+        </div>
+        <div class="wi-item">
+          <div class="wi-num">03</div>
+          <div class="wi-label">Mobile-First System</div>
+          <div class="wi-desc">Bottom tab bar: Home / Search / Sections / Newsletter / Saved. No hamburger.
+            Thumb-friendly. Native app feel. LCP &lt;1.5s.</div>
+        </div>
+        <div class="wi-item">
+          <div class="wi-num">04</div>
+          <div class="wi-label">Ad Placement Strategy</div>
+          <div class="wi-desc">6 premium ad zones mapped. B2B CPM $40–80. No auto-play, no popups. Native editorial
+            format. Target: Autodesk, Siemens, NVIDIA.</div>
+        </div>
+        <div class="wi-item">
+          <div class="wi-num">05</div>
+          <div class="wi-label">MCP Connection Panel</div>
+          <div class="wi-desc">Footer + article sidebar. Connect to ChatGPT, Claude, Perplexity. Copy MCP URL. API key
+            generation. Free / Pro tiers shown.</div>
+        </div>
+        <div class="wi-item">
+          <div class="wi-num">06</div>
+          <div class="wi-label">Hot Keyword System</div>
+          <div class="wi-desc">AI-detected keywords glow on hover. Auto-linked to topic clusters. Trending bar updates
+            from frequency algo. Eye-catching but not distracting.</div>
+        </div>
       </div>
-      <div class="wi-item">
-        <div class="wi-num">02</div>
-        <div class="wi-label">Article Page</div>
-        <div class="wi-desc">Semafor format display, hot keyword highlights, sticky sidebar with key facts, confidence score badge, MCP "Use in AI" button.</div>
-      </div>
-      <div class="wi-item">
-        <div class="wi-num">03</div>
-        <div class="wi-label">Mobile-First System</div>
-        <div class="wi-desc">Bottom tab bar: Home / Search / Sections / Newsletter / Saved. No hamburger. Thumb-friendly. Native app feel. LCP &lt;1.5s.</div>
-      </div>
-      <div class="wi-item">
-        <div class="wi-num">04</div>
-        <div class="wi-label">Ad Placement Strategy</div>
-        <div class="wi-desc">6 premium ad zones mapped. B2B CPM $40–80. No auto-play, no popups. Native editorial format. Target: Autodesk, Siemens, NVIDIA.</div>
-      </div>
-      <div class="wi-item">
-        <div class="wi-num">05</div>
-        <div class="wi-label">MCP Connection Panel</div>
-        <div class="wi-desc">Footer + article sidebar. Connect to ChatGPT, Claude, Perplexity. Copy MCP URL. API key generation. Free / Pro tiers shown.</div>
-      </div>
-      <div class="wi-item">
-        <div class="wi-num">06</div>
-        <div class="wi-label">Hot Keyword System</div>
-        <div class="wi-desc">AI-detected keywords glow on hover. Auto-linked to topic clusters. Trending bar updates from frequency algo. Eye-catching but not distracting.</div>
-      </div>
+    </div>
+
+    <div class="coming-soon">
+      <div class="cs-icon">🎨</div>
+      <div class="cs-title">Full Mockup — Next to Build</div>
+      <p class="cs-body">The complete interactive website mockup with all pages, layouts, mobile views, and ad zones is
+        the next deliverable. Built with Cursor + Next.js + Tailwind + Framer Motion.</p>
+      <a href="/phase2-agents.html" class="cs-cta">← Review Phase 2 First</a>
     </div>
   </div>
 
-  <div class="coming-soon">
-    <div class="cs-icon">🎨</div>
-    <div class="cs-title">Full Mockup — Next to Build</div>
-    <p class="cs-body">The complete interactive website mockup with all pages, layouts, mobile views, and ad zones is the next deliverable. Built with Cursor + Next.js + Tailwind + Framer Motion.</p>
-    <a href="/phase2-agents.html" class="cs-cta">← Review Phase 2 First</a>
-  </div>
-</div>
-
+  <script>(function () { var s = localStorage.getItem('bi-theme') || 'dark'; document.documentElement.setAttribute('data-theme', s); var b = document.getElementById('themeToggle'); if (b) b.textContent = s === 'light' ? '🌙' : '☀️'; if (b) b.onclick = function () { var c = document.documentElement.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n); localStorage.setItem('bi-theme', n); b.textContent = n === 'light' ? '🌙' : '☀️'; }; })();</script>
 </body>
+
 </html>
