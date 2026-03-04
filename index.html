@@ -105,27 +105,28 @@
 
     /* ── THEME TOGGLE ── */
     .theme-toggle {
-      background: none;
-      border: 1px solid var(--border2);
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 14px;
-      width: 32px;
-      height: 32px;
+      background: var(--glass2);
+      border: 2px solid var(--orange);
+      color: var(--text);
+      font-size: 16px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.25s;
       flex-shrink: 0;
       margin-left: 8px;
+      box-shadow: 0 0 8px rgba(232, 134, 58, 0.25);
     }
 
     .theme-toggle:hover {
-      color: var(--text);
+      background: rgba(232, 134, 58, 0.15);
       border-color: var(--orange);
-      background: var(--glass2);
+      box-shadow: 0 0 14px rgba(232, 134, 58, 0.45);
+      transform: rotate(20deg) scale(1.1);
     }
 
     /* ── LAYOUT ── */
@@ -482,7 +483,7 @@
 
   <script>
     (function () {
-      var saved = localStorage.getItem('bi-theme') || 'dark';
+      var saved = localStorage.getItem('bi-theme') || 'light';
       document.documentElement.setAttribute('data-theme', saved);
       var btn = document.getElementById('themeToggle');
       if (btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';

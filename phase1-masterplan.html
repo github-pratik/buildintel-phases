@@ -1229,30 +1229,34 @@
     }
 
     .theme-toggle {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: rgba(240, 239, 232, 0.5);
-      font-size: 13px;
-      width: 28px;
-      height: 28px;
+      background: rgba(232, 134, 58, 0.1);
+      border: 2px solid #e8863a;
+      color: #f0efe8;
+      font-size: 16px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.25s;
       flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(232, 134, 58, 0.3);
     }
 
     [data-theme="light"] .theme-toggle {
-      border-color: rgba(0, 0, 0, 0.15);
-      color: rgba(26, 24, 20, 0.5);
+      background: rgba(201, 107, 26, 0.1);
+      border-color: #c96b1a;
+      color: #1a1814;
+      box-shadow: 0 0 8px rgba(201, 107, 26, 0.25);
     }
 
     .theme-toggle:hover {
-      border-color: rgba(201, 107, 26, 0.5);
-      color: #c96b1a;
-      background: rgba(201, 107, 26, 0.08);
+      border-color: #e8863a;
+      background: rgba(232, 134, 58, 0.2);
+      box-shadow: 0 0 16px rgba(232, 134, 58, 0.5);
+      transform: rotate(20deg) scale(1.12);
     }
   </style>
 
@@ -2744,7 +2748,7 @@
     sections.forEach(s => scrollSpy.observe(s));
   </script>
 
-  <script>(function () { var s = localStorage.getItem('bi-theme') || 'dark'; document.documentElement.setAttribute('data-theme', s); var b = document.getElementById('themeToggle'); if (b) b.textContent = s === 'light' ? '🌙' : '☀️'; if (b) b.onclick = function () { var c = document.documentElement.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n); localStorage.setItem('bi-theme', n); b.textContent = n === 'light' ? '🌙' : '☀️'; }; })();</script>
+  <script>(function () { var s = localStorage.getItem('bi-theme') || 'light'; document.documentElement.setAttribute('data-theme', s); var b = document.getElementById('themeToggle'); if (b) b.textContent = s === 'light' ? '🌙' : '☀️'; if (b) b.onclick = function () { var c = document.documentElement.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n); localStorage.setItem('bi-theme', n); b.textContent = n === 'light' ? '🌙' : '☀️'; }; })();</script>
 </body>
 
 </html>
