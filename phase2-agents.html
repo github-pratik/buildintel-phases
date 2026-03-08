@@ -2900,8 +2900,163 @@
 
         <div
           style="margin-top:36px;padding-top:28px;border-top:1px solid var(--glass-border);font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);">
-          BuildIntel — AI + ACEM Intelligence Platform · Phase 2 Execution Plan · Prototype First
+          IndustrialBriefs — AI + ACEM Intelligence Platform · Phase 2 Execution Plan · Prototype First
         </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PHASE 2.2 — ACTUAL BUILD STATE & EXECUTION PLAN (2026-03-08)
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="page" id="phase22" style="background:linear-gradient(135deg,rgba(58,184,160,0.04) 0%,transparent 60%);">
+      <div style="max-width:900px;margin:0 auto;">
+
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);">Phase 2.2</div>
+          <div style="flex:1;height:1px;background:var(--glass-border);"></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">2026-03-08</div>
+        </div>
+        <h2 style="font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:600;margin-bottom:12px;">Ground Truth Build State</h2>
+        <p style="color:var(--muted);max-width:640px;margin-bottom:48px;">What is actually deployed, how agents execute in sequence, and what needs to be built next.</p>
+
+        <!-- Live status cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px;">
+          <div style="background:var(--glass);border:1px solid rgba(92,184,122,0.3);border-radius:12px;padding:20px;">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--green);letter-spacing:0.1em;margin-bottom:8px;">✅ LIVE</div>
+            <div style="font-weight:600;margin-bottom:4px;">WF1 Scout Agent</div>
+            <div style="font-size:12px;color:var(--muted);">25 RSS feeds · Scores · Scrapes</div>
+            <div style="font-size:10px;font-family:var(--mono);color:var(--dim);margin-top:8px;">Every 6 hours</div>
+          </div>
+          <div style="background:var(--glass);border:1px solid rgba(92,184,122,0.3);border-radius:12px;padding:20px;">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--green);letter-spacing:0.1em;margin-bottom:8px;">✅ LIVE</div>
+            <div style="font-weight:600;margin-bottom:4px;">WF2 Writer Agent</div>
+            <div style="font-size:12px;color:var(--muted);">Groq LLaMA 3.3 70B · Semafor format</div>
+            <div style="font-size:10px;font-family:var(--mono);color:var(--dim);margin-top:8px;">Webhook trigger</div>
+          </div>
+          <div style="background:var(--glass);border:1px solid rgba(240,239,232,0.12);border-radius:12px;padding:20px;opacity:0.6;">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--orange);letter-spacing:0.1em;margin-bottom:8px;">⏳ TO BUILD</div>
+            <div style="font-weight:600;margin-bottom:4px;">WF3 Publisher</div>
+            <div style="font-size:12px;color:var(--muted);">Ghost CMS Admin API</div>
+            <div style="font-size:10px;font-family:var(--mono);color:var(--dim);margin-top:8px;">Needs Ghost API key</div>
+          </div>
+          <div style="background:var(--glass);border:1px solid rgba(240,239,232,0.12);border-radius:12px;padding:20px;opacity:0.6;">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--orange);letter-spacing:0.1em;margin-bottom:8px;">⏳ TO BUILD</div>
+            <div style="font-weight:600;margin-bottom:4px;">WF4 Curator</div>
+            <div style="font-size:12px;color:var(--muted);">Beehiiv daily newsletter</div>
+            <div style="font-size:10px;font-family:var(--mono);color:var(--dim);margin-top:8px;">5:30am daily cron</div>
+          </div>
+        </div>
+
+        <!-- Full execution flow diagram -->
+        <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:32px;margin-bottom:48px;font-family:var(--mono);font-size:13px;line-height:2;">
+          <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);margin-bottom:20px;">End-to-End Execution Flow</div>
+
+          <div style="color:var(--dim);margin-bottom:4px;">── EVERY 6 HOURS ─────────────────────────────────</div>
+
+          <div style="margin:16px 0;padding:16px;background:rgba(92,184,122,0.06);border-left:3px solid var(--green);border-radius:0 8px 8px 0;">
+            <span style="color:var(--green);">WF1 Scout Agent</span><br>
+            <span style="color:var(--dim);font-size:11px;">Schedule → 25 RSS Feeds (parallel) → Filter &amp; Score (top 30, relevance ≥4)</span><br>
+            <span style="color:var(--dim);font-size:11px;">→ Supabase Dedup (batch IN query) → Scrape Full Article (4000 chars + image + author)</span><br>
+            <span style="color:var(--dim);font-size:11px;">→ POST /webhook/writer-agent</span>
+          </div>
+
+          <div style="text-align:center;color:var(--dim);margin:4px 0;">↓ enriched payload per new article</div>
+
+          <div style="margin:16px 0;padding:16px;background:rgba(92,184,122,0.06);border-left:3px solid var(--green);border-radius:0 8px 8px 0;">
+            <span style="color:var(--green);">WF2 Writer Agent</span><br>
+            <span style="color:var(--dim);font-size:11px;">Webhook → Parse JSON → Groq LLaMA 3.3 70B (Semafor format)</span><br>
+            <span style="color:var(--dim);font-size:11px;">→ Validate article → Save to Supabase → POST /webhook/publisher-agent</span>
+          </div>
+
+          <div style="text-align:center;color:var(--dim);margin:4px 0;">↓ { title, body, summary, tags }</div>
+
+          <div style="margin:16px 0;padding:16px;background:rgba(232,134,58,0.06);border-left:3px solid var(--orange);border-radius:0 8px 8px 0;opacity:0.7;">
+            <span style="color:var(--orange);">WF3 Publisher Agent</span> <span style="font-size:10px;color:var(--dim);">[TO BUILD]</span><br>
+            <span style="color:var(--dim);font-size:11px;">Webhook → Generate Ghost JWT → POST to Ghost Admin API</span><br>
+            <span style="color:var(--dim);font-size:11px;">→ Article live on Ghost CMS → Update Supabase (ghost_url, ghost_post_id)</span>
+          </div>
+
+          <div style="text-align:center;color:var(--dim);margin:4px 0;">↓ article published</div>
+
+          <div style="color:var(--dim);margin:4px 0;">── DAILY 5:30AM ──────────────────────────────────</div>
+
+          <div style="margin:16px 0;padding:16px;background:rgba(232,134,58,0.06);border-left:3px solid var(--orange);border-radius:0 8px 8px 0;opacity:0.7;">
+            <span style="color:var(--orange);">WF4 Curator Agent</span> <span style="font-size:10px;color:var(--dim);">[TO BUILD]</span><br>
+            <span style="color:var(--dim);font-size:11px;">Cron → Query top 5 Supabase articles (last 24h) → Format digest</span><br>
+            <span style="color:var(--dim);font-size:11px;">→ POST to Beehiiv API → Newsletter sent to subscribers by 6:00am</span>
+          </div>
+
+          <div style="color:var(--dim);margin-top:16px;">── RESULT: Article live on Ghost + subscribers notified ──</div>
+        </div>
+
+        <!-- What to build next -->
+        <div style="margin-bottom:48px;">
+          <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;">What To Build Next</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:rgba(224,92,92,0.06);border:1px solid rgba(224,92,92,0.2);border-radius:10px;">
+              <span style="font-size:18px;">🔴</span>
+              <div>
+                <div style="font-weight:600;font-size:14px;">Set up Ghost CMS + get Admin API key</div>
+                <div style="font-size:12px;color:var(--muted);">Blocker for WF3. Decide: Ghost Pro ($25/mo) or self-hosted on Railway.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:rgba(224,92,92,0.06);border:1px solid rgba(224,92,92,0.2);border-radius:10px;">
+              <span style="font-size:18px;">🔴</span>
+              <div>
+                <div style="font-weight:600;font-size:14px;">Build WF3 Publisher Agent</div>
+                <div style="font-size:12px;color:var(--muted);">Ghost JWT auth + POST /ghost/api/admin/posts/ + update Supabase ghost_url.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.2);border-radius:10px;">
+              <span style="font-size:18px;">🟡</span>
+              <div>
+                <div style="font-weight:600;font-size:14px;">Set up Beehiiv + Build WF4 Curator Agent</div>
+                <div style="font-size:12px;color:var(--muted);">Free signup. Daily 5:30am cron → top 5 from Supabase → Beehiiv API → newsletter sent.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:rgba(91,155,213,0.06);border:1px solid rgba(91,155,213,0.2);border-radius:10px;">
+              <span style="font-size:18px;">🟢</span>
+              <div>
+                <div style="font-weight:600;font-size:14px;">Wire WF2 → WF3 handoff + add pipeline_runs logging</div>
+                <div style="font-size:12px;color:var(--muted);">WF2 NoOp node is the integration point. Add monitoring/alerting via pipeline_runs table.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scout upgrade before/after -->
+        <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:32px;">
+          <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;">Scout Agent — Phase 1 vs Phase 2.1</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div>
+              <div style="font-size:11px;font-family:var(--mono);color:var(--dim);margin-bottom:12px;">BEFORE (Phase 1)</div>
+              <div style="font-size:13px;color:var(--muted);line-height:2;">
+                7 RSS feeds<br>
+                Regex pass/fail filter<br>
+                Per-article dedup (slow)<br>
+                Title + 500 char snippet<br>
+                All matches sent (no cap)<br>
+                No source weighting
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-family:var(--mono);color:var(--green);margin-bottom:12px;">AFTER (Phase 2.1)</div>
+              <div style="font-size:13px;color:var(--text);line-height:2;">
+                25 verified RSS feeds<br>
+                Relevance score 0–20+ system<br>
+                Batch IN query dedup (fast)<br>
+                Title + snippet + 4000 char body + image<br>
+                Top 30 per run by score<br>
+                3-tier source weighting
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:48px;padding-top:28px;border-top:1px solid var(--glass-border);font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);text-align:center;">
+          IndustrialBriefs — Phase 2.2 Ground Truth · Updated 2026-03-08
+        </div>
+
       </div>
     </div>
 

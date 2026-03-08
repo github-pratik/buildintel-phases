@@ -1,5 +1,5 @@
-# BuildIntel — Phase 2: Agent Orchestra & Data Flow
-**GPT Memory Context File | Status: 🟠 IN PROGRESS | Last Updated: March 2026**
+# IndustrialBriefs — Phase 2: Agent Orchestra & Data Flow
+**Memory Context File | Status: 🟢 PHASE 2.1 COMPLETE | Last Updated: 2026-03-08**
 
 ---
 
@@ -143,13 +143,246 @@ WORLD (internet)
 
 ---
 
-## 📋 Open Tasks
+## 📋 Open Tasks (Phase 2 Original)
 
-- [ ] n8n deploy on Railway free tier
-- [ ] Supabase schema — 3 tables: feeds, queue, published
+- [x] n8n deploy on Railway free tier ✅
+- [x] Supabase schema — `published` table created and verified ✅
 - [ ] Ghost local install + Admin API key
-- [ ] First 10 RSS feeds to connect
-- [ ] Claude API key in n8n
+- [x] First 10 RSS feeds → now 25 verified feeds ✅
+- [x] Groq API key in n8n (using Groq LLaMA 3.3 instead of Claude) ✅
+
+---
+
+---
+
+## 🟢 Phase 2.2 — Actual Build State & Execution Plan (2026-03-08)
+
+> This section documents what is **actually deployed**, how agents execute in sequence, and what needs to be built next. Replaces the theoretical Phase 2 plan with ground truth.
+
+---
+
+### 🏗️ What Is Live Right Now
+
+| Agent | n8n Workflow ID | Status | Trigger |
+|-------|----------------|--------|---------|
+| **WF1 — Scout Agent** | `N2HuAM6ThXrc4aGM` | ✅ Active | Every 6 hours |
+| **WF2 — Writer Agent** | `LO93zvn51g2JG2sJ` | ✅ Active | Webhook (called by WF1) |
+| **WF3 — Publisher Agent** | TBD | ⏳ Not built | Webhook (called by WF2) |
+| **WF4 — Curator Agent** | TBD | ⏳ Not built | Cron daily 5:30am |
+
+**Infrastructure:**
+- n8n: `https://n8n-primary-production-e002.up.railway.app` ✅
+- Supabase: `https://hcforutxssuhikfzylhe.supabase.co` ✅ (`published` table live)
+- Groq LLaMA 3.3 70B: `https://api.groq.com/openai/v1/` ✅
+- Ghost CMS: ⏳ Not set up yet
+- Beehiiv: ⏳ Not set up yet
+
+---
+
+### 🔄 Full Agent Execution Flow (Current + Planned)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  EVERY 6 HOURS — Automatic trigger
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌─────────────────────────────────────────────────────────┐
+│  WF1 — SCOUT AGENT                         [LIVE ✅]   │
+│                                                         │
+│  Schedule Trigger (every 6h)                            │
+│    ↓                                                    │
+│  25 RSS Feeds (parallel fetch)                          │
+│  ┌──────────────────────────────────────┐               │
+│  │ Tier 1: Construction Dive, AEC Mag,  │               │
+│  │  MIT Tech Review, VentureBeat AI,    │               │
+│  │  AI Business, Smart Cities Dive...   │               │
+│  │ Tier 2: ArchDaily, Mfg Dive, Dezeen  │               │
+│  │ Tier 3: TechCrunch, Robot Report...  │               │
+│  └──────────────────────────────────────┘               │
+│    ↓ (all outputs merge into one batch)                 │
+│  Filter & Score                                         │
+│  - Relevance score 0–20+ per article                    │
+│  - Keywords: BIM, AI, contech, modular...               │
+│  - Recency bonus: <6h=+4, <24h=+2                      │
+│  - Source tier bonus: T1=+3, T2=+1.5, T3=+0.5          │
+│  - Threshold ≥ 4 to pass                               │
+│  - Output: top 30 articles sorted by score              │
+│    ↓                                                    │
+│  Supabase Dedup Check                                   │
+│  - Batch IN query on `published.source_url`             │
+│  - Drops articles already published                     │
+│    ↓                                                    │
+│  Scrape Full Article (per new article)                  │
+│  - HTTP GET article URL                                 │
+│  - Extract <article>/<main>/<body>, strip ads/nav       │
+│  - Pull og:image + author byline                        │
+│  - Up to 4,000 chars of real content                    │
+│    ↓                                                    │
+│  HTTP POST → /webhook/writer-agent (WF2)                │
+│  Payload: { title, link, source, category, score,       │
+│             pubDate, snippet, fullContent, image,        │
+│             author, scrapedOk }                         │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  WF2 — WRITER AGENT                        [LIVE ✅]   │
+│                                                         │
+│  Webhook Trigger: POST /webhook/writer-agent            │
+│    ↓                                                    │
+│  Parse Article JSON                                     │
+│  - Validates required fields: title, link, fullContent  │
+│    ↓                                                    │
+│  Groq LLaMA 3.3 70B API Call                           │
+│  - System: Senior journalist, Semafor format            │
+│  - Prompt: title + source + fullContent (4000 chars)    │
+│  - Returns JSON: { title, body, summary, tags }         │
+│    ↓                                                    │
+│  Valid Article? (Filter node)                           │
+│  - Checks JSON parsed correctly                         │
+│  - Checks body length > 200 chars                       │
+│    ↓ [valid]                                            │
+│  Save to Supabase (published table)                     │
+│  - source_url, title, summary, category, source         │
+│    ↓                                                    │
+│  Ready for Publisher (NoOp — handoff point to WF3)      │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  WF3 — PUBLISHER AGENT                  [⏳ TO BUILD]  │
+│                                                         │
+│  Webhook Trigger: POST /webhook/publisher-agent         │
+│    ↓                                                    │
+│  Generate Ghost JWT token                               │
+│  - Split Admin API key → id + secret                    │
+│  - Sign HS256 JWT (5 min expiry, /admin/ audience)      │
+│    ↓                                                    │
+│  POST to Ghost Admin API                                │
+│  - Convert markdown body → HTML (mobiledoc/lexical)     │
+│  - Set: title, html, tags, status=published,            │
+│         feature_image, custom_excerpt (summary)         │
+│    ↓                                                    │
+│  Update Supabase published record                       │
+│  - Set: ghost_url, ghost_post_id                        │
+│    ↓                                                    │
+│  Confirm publish → log to pipeline_runs                 │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│  WF4 — CURATOR AGENT (Newsletter)       [⏳ TO BUILD]  │
+│                                                         │
+│  Cron Trigger: Daily at 5:30am                         │
+│    ↓                                                    │
+│  Query Supabase: top 5 articles last 24h                │
+│  - ORDER BY published_at DESC LIMIT 5                   │
+│    ↓                                                    │
+│  Has enough articles? (≥3 to send)                      │
+│    ↓ [yes]                                              │
+│  Format Newsletter digest                               │
+│  - Subject: IndustrialBriefs Daily — {date}             │
+│  - Body: Top 5 stories with title, summary, link        │
+│    ↓                                                    │
+│  POST to Beehiiv API                                    │
+│  - Create post → auto-send to subscriber list           │
+│    ↓                                                    │
+│  Log to Supabase pipeline_runs                          │
+└─────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RESULT: Article live on Ghost + subscribers notified
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+### 📊 Data Flow Summary
+
+```
+Internet (25 RSS feeds)
+    ↓ every 6h
+[Scout] Score + Scrape → top 30 articles
+    ↓ new only (Supabase dedup)
+[Writer] Groq LLaMA 3.3 → full article JSON
+    ↓
+[Supabase] published table ← source_url, title, summary, category
+    ↓
+[Publisher] Ghost CMS ← HTML article, tags, feature image
+    ↓
+[Curator] Beehiiv ← daily digest of top 5
+    ↓
+Subscribers 📬
+```
+
+---
+
+### 🔧 What To Build Next (Phase 2.2 Tasks)
+
+| Priority | Task | Blocker |
+|----------|------|---------|
+| 🔴 High | Set up Ghost CMS instance | Need hosting decision (Ghost Pro vs self-hosted) |
+| 🔴 High | Get Ghost Admin API key | Needs Ghost instance first |
+| 🔴 High | Build WF3 Publisher Agent | Needs Ghost API key |
+| 🟡 Medium | Set up Beehiiv account | Free signup |
+| 🟡 Medium | Build WF4 Curator Agent | Needs Beehiiv API key |
+| 🟡 Medium | Wire WF2 → WF3 handoff | WF2 NoOp node ready as integration point |
+| 🟢 Low | Configure `n8n.industrialbriefs.com` DNS | Optional for now |
+| 🟢 Low | Add pipeline_runs logging | Monitoring/alerting |
+
+---
+
+### 📐 WF3 Publisher — Ghost API Reference
+
+```javascript
+// 1. Generate JWT token (runs inside n8n Code node)
+const [id, secret] = GHOST_ADMIN_KEY.split(':');
+const header = { alg: 'HS256', typ: 'JWT', kid: id };
+const now = Math.floor(Date.now() / 1000);
+const payload = { iat: now, exp: now + 300, aud: '/admin/' };
+// → base64url(header).base64url(payload).signature
+
+// 2. POST article to Ghost
+POST https://{ghost-domain}/ghost/api/admin/posts/
+Authorization: Ghost {jwt}
+Content-Type: application/json
+
+{
+  "posts": [{
+    "title": "AI Reshapes Modular Construction Timelines",
+    "html": "<p>Full article HTML...</p>",
+    "custom_excerpt": "Two sentence summary from Groq",
+    "tags": [{"name": "construction"}, {"name": "ai"}],
+    "feature_image": "https://og-image-from-scraper",
+    "status": "published"
+  }]
+}
+```
+
+### 📐 WF4 Curator — Beehiiv API Reference
+
+```
+POST https://api.beehiiv.com/v2/publications/{pub_id}/posts
+Authorization: Bearer {BEEHIIV_API_KEY}
+
+{
+  "subject": "IndustrialBriefs Daily — March 8, 2026",
+  "content": {
+    "free": "<h1>Top Stories</h1><p>...</p>"
+  },
+  "send_at": "immediate",
+  "status": "confirmed"
+}
+```
+
+---
+
+### ⏱️ Performance Targets (Phase 2.2 Goals)
+
+| Metric | Target |
+|--------|--------|
+| RSS fetch → Writer Agent | < 2 min |
+| Writer Agent → Ghost published | < 1 min |
+| Articles published per day | 10–20 |
+| Newsletter send time | 6:00am daily |
+| Human review time | 15 min/day |
 
 ---
 
