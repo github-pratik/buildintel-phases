@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndustrialBriefs — Phase 2.1: Live Agents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text: #f0efe8;
+      --muted: rgba(240, 239, 232, 0.45);
+      --dim: rgba(240, 239, 232, 0.25);
+      --orange: #e8863a;
+      --orange-glow: rgba(232, 134, 58, 0.15);
+      --teal: #3ab8a0;
+      --teal-glow: rgba(58, 184, 160, 0.12);
+      --gold: #d4a843;
+      --blue: #5b9bd5;
+      --purple: #9b7fd4;
+      --green: #5cb87a;
+      --red: #e05c5c;
+      --display: 'Cormorant Garamond', serif;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 20%, rgba(58, 184, 160, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(92, 184, 122, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 50% 50%, rgba(91, 155, 213, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    .wrapper { position: relative; z-index: 1; }
+
+    /* NAV */
+    .top-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 32px;
+      background: rgba(13, 15, 20, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 100;
+    }
+    .nav-brand { font-family: var(--display); font-size: 18px; font-weight: 700; }
+    .nav-brand span { color: var(--teal); }
+    .nav-links { display: flex; gap: 24px; list-style: none; margin-left: auto; }
+    .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .progress {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--green));
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .pnav {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      display: flex;
+      gap: 8px;
+      z-index: 100;
+    }
+    .pnav-arrow, .pnav-md {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      text-decoration: none;
+      font-family: var(--mono);
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+    }
+    .pnav-arrow:hover, .pnav-md:hover { color: var(--text); border-color: var(--teal); }
+
+    /* COVER */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 40px 60px;
+    }
+    .cover-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: var(--teal-glow);
+      border: 1px solid rgba(58, 184, 160, 0.25);
+      padding: 6px 18px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      display: inline-block;
+    }
+    .cover h1 {
+      font-family: var(--display);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #f0efe8 0%, rgba(240, 239, 232, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cover h1 em { font-style: italic; color: var(--teal); -webkit-text-fill-color: var(--teal); }
+    .cover-sub {
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+    .cover-stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 64px;
+    }
+    .cover-stat {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 20px 28px;
+      min-width: 120px;
+    }
+    .cover-stat-num { font-family: var(--display); font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+    .cover-stat-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
+    .scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--teal));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    /* PAGES */
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+    .sec-header {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 48px;
+    }
+    .sec-number {
+      font-family: var(--display);
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(240, 239, 232, 0.06);
+      margin-top: -8px;
+    }
+    .sec-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .sec-title {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .sec-desc { color: var(--muted); max-width: 640px; }
+
+    /* AGENT CARDS */
+    .agent-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 32px 36px 24px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .agent-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .agent-meta { flex: 1; }
+    .agent-id {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      margin-bottom: 4px;
+    }
+    .agent-name {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .agent-desc { font-size: 13px; color: var(--muted); }
+    .agent-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .status-pill {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+    .status-live { color: var(--green); border-color: rgba(92, 184, 122, 0.3); background: rgba(92, 184, 122, 0.08); }
+    .status-pending { color: var(--orange); border-color: rgba(232, 134, 58, 0.3); background: rgba(232, 134, 58, 0.08); }
+    .trigger-pill {
+      font-size: 11px;
+      color: var(--dim);
+      font-family: var(--mono);
+    }
+
+    .agent-body { padding: 0 36px 36px; }
+
+    /* Stats row */
+    .agent-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--glass-border);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 28px 0;
+    }
+    .agent-stat {
+      background: var(--bg);
+      padding: 18px 20px;
+    }
+    .agent-stat-val {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .agent-stat-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* Pipeline flow */
+    .pipeline {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 28px;
+      margin: 24px 0;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .pipeline-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 20px;
+    }
+    .pipeline-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .pipe-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .pipe-line {
+      width: 1px;
+      height: 20px;
+      margin-left: 3.5px;
+      margin-bottom: 4px;
+      background: var(--glass-border);
+    }
+    .pipe-title { color: var(--text); font-size: 12px; margin-bottom: 3px; }
+    .pipe-detail { color: var(--dim); font-size: 11px; line-height: 1.7; }
+
+    /* Payload / code block */
+    .code-block {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--muted);
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+    .code-block .key { color: var(--blue); }
+    .code-block .val { color: var(--green); }
+    .code-block .comment { color: var(--dim); font-style: italic; }
+
+    /* Feed grid */
+    .feed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .feed-item {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+    .feed-name { font-weight: 500; margin-bottom: 2px; }
+    .feed-tier {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .tier-1 { color: var(--teal); }
+    .tier-2 { color: var(--blue); }
+    .tier-3 { color: var(--muted); }
+
+    /* Section divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 64px 0 48px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--glass-border); }
+    .divider-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* Handoff arrow */
+    .handoff {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 24px 0;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+    .handoff-arrow { font-size: 24px; color: var(--teal); }
+    .handoff-payload {
+      background: rgba(58, 184, 160, 0.06);
+      border: 1px solid rgba(58, 184, 160, 0.2);
+      border-radius: 8px;
+      padding: 8px 20px;
+      font-size: 11px;
+      color: var(--teal);
+    }
+
+    /* Summary */
+    .summary-block {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 48px;
+      text-align: center;
+    }
+    .summary-title {
+      font-family: var(--display);
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .summary-desc { color: var(--muted); max-width: 600px; margin: 0 auto 36px; line-height: 1.7; }
+    .summary-metrics { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+    .sm-item { text-align: center; }
+    .sm-val { font-family: var(--display); font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .sm-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* Fade up animation */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Theme toggle */
+    .theme-toggle {
+      background: none; border: 1px solid var(--glass-border);
+      color: var(--muted); border-radius: 8px; padding: 6px 10px;
+      cursor: pointer; font-size: 14px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f4ef;
+      --glass: rgba(0,0,0,0.03);
+      --glass-border: rgba(0,0,0,0.08);
+      --text: #1a1a1a;
+      --muted: rgba(26,26,26,0.55);
+      --dim: rgba(26,26,26,0.3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Page nav -->
+  <div class="pnav">
+    <a href="/phase2-agents.html" class="pnav-arrow">← Phase 2</a>
+    <a href="/phase3-website.html" class="pnav-arrow">Phase 3 →</a>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">☀️</button>
+  </div>
+
+  <div class="wrapper">
+
+    <!-- TOP NAV -->
+    <nav class="top-nav">
+      <div class="nav-brand">Industrial<span>Briefs</span></div>
+      <ul class="nav-links">
+        <li><a href="#wf1">Scout Agent</a></li>
+        <li><a href="#wf2">Writer Agent</a></li>
+        <li><a href="#handoff">Handoff</a></li>
+        <li><a href="#next">What's Next</a></li>
+      </ul>
+      <div class="progress" id="prog"></div>
+    </nav>
+
+    <!-- COVER -->
+    <div class="cover">
+      <div class="cover-badge">Phase 2.1 — Agents Live · 2026-03-08</div>
+      <h1>Industrial<em>Briefs</em></h1>
+      <p class="cover-sub">Two agents are live and running. Scout fetches & scores news from 25 sources. Writer transforms raw stories into full AI-generated articles. The pipeline is real.</p>
+
+      <div class="cover-stats">
+        <div class="cover-stat">
+          <div class="cover-stat-num" style="color:var(--green);">2</div>
+          <div class="cover-stat-label">Agents Live</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num" style="color:var(--teal);">25</div>
+          <div class="cover-stat-label">RSS Feeds</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num" style="color:var(--blue);">6h</div>
+          <div class="cover-stat-label">Run Cycle</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num" style="color:var(--gold);">30</div>
+          <div class="cover-stat-label">Articles / Run</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num" style="color:var(--purple);">70B</div>
+          <div class="cover-stat-label">LLM Params</div>
+        </div>
+      </div>
+
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        Scroll to explore
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         WF1 — SCOUT AGENT
+    ════════════════════════════════════════════════════ -->
+    <div class="page" id="wf1">
+      <div class="sec-header fade-up">
+        <div class="sec-number">01</div>
+        <div class="sec-title-block">
+          <div class="sec-eyebrow" style="color:var(--teal);">Workflow 1 · Active · Every 6 Hours</div>
+          <h2 class="sec-title">Scout Agent</h2>
+          <p class="sec-desc">Monitors 25 verified RSS feeds across ACEM + AI industries. Scores every article for relevance, deduplicates against Supabase, scrapes full content, and fires enriched payloads to the Writer Agent.</p>
+        </div>
+      </div>
+
+      <div class="agent-card fade-up">
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(58,184,160,0.1);border:1px solid rgba(58,184,160,0.2);">🕷️</div>
+          <div class="agent-meta">
+            <div class="agent-id">n8n · ID: N2HuAM6ThXrc4aGM · 30 nodes</div>
+            <div class="agent-name">Vision_News — Scout Agent</div>
+            <div class="agent-desc">RSS Fetcher · Scorer · Scraper · Dispatcher</div>
+          </div>
+          <div class="agent-status">
+            <span class="status-pill status-live">✅ Live</span>
+            <span class="trigger-pill">⏱ Every 6 hours</span>
+          </div>
+        </div>
+
+        <div class="agent-body">
+
+          <!-- Stats -->
+          <div class="agent-stats">
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--teal);">25</div>
+              <div class="agent-stat-label">RSS Feeds</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--green);">≥ 4</div>
+              <div class="agent-stat-label">Score Threshold</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--blue);">Top 30</div>
+              <div class="agent-stat-label">Per Run Cap</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--gold);">4,000</div>
+              <div class="agent-stat-label">Chars Scraped</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--purple);">3</div>
+              <div class="agent-stat-label">Source Tiers</div>
+            </div>
+          </div>
+
+          <!-- Pipeline flow -->
+          <div class="pipeline">
+            <div class="pipeline-label">Execution Flow</div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--teal);"></div>
+              <div>
+                <div class="pipe-title">Schedule Trigger</div>
+                <div class="pipe-detail">Fires every 6 hours automatically</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--teal);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--blue);"></div>
+              <div>
+                <div class="pipe-title">25 RSS Feeds — Parallel Fetch</div>
+                <div class="pipe-detail">All feeds fetched simultaneously. Tier 1: Construction Dive, AEC Magazine, MIT Tech Review, VentureBeat AI, AI Business, Smart Cities Dive, The Construction Index, Global Construction Review. Tier 2: ArchDaily, Mfg Dive, Dezeen + 9 more. Tier 3: TechCrunch, Robot Report + 3 more.</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--blue);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--gold);"></div>
+              <div>
+                <div class="pipe-title">Filter &amp; Score</div>
+                <div class="pipe-detail">Each article scored 0–20+. High keywords (BIM, AI, digital twin, contech) → +3 each. Mid keywords (construction, infrastructure) → +1.5 each. Recency: &lt;6h → +4, &lt;24h → +2. Source tier bonus: T1 → +3, T2 → +1.5, T3 → +0.5. Threshold ≥ 4. Output: top 30 by score. In-memory URL dedup across feeds.</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--gold);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--purple);"></div>
+              <div>
+                <div class="pipe-title">Supabase Dedup Check</div>
+                <div class="pipe-detail">Single batch IN query against published.source_url. Drops articles already in the database. Fail-open: if Supabase unreachable, all articles pass through.</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--purple);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--orange);"></div>
+              <div>
+                <div class="pipe-title">Scrape Full Article</div>
+                <div class="pipe-detail">HTTP GET each new article URL. Extracts body from &lt;article&gt; / &lt;main&gt; / &lt;body&gt; tags. Strips scripts, nav, footer, ads. Pulls og:image and author byline. Up to 4,000 chars of real content. Falls back to RSS snippet if scrape fails (paywall, bot block).</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--orange);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--green);"></div>
+              <div>
+                <div class="pipe-title">POST → Writer Agent Webhook</div>
+                <div class="pipe-detail">Fires enriched payload per article to /webhook/writer-agent (WF2)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RSS Feeds -->
+          <div style="margin-top:28px;">
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;font-family:var(--mono);">Verified RSS Sources — Tested 2026-03-08</div>
+            <div class="feed-grid">
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">Construction Dive</div>
+                <div class="feed-tier tier-1">● Tier 1 · AEC News</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">AEC Magazine</div>
+                <div class="feed-tier tier-1">● Tier 1 · AEC Tech</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">MIT Tech Review</div>
+                <div class="feed-tier tier-1">● Tier 1 · AI Tech</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">VentureBeat AI</div>
+                <div class="feed-tier tier-1">● Tier 1 · AI News</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">AI Business</div>
+                <div class="feed-tier tier-1">● Tier 1 · AI Industry</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">Smart Cities Dive</div>
+                <div class="feed-tier tier-1">● Tier 1 · Smart Infra</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">The Construction Index</div>
+                <div class="feed-tier tier-1">● Tier 1 · AEC News</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(58,184,160,0.2);">
+                <div class="feed-name">Global Construction Review</div>
+                <div class="feed-tier tier-1">● Tier 1 · AEC News</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">ArchDaily</div>
+                <div class="feed-tier tier-2">● Tier 2 · Architecture</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Manufacturing Dive</div>
+                <div class="feed-tier tier-2">● Tier 2 · Manufacturing</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Construction Executive</div>
+                <div class="feed-tier tier-2">● Tier 2 · Construction</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">World Construction Network</div>
+                <div class="feed-tier tier-2">● Tier 2 · AEC News</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">AI News</div>
+                <div class="feed-tier tier-2">● Tier 2 · AI Industry</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Synced Review</div>
+                <div class="feed-tier tier-2">● Tier 2 · AI Research</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">The Gradient</div>
+                <div class="feed-tier tier-2">● Tier 2 · AI Research</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">AEC Business</div>
+                <div class="feed-tier tier-2">● Tier 2 · AEC Tech</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Cities Today</div>
+                <div class="feed-tier tier-2">● Tier 2 · Urban Dev</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Planetizen</div>
+                <div class="feed-tier tier-2">● Tier 2 · Urban Planning</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Dezeen</div>
+                <div class="feed-tier tier-2">● Tier 2 · Arch Design</div>
+              </div>
+              <div class="feed-item" style="border-color:rgba(91,155,213,0.2);">
+                <div class="feed-name">Construction Business Owner</div>
+                <div class="feed-tier tier-2">● Tier 2 · Const. Mgmt</div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-name">TechCrunch</div>
+                <div class="feed-tier tier-3">● Tier 3 · Tech News</div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-name">The Robot Report</div>
+                <div class="feed-tier tier-3">● Tier 3 · Robotics</div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-name">Propmodo</div>
+                <div class="feed-tier tier-3">● Tier 3 · PropTech</div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-name">Hexagon Blog</div>
+                <div class="feed-tier tier-3">● Tier 3 · Const. Tech</div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-name">Built Environment News</div>
+                <div class="feed-tier tier-3">● Tier 3 · Const. News</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output payload -->
+          <div style="margin-top:28px;">
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-family:var(--mono);">Enriched Payload Sent to Writer Agent</div>
+            <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="key">"title"</span>:       <span class="val">"AI-Powered Modular Construction Cuts Build Time by 40%"</span>,<br>
+&nbsp;&nbsp;<span class="key">"link"</span>:        <span class="val">"https://www.constructiondive.com/news/..."</span>,<br>
+&nbsp;&nbsp;<span class="key">"source"</span>:      <span class="val">"Construction Dive"</span>,<br>
+&nbsp;&nbsp;<span class="key">"category"</span>:    <span class="val">"AEC News"</span>,<br>
+&nbsp;&nbsp;<span class="key">"score"</span>:       <span class="val">16.5</span>,  <span class="comment">// relevance score 0–20+</span><br>
+&nbsp;&nbsp;<span class="key">"pubDate"</span>:     <span class="val">"2026-03-08T04:12:00Z"</span>,<br>
+&nbsp;&nbsp;<span class="key">"snippet"</span>:     <span class="val">"RSS excerpt up to 800 chars..."</span>,<br>
+&nbsp;&nbsp;<span class="key">"fullContent"</span>: <span class="val">"Scraped article body up to 4,000 chars..."</span>,<br>
+&nbsp;&nbsp;<span class="key">"image"</span>:       <span class="val">"https://og-image-url-from-scraper.jpg"</span>,<br>
+&nbsp;&nbsp;<span class="key">"author"</span>:      <span class="val">"Jane Smith"</span>,<br>
+&nbsp;&nbsp;<span class="key">"scrapedOk"</span>:   <span class="val">true</span><br>
+}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Handoff -->
+      <div class="handoff" id="handoff">
+        <div class="handoff-arrow">↓</div>
+        <div class="handoff-payload">POST /webhook/writer-agent · enriched article payload</div>
+        <div class="handoff-arrow">↓</div>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         WF2 — WRITER AGENT
+    ════════════════════════════════════════════════════ -->
+    <div class="page" id="wf2" style="padding-top:0;">
+
+      <div class="sec-header fade-up">
+        <div class="sec-number">02</div>
+        <div class="sec-title-block">
+          <div class="sec-eyebrow" style="color:var(--green);">Workflow 2 · Active · Webhook Trigger</div>
+          <h2 class="sec-title">Writer Agent</h2>
+          <p class="sec-desc">Receives enriched article data from Scout, calls Groq LLaMA 3.3 70B to generate a full news article in Semafor format, validates the output, and saves it to Supabase ready for the Publisher.</p>
+        </div>
+      </div>
+
+      <div class="agent-card fade-up">
+        <div class="agent-header">
+          <div class="agent-icon" style="background:rgba(92,184,122,0.1);border:1px solid rgba(92,184,122,0.2);">✍️</div>
+          <div class="agent-meta">
+            <div class="agent-id">n8n · ID: LO93zvn51g2JG2sJ · Groq LLaMA 3.3 70B</div>
+            <div class="agent-name">Vision_News — Writer Agent</div>
+            <div class="agent-desc">Article Generator · JSON Validator · Supabase Publisher</div>
+          </div>
+          <div class="agent-status">
+            <span class="status-pill status-live">✅ Live</span>
+            <span class="trigger-pill">🔗 POST /webhook/writer-agent</span>
+          </div>
+        </div>
+
+        <div class="agent-body">
+
+          <!-- Stats -->
+          <div class="agent-stats">
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--green);">70B</div>
+              <div class="agent-stat-label">LLM Parameters</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--teal);">0.7</div>
+              <div class="agent-stat-label">Temperature</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--blue);">3</div>
+              <div class="agent-stat-label">Article Sections</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--gold);">Groq</div>
+              <div class="agent-stat-label">AI Provider</div>
+            </div>
+            <div class="agent-stat">
+              <div class="agent-stat-val" style="color:var(--purple);">&lt; 5s</div>
+              <div class="agent-stat-label">Avg Response</div>
+            </div>
+          </div>
+
+          <!-- Pipeline flow -->
+          <div class="pipeline">
+            <div class="pipeline-label">Execution Flow</div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--green);"></div>
+              <div>
+                <div class="pipe-title">Webhook Trigger</div>
+                <div class="pipe-detail">Receives POST from Scout Agent at /webhook/writer-agent</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--green);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--blue);"></div>
+              <div>
+                <div class="pipe-title">Parse Article JSON</div>
+                <div class="pipe-detail">Validates required fields: title, link, fullContent. Extracts source, category, score, image, author.</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--blue);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--gold);"></div>
+              <div>
+                <div class="pipe-title">Groq LLaMA 3.3 70B — Article Generation</div>
+                <div class="pipe-detail">System prompt: Senior journalist at IndustrialBriefs, covering ACEM + AI sectors, Semafor format (What Happened / Why It Matters / What's Next). User prompt: title + source + fullContent (4,000 chars). Returns strict JSON: { title, body, summary, tags }.</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--gold);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--orange);"></div>
+              <div>
+                <div class="pipe-title">Valid Article? (Filter node)</div>
+                <div class="pipe-detail">Checks JSON parsed correctly and body length &gt; 200 chars. Invalid articles are dropped silently.</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--orange);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--teal);"></div>
+              <div>
+                <div class="pipe-title">Save to Supabase</div>
+                <div class="pipe-detail">INSERT into published table: source_url, title, summary, category, source, published_at. Sets ghost_url and ghost_post_id to null (filled by WF3).</div>
+              </div>
+            </div>
+            <div class="pipe-line" style="background:var(--teal);opacity:0.3;"></div>
+
+            <div class="pipeline-step">
+              <div class="pipe-dot" style="background:var(--purple);"></div>
+              <div>
+                <div class="pipe-title">Ready for Publisher (NoOp)</div>
+                <div class="pipe-detail">Handoff point. WF3 Publisher Agent will connect here when Ghost CMS is set up.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LLM prompt -->
+          <div style="margin-top:28px;">
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-family:var(--mono);">Groq API Prompt</div>
+            <div class="code-block">
+<span class="comment">// System message</span><br>
+<span class="val">"You are a senior journalist at IndustrialBriefs, an AI-powered<br>
+&nbsp;news platform covering Architecture, Construction, Engineering,<br>
+&nbsp;and Manufacturing (ACEM) sectors. Write in the Semafor format:<br>
+&nbsp;What Happened / Why It Matters / What's Next.<br>
+&nbsp;Return ONLY valid JSON — no markdown, no preamble."</span><br><br>
+<span class="comment">// User message</span><br>
+<span class="val">"Write a news article based on:\n<br>
+&nbsp;Title: {title}\n<br>
+&nbsp;Source: {source}\n<br>
+&nbsp;Category: {category}\n<br>
+&nbsp;Content: {fullContent}"</span><br><br>
+<span class="comment">// Model: llama-3.3-70b-versatile · Temperature: 0.7</span>
+            </div>
+          </div>
+
+          <!-- Output format -->
+          <div style="margin-top:20px;">
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-family:var(--mono);">LLM Output → Saved to Supabase</div>
+            <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="key">"title"</span>:   <span class="val">"AI-Powered Modular Construction Cuts Build Time by 40%"</span>,<br>
+&nbsp;&nbsp;<span class="key">"body"</span>:    <span class="val">"## What Happened\n\nA new study from...\n\n## Why It Matters\n\n...\n\n## What's Next\n\n..."</span>,<br>
+&nbsp;&nbsp;<span class="key">"summary"</span>: <span class="val">"Two sentence executive summary. Suitable for newsletter and meta description."</span>,<br>
+&nbsp;&nbsp;<span class="key">"tags"</span>:    <span class="val">["construction", "ai", "modular", "innovation"]</span><br>
+}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         WHAT'S NEXT
+    ════════════════════════════════════════════════════ -->
+    <div class="page" id="next">
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-label">Pipeline Status</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="sec-header fade-up">
+        <div class="sec-number">03</div>
+        <div class="sec-title-block">
+          <div class="sec-eyebrow" style="color:var(--orange);">Up Next — Phase 2.2</div>
+          <h2 class="sec-title">Two More Agents to Build</h2>
+          <p class="sec-desc">Scout and Writer are live. Publisher and Curator are designed and ready to build — they just need Ghost CMS and Beehiiv credentials to go live.</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;" class="fade-up">
+
+        <!-- WF3 -->
+        <div style="background:var(--glass);border:1px solid rgba(232,134,58,0.2);border-radius:16px;padding:28px;opacity:0.75;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:10px;background:rgba(232,134,58,0.1);border:1px solid rgba(232,134,58,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;">🚀</div>
+            <div>
+              <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--orange);text-transform:uppercase;margin-bottom:2px;">WF3 · To Build</div>
+              <div style="font-family:var(--display);font-size:20px;font-weight:600;">Publisher Agent</div>
+            </div>
+            <span class="status-pill status-pending" style="margin-left:auto;">⏳ Pending</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;">Receives article JSON from Writer, generates Ghost JWT token, publishes via Ghost Admin API. Updates Supabase with ghost_url and ghost_post_id.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--dim);">
+            Trigger: POST /webhook/publisher-agent<br>
+            Blocker: Ghost CMS instance + Admin API key
+          </div>
+        </div>
+
+        <!-- WF4 -->
+        <div style="background:var(--glass);border:1px solid rgba(212,168,67,0.2);border-radius:16px;padding:28px;opacity:0.75;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:10px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;">📧</div>
+            <div>
+              <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:2px;">WF4 · To Build</div>
+              <div style="font-family:var(--display);font-size:20px;font-weight:600;">Curator Agent</div>
+            </div>
+            <span class="status-pill status-pending" style="margin-left:auto;">⏳ Pending</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;">Runs daily at 5:30am. Queries Supabase for top 5 articles from last 24h. Formats a newsletter digest and sends via Beehiiv API to subscribers by 6:00am.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--dim);">
+            Trigger: Cron — daily 05:30<br>
+            Blocker: Beehiiv account + API key
+          </div>
+        </div>
+      </div>
+
+      <!-- Full pipeline status bar -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:28px;font-family:var(--mono);font-size:12px;" class="fade-up">
+        <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-bottom:20px;">Full Pipeline — Current Status</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;">
+          <div style="padding:16px;background:rgba(92,184,122,0.06);border:1px solid rgba(92,184,122,0.2);border-radius:8px;text-align:center;">
+            <div style="font-size:20px;margin-bottom:8px;">🕷️</div>
+            <div style="color:var(--green);font-size:10px;margin-bottom:4px;">✅ LIVE</div>
+            <div style="font-weight:600;margin-bottom:2px;">WF1 Scout</div>
+            <div style="color:var(--dim);font-size:10px;">Every 6h</div>
+          </div>
+          <div style="padding:16px;background:rgba(92,184,122,0.06);border:1px solid rgba(92,184,122,0.2);border-radius:8px;text-align:center;">
+            <div style="font-size:20px;margin-bottom:8px;">✍️</div>
+            <div style="color:var(--green);font-size:10px;margin-bottom:4px;">✅ LIVE</div>
+            <div style="font-weight:600;margin-bottom:2px;">WF2 Writer</div>
+            <div style="color:var(--dim);font-size:10px;">Webhook</div>
+          </div>
+          <div style="padding:16px;background:rgba(232,134,58,0.04);border:1px solid rgba(232,134,58,0.15);border-radius:8px;text-align:center;opacity:0.65;">
+            <div style="font-size:20px;margin-bottom:8px;">🚀</div>
+            <div style="color:var(--orange);font-size:10px;margin-bottom:4px;">⏳ TO BUILD</div>
+            <div style="font-weight:600;margin-bottom:2px;">WF3 Publisher</div>
+            <div style="color:var(--dim);font-size:10px;">Ghost CMS</div>
+          </div>
+          <div style="padding:16px;background:rgba(212,168,67,0.04);border:1px solid rgba(212,168,67,0.15);border-radius:8px;text-align:center;opacity:0.65;">
+            <div style="font-size:20px;margin-bottom:8px;">📧</div>
+            <div style="color:var(--gold);font-size:10px;margin-bottom:4px;">⏳ TO BUILD</div>
+            <div style="font-weight:600;margin-bottom:2px;">WF4 Curator</div>
+            <div style="color:var(--dim);font-size:10px;">Beehiiv · 5:30am</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="page" style="padding-bottom:0;">
+      <div class="summary-block fade-up">
+        <div class="summary-title">Phase 2.1 Complete</div>
+        <p class="summary-desc">Scout Agent is pulling and scoring news from 25 verified sources every 6 hours. Writer Agent is generating full Semafor-format articles using Groq LLaMA 3.3 70B and saving them to Supabase. The core intelligence pipeline is live.</p>
+        <div class="summary-metrics">
+          <div class="sm-item">
+            <div class="sm-val" style="color:var(--green);">2/4</div>
+            <div class="sm-label">Agents Live</div>
+          </div>
+          <div class="sm-item">
+            <div class="sm-val" style="color:var(--teal);">25</div>
+            <div class="sm-label">RSS Sources</div>
+          </div>
+          <div class="sm-item">
+            <div class="sm-val" style="color:var(--blue);">70B</div>
+            <div class="sm-label">LLM Params</div>
+          </div>
+          <div class="sm-item">
+            <div class="sm-val" style="color:var(--orange);">Ghost</div>
+            <div class="sm-label">Next Blocker</div>
+          </div>
+        </div>
+        <div style="margin-top:36px;padding-top:28px;border-top:1px solid var(--glass-border);font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);">
+          IndustrialBriefs — Phase 2.1 · Scout + Writer Agents Live · 2026-03-08
+        </div>
+      </div>
+    </div>
+
+  </div><!-- wrapper -->
+
+  <script>
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (window.scrollY / (h.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('prog').style.width = pct + '%';
+    });
+
+    // Fade up on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+    });
+  </script>
+
+</body>
+</html>
