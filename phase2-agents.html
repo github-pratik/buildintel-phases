@@ -591,7 +591,7 @@
       font-size: 11.5px;
       color: var(--muted);
       padding: 4px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid var(--glass-border);
       display: flex;
       align-items: flex-start;
       gap: 8px;
@@ -612,8 +612,8 @@
     }
 
     .tool-vs {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
       padding: 10px 14px;
       font-size: 11px;
       color: var(--dim);
@@ -911,7 +911,7 @@
     }
 
     .cost-table th {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--glass);
       padding: 12px 18px;
       text-align: left;
       font-family: var(--mono);
@@ -925,7 +925,7 @@
 
     .cost-table td {
       padding: 12px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--glass-border);
       font-size: 13px;
       color: var(--muted);
       vertical-align: middle;
@@ -1011,7 +1011,7 @@
 
     .sm-item {
       padding: 20px 32px;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--glass);
       border: 1px solid var(--glass-border);
       text-align: center;
     }
@@ -1564,6 +1564,82 @@
       box-shadow: 0 0 8px rgba(201, 107, 26, 0.25);
     }
 
+    /* ── LIGHT MODE: fix hardcoded dark-only colors ── */
+
+    /* pnav hardcoded colors */
+    [data-theme="light"] .pnav {
+      background: rgba(242, 240, 235, 0.97);
+      border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="light"] .pnav-brand {
+      color: #1a1814;
+    }
+    [data-theme="light"] .pnav-btn {
+      color: rgba(26, 24, 20, 0.35);
+    }
+    [data-theme="light"] .pnav-btn:hover {
+      color: rgba(26, 24, 20, 0.8);
+      background: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+    [data-theme="light"] .pnav-btn.active {
+      color: #c96b1a;
+      background: rgba(201, 107, 26, 0.1);
+      border-color: rgba(201, 107, 26, 0.28);
+    }
+    [data-theme="light"] .pnav-btn.done {
+      color: rgba(42, 144, 128, 0.75);
+    }
+    [data-theme="light"] .pnav-btn.locked {
+      color: rgba(26, 24, 20, 0.2);
+    }
+    [data-theme="light"] .pnav-sep {
+      background: rgba(0, 0, 0, 0.12);
+    }
+    [data-theme="light"] .pnav-arrow {
+      color: rgba(26, 24, 20, 0.45);
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="light"] .pnav-arrow:hover {
+      color: #1a1814;
+      border-color: rgba(0, 0, 0, 0.22);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* rgba(255,255,255,...) backgrounds → dark-on-light equivalents */
+    [data-theme="light"] .tool-vs {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.08);
+      color: rgba(26, 24, 20, 0.5);
+    }
+    [data-theme="light"] .tool-points li {
+      border-bottom-color: rgba(0, 0, 0, 0.06);
+    }
+    [data-theme="light"] .cost-table td {
+      border-bottom-color: rgba(0, 0, 0, 0.05);
+    }
+    [data-theme="light"] .cost-table th {
+      background: rgba(0, 0, 0, 0.03);
+    }
+    [data-theme="light"] .sm-item {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    /* top-nav hardcoded dark bg */
+    [data-theme="light"] .top-nav {
+      background: rgba(232, 230, 224, 0.95);
+      border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="light"] .nav-brand,
+    [data-theme="light"] .nav-links a {
+      color: #1a1814;
+    }
+
+    /* Phase 2.2 appended section — inline style overrides for connector lines */
+    [data-theme="light"] [style*="rgba(255,255,255"] {
+      /* caught by inline styles — handled via JS below */
+    }
+
     .theme-toggle:hover {
       border-color: #e8863a;
       background: rgba(232, 134, 58, 0.2);
@@ -2054,7 +2130,7 @@
         <!-- V connector -->
         <div style="display:flex;justify-content:center;margin-bottom:2px;">
           <div
-            style="width:1px;height:28px;background:linear-gradient(to bottom,rgba(92,184,122,0.4),rgba(255,255,255,0.06));">
+            style="width:1px;height:28px;background:linear-gradient(to bottom,rgba(92,184,122,0.4),var(--glass-border));">
           </div>
         </div>
 
@@ -2074,7 +2150,7 @@
         <!-- V connector -->
         <div style="display:flex;justify-content:center;margin-bottom:2px;">
           <div
-            style="width:1px;height:28px;background:linear-gradient(to bottom,rgba(232,134,58,0.3),rgba(255,255,255,0.06));">
+            style="width:1px;height:28px;background:linear-gradient(to bottom,rgba(232,134,58,0.3),var(--glass-border));">
           </div>
         </div>
 
@@ -2116,7 +2192,7 @@
         <!-- H connector line visual -->
         <div style="display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
           <div
-            style="height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(255,255,255,0.08),rgba(255,255,255,0.08),transparent);">
+            style="height:1px;flex:1;background:linear-gradient(to right,transparent,var(--glass-border),var(--glass-border),transparent);">
           </div>
         </div>
 
@@ -2159,7 +2235,7 @@
         <!-- H connector -->
         <div style="display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
           <div
-            style="height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(255,255,255,0.06),rgba(255,255,255,0.06),transparent);">
+            style="height:1px;flex:1;background:linear-gradient(to right,transparent,var(--glass-border),var(--glass-border),transparent);">
           </div>
         </div>
 
