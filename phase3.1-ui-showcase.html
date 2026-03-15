@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Industrial Briefs — Phase 3.1: UI Design Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --glass: rgba(255,255,255,0.04);
+      --glass2: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
+      --text: #f0efe8;
+      --muted: rgba(240,239,232,0.45);
+      --dim: rgba(240,239,232,0.22);
+      --orange: #e8863a;
+      --teal: #3ab8a0;
+      --green: #5cb87a;
+      --display: 'Cormorant Garamond', serif;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --drawer-w: 280px;
+      --nav-h: 52px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f3ef;
+      --glass: rgba(0,0,0,0.03);
+      --glass2: rgba(0,0,0,0.055);
+      --border: rgba(0,0,0,0.08);
+      --border2: rgba(0,0,0,0.14);
+      --text: #1a1814;
+      --muted: rgba(26,24,20,0.5);
+      --dim: rgba(26,24,20,0.3);
+      --orange: #c96b1a;
+      --teal: #2a9080;
+      --green: #3a8f54;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 20%, rgba(232,134,58,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 75%, rgba(58,184,160,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── TOP NAV ── */
+    .topnav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 200;
+      background: rgba(8,9,13,0.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+    }
+
+    [data-theme="light"] .topnav {
+      background: rgba(244,243,239,0.97);
+    }
+
+    .hamburger-btn {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border2);
+      background: var(--glass);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .hamburger-btn:hover { background: var(--glass2); border-color: var(--orange); }
+    .hamburger-btn span {
+      display: block;
+      width: 16px; height: 1.5px;
+      background: var(--text);
+      border-radius: 1px;
+      transition: background 0.2s, transform 0.25s, opacity 0.25s;
+      transform-origin: center;
+    }
+    .hamburger-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .nav-brand {
+      flex: 1;
+      font-family: var(--display);
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      line-height: 1;
+    }
+    .nav-brand em { color: var(--orange); font-style: italic; }
+
+    .nav-phase {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .nav-home {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .nav-home:hover { color: var(--orange); border-color: var(--orange); }
+
+    .theme-btn {
+      width: 34px; height: 34px;
+      border: 1px solid var(--border2);
+      background: var(--glass);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .theme-btn:hover { background: rgba(232,134,58,0.12); border-color: var(--orange); transform: rotate(20deg); }
+
+    /* ── DRAWER OVERLAY ── */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0,0,0,0);
+      pointer-events: none;
+      transition: background 0.3s ease;
+    }
+    .drawer-overlay.open {
+      background: rgba(0,0,0,0.55);
+      pointer-events: all;
+    }
+
+    /* ── DRAWER PANEL ── */
+    .drawer {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--drawer-w);
+      z-index: 400;
+      background: #080a0f;
+      border-right: 1px solid var(--border2);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(calc(-1 * var(--drawer-w)));
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+      will-change: transform;
+    }
+    [data-theme="light"] .drawer { background: #efede9; }
+    .drawer.open { transform: translateX(0); }
+
+    /* Drawer header */
+    .drawer-head {
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .drawer-brand {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .drawer-brand em { color: var(--orange); font-style: italic; }
+    .drawer-brand-sub {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .drawer-close {
+      width: 28px; height: 28px;
+      background: var(--glass2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s;
+    }
+    .drawer-close:hover { background: rgba(232,134,58,0.12); color: var(--orange); border-color: var(--orange); }
+
+    /* Drawer section label */
+    .drawer-section-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 16px 20px 6px;
+    }
+
+    /* Drawer nav */
+    .drawer-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 16px;
+    }
+    .drawer-nav::-webkit-scrollbar { width: 3px; }
+    .drawer-nav::-webkit-scrollbar-track { background: transparent; }
+    .drawer-nav::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    .drawer-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+      user-select: none;
+    }
+    .drawer-item:hover { background: var(--glass2); }
+    .drawer-item.active {
+      background: rgba(232,134,58,0.07);
+      border-left-color: var(--orange);
+    }
+
+    .drawer-item-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--glass2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .drawer-item.active .drawer-item-icon {
+      background: rgba(232,134,58,0.15);
+      border-color: rgba(232,134,58,0.35);
+    }
+
+    .drawer-item-body { flex: 1; min-width: 0; padding-top: 1px; }
+    .drawer-item-label {
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .drawer-item.active .drawer-item-label { color: var(--orange); }
+    .drawer-item-desc {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dim);
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .drawer-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 10px 20px;
+    }
+
+    /* Phase items */
+    .drawer-phase-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .drawer-phase-item:hover { background: var(--glass2); }
+    .drawer-phase-num {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      width: 38px;
+      flex-shrink: 0;
+    }
+    .drawer-phase-name {
+      font-family: var(--body);
+      font-size: 12px;
+      color: var(--muted);
+      flex: 1;
+    }
+    .drawer-phase-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-done { background: var(--green); }
+    .dot-progress { background: var(--orange); animation: pulseAnim 2s ease-in-out infinite; }
+    .dot-planned { background: var(--border2); }
+    .dot-current { background: var(--orange); box-shadow: 0 0 6px rgba(232,134,58,0.6); }
+
+    @keyframes pulseAnim {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:0.4; transform:scale(0.65); }
+    }
+
+    /* Drawer footer */
+    .drawer-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .drawer-footer-text {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.7;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      position: relative;
+      z-index: 1;
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 40px 36px;
+    }
+
+    .page-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.1s ease forwards;
+    }
+
+    .page-title {
+      font-family: var(--display);
+      font-size: clamp(38px, 6vw, 60px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.2s ease forwards;
+    }
+    .page-title em { color: var(--orange); font-style: italic; }
+
+    .page-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.75;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.3s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DESIGN TABS ── */
+    .design-tabs {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px 20px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .design-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--body);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .design-tab:hover { background: var(--glass2); color: var(--text); border-color: var(--border2); }
+    .design-tab.active {
+      background: rgba(232,134,58,0.1);
+      border-color: rgba(232,134,58,0.4);
+      color: var(--orange);
+    }
+    .design-tab-icon { font-size: 14px; }
+    .design-tab-badge {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      background: var(--glass2);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: var(--dim);
+    }
+    .design-tab.active .design-tab-badge {
+      background: rgba(232,134,58,0.12);
+      border-color: rgba(232,134,58,0.3);
+      color: rgba(232,134,58,0.8);
+    }
+
+    /* ── DESIGN PANELS ── */
+    .design-panels {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+
+    .design-panel { display: none; }
+    .design-panel.active { display: block; animation: fadeUp 0.3s ease forwards; }
+
+    /* Panel meta */
+    .panel-meta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .panel-meta-left { display: flex; flex-direction: column; gap: 5px; }
+
+    .panel-title {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .panel-desc {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 500px;
+      line-height: 1.65;
+    }
+
+    .panel-pills { display: flex; gap: 6px; flex-wrap: wrap; align-items: flex-start; padding-top: 4px; }
+    .panel-pill {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--border2);
+      color: var(--dim);
+      background: var(--glass);
+      white-space: nowrap;
+    }
+
+    /* Browser chrome shell */
+    .iframe-shell {
+      background: var(--glass);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .iframe-chrome {
+      background: rgba(6,7,10,0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    [data-theme="light"] .iframe-chrome { background: rgba(220,218,214,0.95); }
+
+    .chrome-dots { display: flex; gap: 5px; flex-shrink: 0; }
+    .chrome-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .chrome-dot-r { background: #ff5f57; }
+    .chrome-dot-y { background: #febc2e; }
+    .chrome-dot-g { background: #28c840; }
+
+    .chrome-bar {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 0.04em;
+    }
+    [data-theme="light"] .chrome-bar { background: rgba(0,0,0,0.04); }
+
+    iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    /* Info cards */
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin-top: 14px;
+    }
+    .info-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+    }
+    .info-card-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 6px;
+    }
+    .info-card-value {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .info-card-accent { color: var(--orange); font-weight: 500; }
+
+    /* ── SPEC DOWNLOAD BANNER ── */
+    .spec-banner {
+      max-width: 960px;
+      margin: 0 auto 0;
+      padding: 0 40px 40px;
+    }
+    .spec-card {
+      background: var(--glass);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--orange);
+      border-radius: 4px;
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .spec-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .spec-body { flex: 1; min-width: 0; }
+    .spec-title {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .spec-desc {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.55;
+    }
+    .spec-meta {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .spec-meta-pill {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--glass);
+    }
+    .spec-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .spec-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--orange);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .spec-btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .spec-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--glass2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .spec-btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+
+    @media (max-width: 700px) {
+      .spec-banner { padding: 0 20px 40px; }
+      .spec-actions { width: 100%; }
+      .spec-btn-primary, .spec-btn-secondary { flex: 1; justify-content: center; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .page-header { padding: 40px 20px 28px; }
+      .design-tabs { padding: 0 20px 16px; }
+      .design-panels { padding: 0 20px 60px; }
+      .info-cards { grid-template-columns: 1fr; }
+      .nav-phase { display: none; }
+      .nav-home { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="/index.html" class="nav-brand">Industrial<em>Briefs</em></a>
+    <span class="nav-phase">Phase 3.1 · UI Showcase</span>
+    <a href="/index.html" class="nav-home">← Dashboard</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle theme">☀️</button>
+  </nav>
+
+  <!-- DRAWER OVERLAY -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <!-- DRAWER -->
+  <aside class="drawer" id="drawer" aria-label="Navigation">
+
+    <div class="drawer-head">
+      <div>
+        <div class="drawer-brand">Industrial<em>Briefs</em></div>
+        <div class="drawer-brand-sub">UI Design Showcase</div>
+      </div>
+      <button class="drawer-close" id="drawerClose" aria-label="Close">✕</button>
+    </div>
+
+    <div class="drawer-nav">
+
+      <div class="drawer-section-label">UI Designs</div>
+
+      <div class="drawer-item active" data-panel="mobile" onclick="switchPanel('mobile',this)">
+        <div class="drawer-item-icon">📱</div>
+        <div class="drawer-item-body">
+          <div class="drawer-item-label">Mobile App Mockup</div>
+          <div class="drawer-item-desc">Homepage · Article · 2 phone screens</div>
+        </div>
+      </div>
+
+      <div class="drawer-item" data-panel="desktop" onclick="switchPanel('desktop',this)">
+        <div class="drawer-item-icon">🖥</div>
+        <div class="drawer-item-body">
+          <div class="drawer-item-label">Desktop Redesign</div>
+          <div class="drawer-item-desc">Full site · 3-col grid · Multi-page</div>
+        </div>
+      </div>
+
+      <div class="drawer-item" data-panel="markets" onclick="switchPanel('markets',this)">
+        <div class="drawer-item-icon">📊</div>
+        <div class="drawer-item-body">
+          <div class="drawer-item-label">ACEM Markets Widget</div>
+          <div class="drawer-item-desc">Live ticker · Stock cards · Interactive</div>
+        </div>
+      </div>
+
+      <a href="../UI%20design/IndustrialBriefs-UI-Spec-AI-Executable.pdf" target="_blank" class="drawer-item" style="margin-top:2px;">
+        <div class="drawer-item-icon">📄</div>
+        <div class="drawer-item-body">
+          <div class="drawer-item-label">UI Spec Document</div>
+          <div class="drawer-item-desc">PDF · AI-executable spec</div>
+        </div>
+      </a>
+
+      <div class="drawer-divider"></div>
+
+      <div class="drawer-section-label">Project Phases</div>
+
+      <a href="/phase1-masterplan.html" class="drawer-phase-item">
+        <span class="drawer-phase-num">01</span>
+        <span class="drawer-phase-name">Strategy &amp; Master Plan</span>
+        <span class="drawer-phase-dot dot-done"></span>
+      </a>
+
+      <a href="/phase2-agents.html" class="drawer-phase-item">
+        <span class="drawer-phase-num">02</span>
+        <span class="drawer-phase-name">AI Agent Architecture</span>
+        <span class="drawer-phase-dot dot-progress"></span>
+      </a>
+
+      <a href="/phase2.1-agents.html" class="drawer-phase-item">
+        <span class="drawer-phase-num">2.1</span>
+        <span class="drawer-phase-name">Scout Agent Upgrade</span>
+        <span class="drawer-phase-dot dot-done"></span>
+      </a>
+
+      <a href="/phase3-website.html" class="drawer-phase-item">
+        <span class="drawer-phase-num">03</span>
+        <span class="drawer-phase-name">Website Design &amp; UI</span>
+        <span class="drawer-phase-dot dot-progress"></span>
+      </a>
+
+      <a href="/phase3.1-ui-showcase.html" class="drawer-phase-item" style="background:rgba(232,134,58,0.06);border-left:2px solid var(--orange);">
+        <span class="drawer-phase-num" style="color:var(--orange);">3.1</span>
+        <span class="drawer-phase-name" style="color:var(--text);font-weight:500;">UI Design Showcase</span>
+        <span class="drawer-phase-dot dot-current"></span>
+      </a>
+
+      <a href="/phase4-build.html" class="drawer-phase-item">
+        <span class="drawer-phase-num">04</span>
+        <span class="drawer-phase-name">Build &amp; Execution</span>
+        <span class="drawer-phase-dot dot-planned"></span>
+      </a>
+
+    </div>
+
+    <div class="drawer-footer">
+      <div class="drawer-footer-text">Industrial Briefs<br>ACEM AI News Platform · 2026</div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="page-header">
+      <div class="page-tag">Phase 3.1 · UI Design Showcase</div>
+      <h1 class="page-title">Industrial<em>Briefs</em><br>Platform UI</h1>
+      <p class="page-sub">Three purpose-built designs for the ACEM AI news platform — mobile experience, desktop layout, and live market widget. Scroll inside each preview to explore the full design.</p>
+    </div>
+
+    <!-- Tab switcher -->
+    <div class="design-tabs">
+      <button class="design-tab active" data-panel="mobile" onclick="switchPanel('mobile',this)">
+        <span class="design-tab-icon">📱</span>
+        Mobile Mockup
+        <span class="design-tab-badge">2 screens</span>
+      </button>
+      <button class="design-tab" data-panel="desktop" onclick="switchPanel('desktop',this)">
+        <span class="design-tab-icon">🖥</span>
+        Desktop Redesign
+        <span class="design-tab-badge">Full page</span>
+      </button>
+      <button class="design-tab" data-panel="markets" onclick="switchPanel('markets',this)">
+        <span class="design-tab-icon">📊</span>
+        ACEM Markets Widget
+        <span class="design-tab-badge">Interactive</span>
+      </button>
+    </div>
+
+    <div class="design-panels">
+
+      <!-- PANEL 1: Mobile Mockup -->
+      <div class="design-panel active" id="panel-mobile">
+        <div class="panel-meta">
+          <div class="panel-meta-left">
+            <div class="panel-title">Mobile App Mockup</div>
+            <div class="panel-desc">Homepage and article page inside phone frames. Scroll within each phone to see the full layout — swipe rail, section tabs, hero, article cards, market ticker, and related stories.</div>
+          </div>
+          <div class="panel-pills">
+            <span class="panel-pill">Mobile First</span>
+            <span class="panel-pill">320px frames</span>
+            <span class="panel-pill">Lora + DM Sans</span>
+          </div>
+        </div>
+
+        <div class="iframe-shell">
+          <div class="iframe-chrome">
+            <div class="chrome-dots">
+              <div class="chrome-dot chrome-dot-r"></div>
+              <div class="chrome-dot chrome-dot-y"></div>
+              <div class="chrome-dot chrome-dot-g"></div>
+            </div>
+            <div class="chrome-bar">industrialbriefs.com · mobile mockup</div>
+          </div>
+          <iframe src="../UI%20design/industrialbriefs_mobile_mockup.html" height="720" title="Mobile Mockup" loading="lazy"></iframe>
+        </div>
+
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-label">Screens</div>
+            <div class="info-card-value"><span class="info-card-accent">2 layouts</span> — Homepage feed + full Article page inside realistic phone chrome</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Key Patterns</div>
+            <div class="info-card-value">Sticky nav with hamburger, swipe story rail, category tabs, hero section, card grid, share strip</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Typography</div>
+            <div class="info-card-value"><span class="info-card-accent">Lora</span> headlines · <span class="info-card-accent">DM Sans</span> UI · Navy + orange accent system</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: Desktop Redesign -->
+      <div class="design-panel" id="panel-desktop">
+        <div class="panel-meta">
+          <div class="panel-meta-left">
+            <div class="panel-title">Desktop Redesign</div>
+            <div class="panel-desc">Full desktop layout with page switcher — Homepage and Article page. GovExec-style 3-column article grid, hero section, trending bar, and sidebar widgets.</div>
+          </div>
+          <div class="panel-pills">
+            <span class="panel-pill">Desktop</span>
+            <span class="panel-pill">3-col grid</span>
+            <span class="panel-pill">Multi-page</span>
+          </div>
+        </div>
+
+        <div class="iframe-shell">
+          <div class="iframe-chrome">
+            <div class="chrome-dots">
+              <div class="chrome-dot chrome-dot-r"></div>
+              <div class="chrome-dot chrome-dot-y"></div>
+              <div class="chrome-dot chrome-dot-g"></div>
+            </div>
+            <div class="chrome-bar">industrialbriefs.com · desktop redesign</div>
+          </div>
+          <iframe src="../UI%20design/industrialbriefs_redesign_clean.html" height="860" title="Desktop Redesign" loading="lazy"></iframe>
+        </div>
+
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-label">Pages</div>
+            <div class="info-card-value"><span class="info-card-accent">Homepage + Article</span> — switch via the demo nav bar at the top of the preview</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Layout</div>
+            <div class="info-card-value">Utility bar → masthead → section tabs → trending strip → hero grid → 3-col cards → sidebar</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Principles</div>
+            <div class="info-card-value">Cream background · sector colour only on tag borders, never on full backgrounds</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: Markets Widget -->
+      <div class="design-panel" id="panel-markets">
+        <div class="panel-meta">
+          <div class="panel-meta-left">
+            <div class="panel-title">ACEM Markets Widget</div>
+            <div class="panel-desc">Live stock ticker and sector-grouped market data for the homepage sidebar. Click any stock card to expand with full stats and AI relevance notes. Sector tabs filter the view.</div>
+          </div>
+          <div class="panel-pills">
+            <span class="panel-pill">Interactive</span>
+            <span class="panel-pill">16 stocks</span>
+            <span class="panel-pill">Yahoo Finance</span>
+          </div>
+        </div>
+
+        <div class="iframe-shell">
+          <div class="iframe-chrome">
+            <div class="chrome-dots">
+              <div class="chrome-dot chrome-dot-r"></div>
+              <div class="chrome-dot chrome-dot-y"></div>
+              <div class="chrome-dot chrome-dot-g"></div>
+            </div>
+            <div class="chrome-bar">industrialbriefs.com · acem markets widget</div>
+          </div>
+          <iframe src="../UI%20design/acem_market_stats_widget.html" height="720" title="ACEM Markets Widget" loading="lazy"></iframe>
+        </div>
+
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-label">Coverage</div>
+            <div class="info-card-value"><span class="info-card-accent">16 stocks</span> across Construction, Engineering, Manufacturing, and AI Infrastructure sectors</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Interaction</div>
+            <div class="info-card-value">Click any stock to expand market cap, P/E ratio, 52-week range, and AI relevance explanation</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Data Source</div>
+            <div class="info-card-value"><span class="info-card-accent">Yahoo Finance API</span> — free, no key. n8n polls every 15min, stored in Supabase</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PDF SPEC DOWNLOAD -->
+    <div class="spec-banner">
+      <div class="spec-card">
+        <div class="spec-icon">📄</div>
+        <div class="spec-body">
+          <div class="spec-title">UI Spec — AI-Executable Document</div>
+          <div class="spec-desc">Complete design specification for the Industrial Briefs platform — component breakdowns, typography system, colour tokens, layout rules, and AI-readable implementation notes. Use this to brief any developer or AI agent.</div>
+          <div class="spec-meta">
+            <span class="spec-meta-pill">PDF · 467 KB</span>
+            <span class="spec-meta-pill">AI-Executable Spec</span>
+            <span class="spec-meta-pill">Design Tokens</span>
+            <span class="spec-meta-pill">Component Guide</span>
+          </div>
+        </div>
+        <div class="spec-actions">
+          <a href="../UI%20design/IndustrialBriefs-UI-Spec-AI-Executable.pdf" download="IndustrialBriefs-UI-Spec.pdf" class="spec-btn-primary">
+            ↓ Download PDF
+          </a>
+          <a href="../UI%20design/IndustrialBriefs-UI-Spec-AI-Executable.pdf" target="_blank" class="spec-btn-secondary">
+            ↗ Open
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Theme toggle
+    (function () {
+      var saved = localStorage.getItem('ib-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('themeBtn').textContent = saved === 'light' ? '🌙' : '☀️';
+    })();
+
+    document.getElementById('themeBtn').addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme');
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ib-theme', next);
+      this.textContent = next === 'light' ? '🌙' : '☀️';
+    });
+
+    // Drawer
+    var drawer    = document.getElementById('drawer');
+    var overlay   = document.getElementById('drawerOverlay');
+    var hamburger = document.getElementById('hamburgerBtn');
+    var closeBtn  = document.getElementById('drawerClose');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      hamburger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+      hamburger.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', function () {
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Panel switcher
+    function switchPanel(panelId, triggerEl) {
+      // Hide all panels
+      document.querySelectorAll('.design-panel').forEach(function (p) { p.classList.remove('active'); });
+      var target = document.getElementById('panel-' + panelId);
+      if (target) target.classList.add('active');
+
+      // Clear all tab/drawer active states
+      document.querySelectorAll('.design-tab, .drawer-item').forEach(function (el) { el.classList.remove('active'); });
+
+      // Mark all elements with matching data-panel as active
+      document.querySelectorAll('[data-panel="' + panelId + '"]').forEach(function (el) { el.classList.add('active'); });
+
+      // Close drawer on mobile
+      if (window.innerWidth < 700) closeDrawer();
+    }
+  </script>
+
+</body>
+</html>
