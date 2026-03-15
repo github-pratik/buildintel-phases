@@ -1,0 +1,362 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.sans { font-family: -apple-system, 'Helvetica Neue', sans-serif; }
+
+.widget { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; overflow: hidden; }
+
+/* Header */
+.widget-header { background: #1a2e4a; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+.widget-title { font-size: 12px; font-weight: 700; color: #fff; }
+.widget-title span { color: #e96d2e; }
+.live-dot { display: flex; align-items: center; gap: 5px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.live-label { font-size: 9px; color: #4ade80; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.market-status { font-size: 9px; color: #8ea5be; }
+
+/* Tabs */
+.tabs { display: flex; background: #f8f7f4; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.tab { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 7px 14px; color: #999; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab.active { color: #1a2e4a; border-bottom-color: #e96d2e; background: #fff; }
+
+/* Ticker strip */
+.ticker-strip { background: #111d2e; padding: 5px 0; overflow: hidden; white-space: nowrap; }
+.ticker-inner { display: inline-flex; gap: 0; animation: scroll 30s linear infinite; }
+.ticker-inner:hover { animation-play-state: paused; }
+.tick-item { display: inline-flex; align-items: center; gap: 5px; padding: 0 16px; border-right: 1px solid rgba(255,255,255,0.08); }
+.tick-sym { font-size: 9px; font-weight: 800; color: #fff; letter-spacing: 0.06em; }
+.tick-price { font-size: 9px; color: rgba(255,255,255,0.7); }
+.tick-chg { font-size: 9px; font-weight: 700; }
+.up { color: #4ade80; }
+.down { color: #f87171; }
+@keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* Sector groups */
+.sector-block { padding: 12px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.sector-block:last-child { border-bottom: none; }
+.sector-label { font-size: 8px; font-weight: 800; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.sector-label::after { content: ''; flex: 1; height: 0.5px; background: var(--color-border-tertiary); }
+.stocks-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stock-card { background: var(--color-background-secondary); border-radius: 8px; padding: 8px 10px; cursor: pointer; transition: background 0.15s; border: 0.5px solid transparent; }
+.stock-card:hover { border-color: var(--color-border-secondary); }
+.stock-card.featured { border-color: #e96d2e; background: #fff8f0; }
+.sc-sym { font-size: 11px; font-weight: 800; color: var(--color-text-primary); }
+.sc-name { font-size: 8px; color: var(--color-text-secondary); margin: 1px 0 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-price { font-size: 13px; font-weight: 700; color: var(--color-text-primary); }
+.sc-chg { display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+.sc-pct { font-size: 9px; font-weight: 700; }
+.sc-bar { height: 3px; border-radius: 2px; margin-top: 4px; background: var(--color-border-tertiary); overflow: hidden; }
+.sc-fill { height: 3px; border-radius: 2px; }
+.sc-label { font-size: 7px; color: var(--color-text-secondary); margin-top: 2px; }
+
+/* AI relevance badge */
+.ai-rel { display: inline-block; font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 1px 5px; border-radius: 2px; margin-top: 3px; }
+.ai-high { background: #dbeafe; color: #1e40af; }
+.ai-med { background: #d1fae5; color: #065f46; }
+.ai-infra { background: #f3e8ff; color: #6b21a8; }
+
+/* Detail panel */
+.detail-panel { background: var(--color-background-secondary); padding: 12px 14px; border-top: 0.5px solid var(--color-border-tertiary); display: none; }
+.detail-panel.visible { display: block; }
+.dp-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.dp-name { font-size: 13px; font-weight: 700; color: var(--color-text-primary); }
+.dp-ticker { font-size: 9px; color: var(--color-text-secondary); margin-top: 2px; }
+.dp-close { font-size: 10px; color: var(--color-text-secondary); cursor: pointer; padding: 2px 6px; border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; }
+.dp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.dp-stat { background: var(--color-background-primary); border-radius: 6px; padding: 6px 8px; border: 0.5px solid var(--color-border-tertiary); }
+.dp-stat-label { font-size: 8px; color: var(--color-text-secondary); margin-bottom: 2px; }
+.dp-stat-val { font-size: 11px; font-weight: 700; color: var(--color-text-primary); }
+.dp-why { font-size: 9px; color: var(--color-text-secondary); line-height: 1.5; background: var(--color-background-primary); border-radius: 6px; padding: 8px 10px; border-left: 2px solid #e96d2e; }
+
+/* Summary footer */
+.widget-footer { background: var(--color-background-secondary); padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; border-top: 0.5px solid var(--color-border-tertiary); }
+.footer-note { font-size: 8px; color: var(--color-text-secondary); }
+.footer-link { font-size: 8px; color: #e96d2e; font-weight: 700; cursor: pointer; }
+
+/* Mini sparkline */
+.spark { display: flex; align-items: flex-end; gap: 1px; height: 20px; }
+.spark-bar { width: 3px; border-radius: 1px; }
+</style>
+
+<div style="padding: 0.5rem 0;">
+
+<div style="font-family: sans-serif; font-size: 11px; color: var(--color-text-secondary); margin-bottom: 10px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500;">ACEM + AI Markets — homepage widget</div>
+
+<div class="widget">
+
+  <!-- Header -->
+  <div class="widget-header">
+    <div class="widget-title">ACEM <span>&</span> AI Markets</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="live-dot"><div class="dot"></div><div class="live-label">Live</div></div>
+      <div class="market-status">NYSE · NASDAQ · Mar 14, 2026 · 2:34 PM ET</div>
+    </div>
+  </div>
+
+  <!-- Scrolling ticker -->
+  <div class="ticker-strip">
+    <div class="ticker-inner" id="ticker">
+      <div class="tick-item"><span class="tick-sym">CAT</span><span class="tick-price">$347.82</span><span class="tick-chg down">▼ -1.00%</span></div>
+      <div class="tick-item"><span class="tick-sym">ADSK</span><span class="tick-price">$284.15</span><span class="tick-chg up">▲ +0.82%</span></div>
+      <div class="tick-item"><span class="tick-sym">TRMB</span><span class="tick-price">$62.40</span><span class="tick-chg up">▲ +1.34%</span></div>
+      <div class="tick-item"><span class="tick-sym">URI</span><span class="tick-price">$789.60</span><span class="tick-chg down">▼ -5.96%</span></div>
+      <div class="tick-item"><span class="tick-sym">DE</span><span class="tick-price">$412.30</span><span class="tick-chg up">▲ +0.44%</span></div>
+      <div class="tick-item"><span class="tick-sym">EMR</span><span class="tick-price">$118.75</span><span class="tick-chg up">▲ +0.22%</span></div>
+      <div class="tick-item"><span class="tick-sym">FLR</span><span class="tick-price">$41.20</span><span class="tick-chg down">▼ -2.65%</span></div>
+      <div class="tick-item"><span class="tick-sym">NUE</span><span class="tick-price">$128.44</span><span class="tick-chg down">▼ -3.59%</span></div>
+      <div class="tick-item"><span class="tick-sym">NVDA</span><span class="tick-price">$118.60</span><span class="tick-chg up">▲ +1.56%</span></div>
+      <div class="tick-item"><span class="tick-sym">HON</span><span class="tick-price">$214.80</span><span class="tick-chg up">▲ +0.38%</span></div>
+      <!-- duplicate for seamless scroll -->
+      <div class="tick-item"><span class="tick-sym">CAT</span><span class="tick-price">$347.82</span><span class="tick-chg down">▼ -1.00%</span></div>
+      <div class="tick-item"><span class="tick-sym">ADSK</span><span class="tick-price">$284.15</span><span class="tick-chg up">▲ +0.82%</span></div>
+      <div class="tick-item"><span class="tick-sym">TRMB</span><span class="tick-price">$62.40</span><span class="tick-chg up">▲ +1.34%</span></div>
+      <div class="tick-item"><span class="tick-sym">URI</span><span class="tick-price">$789.60</span><span class="tick-chg down">▼ -5.96%</span></div>
+      <div class="tick-item"><span class="tick-sym">DE</span><span class="tick-price">$412.30</span><span class="tick-chg up">▲ +0.44%</span></div>
+      <div class="tick-item"><span class="tick-sym">EMR</span><span class="tick-price">$118.75</span><span class="tick-chg up">▲ +0.22%</span></div>
+      <div class="tick-item"><span class="tick-sym">FLR</span><span class="tick-price">$41.20</span><span class="tick-chg down">▼ -2.65%</span></div>
+      <div class="tick-item"><span class="tick-sym">NUE</span><span class="tick-price">$128.44</span><span class="tick-chg down">▼ -3.59%</span></div>
+      <div class="tick-item"><span class="tick-sym">NVDA</span><span class="tick-price">$118.60</span><span class="tick-chg up">▲ +1.56%</span></div>
+      <div class="tick-item"><span class="tick-sym">HON</span><span class="tick-price">$214.80</span><span class="tick-chg up">▲ +0.38%</span></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(this,'all')">All Sectors</div>
+    <div class="tab" onclick="switchTab(this,'construction')">Construction</div>
+    <div class="tab" onclick="switchTab(this,'engineering')">Engineering</div>
+    <div class="tab" onclick="switchTab(this,'manufacturing')">Manufacturing</div>
+    <div class="tab" onclick="switchTab(this,'ai')">AI Picks</div>
+  </div>
+
+  <!-- Stocks grid -->
+  <div id="stocks-body">
+
+    <!-- CONSTRUCTION TECH -->
+    <div class="sector-block" data-sector="construction">
+      <div class="sector-label">Construction &amp; Project Tech</div>
+      <div class="stocks-row">
+        <div class="stock-card featured" onclick="showDetail('ADSK','Autodesk','$284.15','+0.82%','up','CAD/BIM/AI design software. Used on 90% of major construction projects globally. AI features in Construction Cloud accelerating adoption.','$61.2B','28.4x','$284.15','$198.40 – $312.80')">
+          <div class="sc-sym">ADSK</div>
+          <div class="sc-name">Autodesk</div>
+          <div class="sc-price">$284.15</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.82%</span></div>
+          <div class="sc-bar"><div class="sc-fill up" style="width:68%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('TRMB','Trimble Inc','$62.40','+1.34%','up','GPS, sensors, and AI software for construction sites. Connects field data to office workflows. ACEM-native AI platform.','$15.8B','22.1x','$62.40','$44.20 – $68.90')">
+          <div class="sc-sym">TRMB</div>
+          <div class="sc-name">Trimble</div>
+          <div class="sc-price">$62.40</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +1.34%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:72%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('URI','United Rentals','$789.60','-5.96%','down','Largest equipment rental company in North America. AI-powered fleet management and predictive maintenance programs underway.','$33.1B','14.2x','$789.60','$642.00 – $912.40')">
+          <div class="sc-sym">URI</div>
+          <div class="sc-name">United Rentals</div>
+          <div class="sc-price">$789.60</div>
+          <div class="sc-chg"><span class="sc-pct down">▼ -5.96%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:28%;background:#f87171;"></div></div>
+          <div class="ai-rel ai-med">Med AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('FLR','Fluor Corporation','$41.20','-2.65%','down','Global engineering and construction firm. Deploying AI for megaproject scheduling and cost prediction across $20B+ project portfolio.','$5.4B','11.8x','$41.20','$34.10 – $52.80')">
+          <div class="sc-sym">FLR</div>
+          <div class="sc-name">Fluor Corp</div>
+          <div class="sc-price">$41.20</div>
+          <div class="sc-chg"><span class="sc-pct down">▼ -2.65%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:35%;background:#f87171;"></div></div>
+          <div class="ai-rel ai-med">Med AI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEAVY EQUIPMENT + MANUFACTURING -->
+    <div class="sector-block" data-sector="manufacturing">
+      <div class="sector-label">Heavy Equipment &amp; Manufacturing</div>
+      <div class="stocks-row">
+        <div class="stock-card" onclick="showDetail('CAT','Caterpillar Inc','$347.82','-1.00%','down','World largest construction equipment maker. Cat Digital deploying AI across 1.5M+ connected assets globally. Autonomous mining trucks in 30+ sites.','$172.4B','17.6x','$347.82','$289.20 – $418.50')">
+          <div class="sc-sym">CAT</div>
+          <div class="sc-name">Caterpillar</div>
+          <div class="sc-price">$347.82</div>
+          <div class="sc-chg"><span class="sc-pct down">▼ -1.00%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:40%;background:#f87171;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('DE','John Deere','$412.30','+0.44%','up','Agriculture and construction equipment. AI guidance systems in 500,000+ machines. Precision construction expanding.','$113.8B','16.9x','$412.30','$348.80 – $478.20')">
+          <div class="sc-sym">DE</div>
+          <div class="sc-name">John Deere</div>
+          <div class="sc-price">$412.30</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.44%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:55%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('EMR','Emerson Electric','$118.75','+0.22%','up','Industrial automation and process control. AI-driven factory software growing 18% YoY. Major ACEM manufacturer customer base.','$64.2B','19.4x','$118.75','$98.30 – $134.60')">
+          <div class="sc-sym">EMR</div>
+          <div class="sc-name">Emerson</div>
+          <div class="sc-price">$118.75</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.22%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:60%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-med">Med AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('NUE','Nucor Corp','$128.44','-3.59%','down','Largest US steel manufacturer. Deploying AI for quality control and scrap optimisation across 25 mills. Steel is the backbone of ACEM projects.','$19.6B','10.2x','$128.44','$112.40 – $178.20')">
+          <div class="sc-sym">NUE</div>
+          <div class="sc-name">Nucor</div>
+          <div class="sc-price">$128.44</div>
+          <div class="sc-chg"><span class="sc-pct down">▼ -3.59%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:22%;background:#f87171;"></div></div>
+          <div class="ai-rel ai-med">Med AI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENGINEERING + SENSORS -->
+    <div class="sector-block" data-sector="engineering">
+      <div class="sector-label">Engineering Systems &amp; Sensors</div>
+      <div class="stocks-row">
+        <div class="stock-card" onclick="showDetail('HON','Honeywell','$214.80','+0.38%','up','Building controls, industrial IoT, and AI-driven process automation. Connected buildings platform accelerating post-spinoff AI focus.','$141.2B','20.8x','$214.80','$188.40 – $238.50')">
+          <div class="sc-sym">HON</div>
+          <div class="sc-name">Honeywell</div>
+          <div class="sc-price">$214.80</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.38%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:58%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('PWR','Quanta Services','$318.50','+1.12%','up','Electrical and infrastructure construction. Drone and AI inspection systems deployed at scale across power grid and pipeline projects.','$48.6B','25.4x','$318.50','$248.20 – $364.10')">
+          <div class="sc-sym">PWR</div>
+          <div class="sc-name">Quanta Svcs</div>
+          <div class="sc-price">$318.50</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +1.12%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:65%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-med">Med AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('NVEE','NV5 Global','$74.20','+0.88%','up','Engineering consulting and inspection services. AI-powered infrastructure inspection replacing manual assessments across bridges, roads, utilities.','$2.1B','18.6x','$74.20','$58.40 – $92.80')">
+          <div class="sc-sym">NVEE</div>
+          <div class="sc-name">NV5 Global</div>
+          <div class="sc-price">$74.20</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.88%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:52%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-med">Med AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('SAM','Samsara','$44.80','+2.10%','up','IoT platform for construction fleets and field operations. AI video safety and predictive maintenance adopted by Walsh, Granite, and Skanska.','$26.8B','12.4x','$44.80','$28.40 – $52.20')">
+          <div class="sc-sym">IOT</div>
+          <div class="sc-name">Samsara</div>
+          <div class="sc-price">$44.80</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +2.10%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:76%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI INFRASTRUCTURE PICKS -->
+    <div class="sector-block" data-sector="ai">
+      <div class="sector-label">AI Infrastructure — ACEM Relevance</div>
+      <div class="stocks-row">
+        <div class="stock-card featured" onclick="showDetail('NVDA','NVIDIA','$118.60','+1.56%','up','GPU infrastructure powering AI workloads in construction simulation, digital twin rendering, and autonomous equipment. Partnered with Caterpillar, John Deere, and Siemens.','$2.89T','32.4x','$118.60','$78.40 – $138.80')">
+          <div class="sc-sym">NVDA</div>
+          <div class="sc-name">NVIDIA</div>
+          <div class="sc-price">$118.60</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +1.56%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:82%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-infra">AI Infra</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('MSFT','Microsoft','$388.20','+0.44%','up','Azure AI and Copilot adopted across ACEM firms for project management, BIM analysis, and safety reporting. Key cloud provider for Autodesk, Trimble, Bentley.','$2.88T','30.2x','$388.20','$302.40 – $468.40')">
+          <div class="sc-sym">MSFT</div>
+          <div class="sc-name">Microsoft</div>
+          <div class="sc-price">$388.20</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.44%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:60%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-infra">AI Infra</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('BSY','Bentley Systems','$44.60','+1.88%','up','Infrastructure engineering software — digital twins, bridge analysis, structural simulation. AI-native platform for ACEM project lifecycle management.','$15.4B','38.2x','$44.60','$32.80 – $54.20')">
+          <div class="sc-sym">BSY</div>
+          <div class="sc-name">Bentley Systems</div>
+          <div class="sc-price">$44.60</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +1.88%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:70%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-high">High AI</div>
+        </div>
+        <div class="stock-card" onclick="showDetail('ORCL','Oracle','$148.80','+0.92%','up','AI construction safety platform launched March 2026. Oracle Fusion Cloud used by major contractors for project cost and schedule AI. Expanding ACEM vertical.','$408.2B','22.6x','$148.80','$118.60 – $184.20')">
+          <div class="sc-sym">ORCL</div>
+          <div class="sc-name">Oracle</div>
+          <div class="sc-price">$148.80</div>
+          <div class="sc-chg"><span class="sc-pct up">▲ +0.92%</span></div>
+          <div class="sc-bar"><div class="sc-fill" style="width:58%;background:#4ade80;"></div></div>
+          <div class="ai-rel ai-infra">AI Infra</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="dp-header">
+      <div>
+        <div class="dp-name" id="dp-name">—</div>
+        <div class="dp-ticker" id="dp-ticker">—</div>
+      </div>
+      <div class="dp-close" onclick="document.getElementById('detail-panel').classList.remove('visible')">✕ Close</div>
+    </div>
+    <div class="dp-stats">
+      <div class="dp-stat"><div class="dp-stat-label">Price</div><div class="dp-stat-val" id="dp-price">—</div></div>
+      <div class="dp-stat"><div class="dp-stat-label">Market Cap</div><div class="dp-stat-val" id="dp-mcap">—</div></div>
+      <div class="dp-stat"><div class="dp-stat-label">P/E</div><div class="dp-stat-val" id="dp-pe">—</div></div>
+      <div class="dp-stat"><div class="dp-stat-label">52w Range</div><div class="dp-stat-val" id="dp-range" style="font-size:9px;">—</div></div>
+    </div>
+    <div class="dp-why" id="dp-why">—</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="widget-footer">
+    <div class="footer-note">Data via Yahoo Finance API · 15min delayed · Not financial advice · <strong>Why these stocks?</strong> Direct ACEM AI exposure, not general market picks.</div>
+    <div class="footer-link" onclick="sendPrompt('Tell me more about which ACEM stocks to watch and why they relate to AI adoption')">Full Analysis ↗</div>
+  </div>
+
+</div>
+
+<!-- Placement guide -->
+<div style="margin-top: 14px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+  <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;border-top:2px solid #e96d2e;">
+    <div style="font-family:sans-serif;font-size:9px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px;">Homepage placement</div>
+    <div style="font-family:sans-serif;font-size:10px;color:var(--color-text-secondary);line-height:1.4;">Sits in the Special Reports skybox — top of homepage right sidebar. Updates automatically via Yahoo Finance API. Replaces static placeholder on launch day.</div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;border-top:2px solid #1a2e4a;">
+    <div style="font-family:sans-serif;font-size:9px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px;">Article page placement</div>
+    <div style="font-family:sans-serif;font-size:10px;color:var(--color-text-secondary);line-height:1.4;">Relevant tickers auto-linked inside articles. e.g. mention of "Autodesk" → inline ADSK card with price. Related stocks panel at article bottom alongside related stories.</div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;border-top:2px solid #16a34a;">
+    <div style="font-family:sans-serif;font-size:9px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px;">Data source — free</div>
+    <div style="font-family:sans-serif;font-size:10px;color:var(--color-text-secondary);line-height:1.4;">Yahoo Finance API (free, no key needed). n8n polls every 15min during market hours, stores in Supabase market_prices table, served via Ghost custom route. Zero cost.</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function showDetail(sym, name, price, chg, dir, why, mcap, pe, p, range) {
+  document.getElementById('dp-name').textContent = name;
+  document.getElementById('dp-ticker').textContent = sym + ' · ' + (dir==='up'?'▲':'▼') + ' ' + chg + ' today';
+  document.getElementById('dp-ticker').style.color = dir==='up'?'#16a34a':'#dc2626';
+  document.getElementById('dp-price').textContent = price;
+  document.getElementById('dp-mcap').textContent = mcap;
+  document.getElementById('dp-pe').textContent = pe;
+  document.getElementById('dp-range').textContent = range;
+  document.getElementById('dp-why').textContent = why;
+  document.getElementById('detail-panel').classList.add('visible');
+}
+
+function switchTab(el, sector) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.sector-block').forEach(b => {
+    if (sector === 'all') {
+      b.style.display = 'block';
+    } else {
+      b.style.display = b.dataset.sector === sector ? 'block' : 'none';
+    }
+  });
+}
+</script>

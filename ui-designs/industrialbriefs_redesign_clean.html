@@ -1,0 +1,659 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #1a2e4a;
+  --navy-dark: #111d2e;
+  --orange: #e96d2e;
+  --cream: #fafaf8;
+  --white: #ffffff;
+  --text: #1c1c1c;
+  --text-mid: #444444;
+  --text-muted: #777777;
+  --border: #e8e4de;
+  --border-light: #f0ede8;
+
+  /* Sector accents — ONLY used on tags, never on backgrounds */
+  --c-construction: #e96d2e;
+  --c-architecture: #3b82f6;
+  --c-engineering: #16a34a;
+  --c-manufacturing: #d97706;
+  --c-ai: #7c3aed;
+
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans: 'DM Sans', -apple-system, sans-serif;
+}
+
+body { font-family: var(--font-sans); background: var(--cream); color: var(--text); line-height: 1.6; }
+
+/* ── PAGE SWITCHER ── */
+.page { display: none; }
+.page.active { display: block; }
+.demo-nav { background: #0a0a0a; padding: 8px 20px; display: flex; gap: 8px; align-items: center; }
+.demo-nav span { font-family: var(--font-sans); font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.1em; margin-right: 4px; }
+.demo-btn { font-family: var(--font-sans); font-size: 10px; font-weight: 500; color: #999; background: #1a1a1a; border: 0.5px solid #333; padding: 4px 12px; border-radius: 3px; cursor: pointer; transition: all 0.15s; }
+.demo-btn:hover, .demo-btn.active { background: #e96d2e; color: #fff; border-color: #e96d2e; }
+
+/* ── HEADER (shared) ── */
+.site-header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+
+.header-utility { background: var(--navy-dark); padding: 4px 24px; display: flex; justify-content: space-between; align-items: center; }
+.header-utility .date { font-family: var(--font-sans); font-size: 10px; color: #6a85a0; letter-spacing: 0.02em; }
+.header-utility .links { display: flex; gap: 16px; }
+.header-utility .links a { font-family: var(--font-sans); font-size: 10px; color: #6a85a0; text-decoration: none; }
+.header-utility .links a.highlight { color: var(--orange); font-weight: 600; }
+
+.header-main { padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; border-bottom: 1px solid var(--border); }
+.masthead { font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; }
+.masthead em { color: var(--orange); font-style: normal; }
+.main-nav { display: flex; height: 100%; gap: 2px; }
+.main-nav a { font-family: var(--font-sans); font-size: 10px; font-weight: 500; color: var(--text-muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.07em; padding: 0 12px; height: 100%; display: flex; align-items: center; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
+.main-nav a:hover { color: var(--navy); }
+.main-nav a.insights { color: #d97706; }
+.main-nav .sep { width: 1px; height: 18px; background: var(--border); margin: auto 4px; }
+.header-cta { font-family: var(--font-sans); font-size: 10px; font-weight: 600; background: var(--orange); color: #fff; padding: 7px 16px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none; }
+
+.header-sections { padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--navy); }
+.section-tabs { display: flex; }
+.section-tab { font-family: var(--font-sans); font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 14px 7px; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; transition: color 0.15s; }
+.section-tab.active, .section-tab:hover { color: var(--navy); }
+.section-tab.t-construction.active { border-bottom-color: var(--c-construction); color: var(--c-construction); }
+.section-tab.t-architecture.active { border-bottom-color: var(--c-architecture); color: var(--c-architecture); }
+.section-tab.t-engineering.active  { border-bottom-color: var(--c-engineering); color: var(--c-engineering); }
+.section-tab.t-manufacturing.active { border-bottom-color: var(--c-manufacturing); color: var(--c-manufacturing); }
+.section-tab.t-ai.active { border-bottom-color: var(--c-ai); color: var(--c-ai); }
+
+.header-trending { background: #f5f3ef; padding: 5px 24px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+.trending-label { font-family: var(--font-sans); font-size: 8px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.12em; flex-shrink: 0; }
+.trend-pill { font-family: var(--font-sans); font-size: 9px; font-weight: 500; color: var(--navy); padding: 2px 9px; background: var(--white); border: 0.5px solid var(--border); border-radius: 3px; white-space: nowrap; }
+.trend-pill.hot { color: var(--orange); border-color: var(--orange); }
+
+/* ── SECTOR TAGS — the ONLY place accent colours appear ── */
+.tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--cream);
+  color: var(--navy);
+  border: 0.5px solid var(--border);
+}
+/* Sector accent ONLY on tag foreground + left border — never background */
+.tag.construction { color: var(--c-construction); border-left: 2px solid var(--c-construction); }
+.tag.architecture  { color: var(--c-architecture); border-left: 2px solid var(--c-architecture); }
+.tag.engineering   { color: var(--c-engineering);  border-left: 2px solid var(--c-engineering); }
+.tag.manufacturing { color: var(--c-manufacturing);border-left: 2px solid var(--c-manufacturing); }
+.tag.ai            { color: var(--c-ai);            border-left: 2px solid var(--c-ai); }
+
+/* ════════════════════════════════════
+   HOMEPAGE
+   ════════════════════════════════════ */
+.homepage { background: var(--cream); }
+
+/* Hero section */
+.hero-section { background: var(--navy); padding: 28px 24px 24px; display: grid; grid-template-columns: 1fr 260px; gap: 24px; }
+.hero-left {}
+.hero-eyebrow { font-family: var(--font-sans); font-size: 9px; color: #8ea5be; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+.hero-headline { font-family: var(--font-serif); font-size: 26px; font-weight: 700; color: var(--white); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 10px; }
+.hero-excerpt { font-family: var(--font-sans); font-size: 12px; color: rgba(255,255,255,0.58); line-height: 1.6; margin-bottom: 14px; }
+.hero-meta { font-family: var(--font-sans); font-size: 9px; color: #6a85a0; }
+.hero-read { display: inline-block; margin-top: 14px; font-family: var(--font-sans); font-size: 10px; font-weight: 600; color: var(--orange); text-decoration: none; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid var(--orange); padding-bottom: 1px; }
+
+/* Top stories panel */
+.top-stories-panel { background: rgba(255,255,255,0.05); border-radius: 6px; padding: 14px; }
+.ts-hd { font-family: var(--font-sans); font-size: 8px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.ts-item { display: flex; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.ts-item:last-child { border-bottom: none; }
+.ts-num { font-family: var(--font-sans); font-size: 13px; font-weight: 700; color: var(--orange); min-width: 16px; line-height: 1.3; }
+.ts-title { font-family: var(--font-sans); font-size: 10px; color: rgba(255,255,255,0.8); line-height: 1.35; font-weight: 500; }
+.ts-meta { font-family: var(--font-sans); font-size: 8px; color: rgba(255,255,255,0.3); margin-top: 3px; }
+
+/* Content area */
+.content-area { max-width: 100%; padding: 24px; }
+.section-label { font-family: var(--font-sans); font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+
+/* Article grid — GovExec style: image + headline + short para, nothing more */
+.article-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.article-card { background: var(--white); border: 0.5px solid var(--border); padding: 0; transition: box-shadow 0.15s; cursor: pointer; }
+.article-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); z-index: 1; }
+.card-img { width: 100%; height: 160px; background: #e8e4de; display: block; object-fit: cover; }
+.card-img-placeholder { width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 10px; color: #bbb; }
+.card-body { padding: 14px 16px 16px; }
+.card-meta { font-family: var(--font-sans); font-size: 8px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+/* CRITICAL: headline uses Georgia serif, no colour bleeding */
+.card-headline { font-family: var(--font-serif); font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; margin-bottom: 8px; }
+.card-headline:hover { color: var(--navy); }
+/* Excerpt — short, just 2 lines, clipped */
+.card-excerpt { font-family: var(--font-sans); font-size: 12px; color: var(--text-mid); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-readtime { font-family: var(--font-sans); font-size: 8px; color: var(--text-muted); margin-top: 10px; }
+
+/* Load more */
+.load-more-zone { text-align: center; padding: 24px; border-top: 1px solid var(--border); }
+.load-more-btn { font-family: var(--font-sans); font-size: 10px; font-weight: 600; color: var(--navy); background: var(--white); border: 1px solid var(--navy); padding: 9px 28px; border-radius: 3px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; transition: all 0.15s; }
+.load-more-btn:hover { background: var(--navy); color: var(--white); }
+
+/* Newsletter band */
+.nl-band { background: var(--navy); padding: 28px 24px; text-align: center; }
+.nl-eyebrow { font-family: var(--font-sans); font-size: 9px; color: var(--orange); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 8px; }
+.nl-title { font-family: var(--font-serif); font-size: 22px; color: var(--white); font-weight: 700; margin-bottom: 6px; }
+.nl-sub { font-family: var(--font-sans); font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+.nl-btn { font-family: var(--font-sans); font-size: 11px; font-weight: 700; background: var(--orange); color: var(--white); border: none; padding: 10px 28px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; }
+
+/* Footer */
+.site-footer { background: var(--navy-dark); padding: 20px 24px 12px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 20px; }
+.footer-brand .logo { font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+.footer-brand .logo em { color: var(--orange); font-style: normal; }
+.footer-brand p { font-family: var(--font-sans); font-size: 9px; color: rgba(255,255,255,0.3); line-height: 1.6; }
+.footer-col h4 { font-family: var(--font-sans); font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+.footer-col a { display: block; font-family: var(--font-sans); font-size: 10px; color: rgba(255,255,255,0.55); margin-bottom: 6px; text-decoration: none; }
+.footer-bottom { background: #080f18; padding: 8px 24px; font-family: var(--font-sans); font-size: 8px; color: rgba(255,255,255,0.2); text-align: center; }
+
+/* ════════════════════════════════════
+   ARTICLE PAGE
+   ════════════════════════════════════ */
+.article-page {
+  /* THE FIX — explicit white background scoped to the article page
+     This overrides any Ghost theme variable that was leaking
+     sector colour into the page background */
+  background: var(--white) !important;
+  color: var(--text) !important;
+}
+
+.article-layout { display: grid; grid-template-columns: 1fr 280px; gap: 0; max-width: 100%; background: var(--white); }
+
+/* Reading column — white, clean */
+.article-column { background: var(--white); padding: 28px 32px 28px 24px; border-right: 1px solid var(--border); }
+
+/* Progress bar */
+.progress-bar { height: 3px; background: var(--border); position: relative; margin-bottom: 0; }
+.progress-fill { height: 3px; background: var(--orange); width: 42%; }
+
+/* Article header */
+.article-header { margin-bottom: 20px; }
+.breadcrumb { font-family: var(--font-sans); font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.breadcrumb span { color: var(--c-construction); }
+.article-title { font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--text); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 12px; }
+.article-deck { font-family: var(--font-sans); font-size: 14px; color: var(--text-mid); line-height: 1.6; margin-bottom: 14px; font-weight: 300; }
+.article-meta-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.meta-item { font-family: var(--font-sans); font-size: 9px; color: var(--text-muted); }
+.meta-dot { color: var(--border); }
+
+/* Hero image */
+.article-hero { width: 100%; height: 200px; background: #e8e4de; display: block; border-radius: 2px; margin: 20px 0 24px; }
+.article-caption { font-family: var(--font-sans); font-size: 9px; color: var(--text-muted); font-style: italic; margin-top: -18px; margin-bottom: 20px; }
+
+/* Body text */
+.article-body p { font-family: var(--font-serif); font-size: 16px; line-height: 1.8; color: var(--text); margin-bottom: 20px; font-weight: 400; }
+.article-body h2 { font-family: var(--font-sans); font-size: 15px; font-weight: 700; color: var(--navy); margin: 28px 0 12px; padding-top: 20px; border-top: 1px solid var(--border); letter-spacing: -0.01em; }
+.article-body blockquote { border-left: 3px solid var(--orange); padding: 10px 16px; margin: 24px 0; background: #faf8f5; font-family: var(--font-serif); font-style: italic; color: var(--text-mid); font-size: 15px; line-height: 1.7; }
+.truncate-note { text-align: center; font-family: var(--font-sans); font-size: 9px; color: #ccc; padding: 12px 0; border-top: 0.5px dashed var(--border); margin: 16px 0; letter-spacing: 0.08em; }
+
+/* Ad units — clearly delineated */
+.ad-unit { background: #f8f7f4; border: 0.5px solid var(--border); border-radius: 3px; padding: 12px; text-align: center; margin: 24px 0; }
+.ad-label { font-family: var(--font-sans); font-size: 8px; color: #bbb; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.ad-placeholder { background: #eee; height: 90px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 9px; color: #bbb; }
+
+/* Sidebar — white background, never inherits sector colour */
+.article-sidebar { background: var(--white) !important; padding: 24px 16px; }
+.sidebar-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.sidebar-section:last-child { border-bottom: none; }
+.sidebar-hd { font-family: var(--font-sans); font-size: 8px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--orange); }
+
+/* Key facts */
+.kf-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 0.5px solid var(--border-light); }
+.kf-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.kf-num { font-family: var(--font-sans); font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1; flex-shrink: 0; min-width: 44px; }
+.kf-label { font-family: var(--font-sans); font-size: 10px; color: var(--text-mid); line-height: 1.4; }
+.kf-sub { font-family: var(--font-sans); font-size: 8px; color: var(--text-muted); margin-top: 2px; }
+
+/* Reading progress */
+.rp-label { font-family: var(--font-sans); font-size: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.rp-bar { background: var(--border); height: 4px; border-radius: 2px; margin-bottom: 4px; }
+.rp-fill { background: var(--orange); height: 4px; border-radius: 2px; width: 42%; }
+.rp-pct { font-family: var(--font-sans); font-size: 9px; color: var(--text-muted); }
+
+/* Related stories in sidebar */
+.rel-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 0.5px solid var(--border-light); }
+.rel-item:last-child { border-bottom: none; }
+.rel-headline { font-family: var(--font-serif); font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.35; margin-bottom: 4px; }
+.rel-meta { font-family: var(--font-sans); font-size: 8px; color: var(--text-muted); }
+
+/* Newsletter signup in sidebar */
+.sidebar-nl { background: var(--navy); border-radius: 6px; padding: 14px; }
+.snl-title { font-family: var(--font-serif); font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.snl-sub { font-family: var(--font-sans); font-size: 10px; color: rgba(255,255,255,0.5); margin-bottom: 12px; line-height: 1.5; }
+.snl-input { width: 100%; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: #fff; font-family: var(--font-sans); font-size: 11px; border-radius: 3px; margin-bottom: 8px; }
+.snl-btn { width: 100%; background: var(--orange); color: #fff; border: none; font-family: var(--font-sans); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px; border-radius: 3px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- Demo page switcher -->
+<div class="demo-nav">
+  <span>Preview:</span>
+  <button class="demo-btn active" onclick="showPage('home', this)">Homepage</button>
+  <button class="demo-btn" onclick="showPage('article', this)">Article Page</button>
+  <button class="demo-btn" onclick="showPage('fix', this)">The Green Bug Fix</button>
+</div>
+
+<!-- ════ HOMEPAGE ════ -->
+<div class="page active" id="page-home">
+  <div class="homepage">
+
+    <div class="site-header">
+      <div class="header-utility">
+        <span class="date">Saturday, March 14, 2026</span>
+        <div class="links">
+          <a href="#">Podcasts</a>
+          <a href="#">Events</a>
+          <a href="#">Newsletters</a>
+          <a href="#">About</a>
+          <a href="#" class="highlight">Advertise</a>
+        </div>
+      </div>
+      <div class="header-main">
+        <div class="masthead">Industrial<em>Briefs</em></div>
+        <div class="main-nav">
+          <a href="#">News</a>
+          <a href="#">Analysis</a>
+          <a href="#">Projects</a>
+          <a href="#">Data</a>
+          <a href="#">Weekly Brief</a>
+          <div class="sep"></div>
+          <a href="#" class="insights">Industry Insights</a>
+        </div>
+        <a href="#" class="header-cta">Subscribe Free</a>
+      </div>
+      <div class="header-sections">
+        <div class="section-tabs">
+          <div class="section-tab t-all active">All</div>
+          <div class="section-tab t-construction">Construction</div>
+          <div class="section-tab t-architecture">Architecture</div>
+          <div class="section-tab t-engineering">Engineering</div>
+          <div class="section-tab t-manufacturing">Manufacturing</div>
+          <div class="section-tab t-ai">AI Tools</div>
+        </div>
+      </div>
+      <div class="header-trending">
+        <span class="trending-label">Trending</span>
+        <span class="trend-pill hot">Data Centers</span>
+        <span class="trend-pill">Steel Tariffs</span>
+        <span class="trend-pill">Robotics</span>
+        <span class="trend-pill">ASTM Updates</span>
+        <span class="trend-pill">AI Permits</span>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero-section">
+      <div class="hero-left">
+        <div class="hero-eyebrow">Featured · Construction</div>
+        <div class="hero-headline">AI Concrete Monitoring Reduces Construction Waste by 30% Across Major Infrastructure Sites</div>
+        <div class="hero-excerpt">ConcreteAI's sensor platform flags curing anomalies before failure — cutting rework costs on bridge decks, tunnels, and high-rise mat foundations across 12 pilot sites.</div>
+        <div class="hero-meta">Mar 14, 2026 · 4 min read · IndustrialBriefs Newsroom</div>
+        <a href="#" class="hero-read">Read Full Story →</a>
+      </div>
+      <div class="top-stories-panel">
+        <div class="ts-hd">Top Stories Today</div>
+        <div class="ts-item">
+          <div class="ts-num">1</div>
+          <div><div class="ts-title">Bridge Sensor Grid Passes Federal Load Tests Ahead of Schedule</div><div class="ts-meta">Engineering · 3 min</div></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-num">2</div>
+          <div><div class="ts-title">Robotic Welding Adoption Surges 40% in Q1 2026</div><div class="ts-meta">Manufacturing · 2 min</div></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-num">3</div>
+          <div><div class="ts-title">Autodesk Construction IQ Gets Real-Time Sensor Integration</div><div class="ts-meta">AI Tools · 3 min</div></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-num">4</div>
+          <div><div class="ts-title">New ASTM Standard Covers AI-Assisted Structural Inspection</div><div class="ts-meta">Engineering · 5 min</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article grid — GovExec style: clean, just image + tag + headline + 2-line excerpt -->
+    <div class="content-area">
+      <div class="section-label">Latest News</div>
+      <div class="article-grid">
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#dce8f0;">Construction</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag construction">Construction</span> <span class="meta-dot">·</span> Mar 14</div>
+            <div class="card-headline">Balfour Beatty Targets Record US Data Center Backlog in 2026</div>
+            <div class="card-excerpt">The firm expects infrastructure revenue to exceed previous highs driven by hyperscaler demand across the southeast corridor.</div>
+            <div class="card-readtime">3 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#dceadc;">Engineering</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag engineering">Engineering</span> <span class="meta-dot">·</span> Mar 13</div>
+            <div class="card-headline">New ASTM Standard Covers AI-Assisted Structural Inspection Tools</div>
+            <div class="card-excerpt">The updated framework provides testing protocols for AI systems used in load-bearing assessments on critical infrastructure.</div>
+            <div class="card-readtime">5 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#ede8dc;">Manufacturing</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag manufacturing">Manufacturing</span> <span class="meta-dot">·</span> Mar 12</div>
+            <div class="card-headline">Siemens and NVIDIA Expand AI Factory Simulation Partnership</div>
+            <div class="card-excerpt">The joint platform now supports full digital twin simulation with real-time telemetry across assembly line networks.</div>
+            <div class="card-readtime">4 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#e8dce8;">AI Tools</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag ai">AI Tools</span> <span class="meta-dot">·</span> Mar 12</div>
+            <div class="card-headline">Autodesk Construction IQ Gets Real-Time Sensor Layer for Site Safety</div>
+            <div class="card-excerpt">The update adds live sensor data feeds to the AI project management platform, flagging hazards within 60 seconds.</div>
+            <div class="card-readtime">3 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#dce4f0;">Architecture</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag architecture">Architecture</span> <span class="meta-dot">·</span> Mar 11</div>
+            <div class="card-headline">Zaha Hadid Architects Deploys Generative AI for Sagrada Família Restoration Detail</div>
+            <div class="card-excerpt">The firm is using AI-generated structural analysis to validate Gaudí's original calculations against modern load requirements.</div>
+            <div class="card-readtime">6 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#dce8f0;">Construction</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag construction">Construction</span> <span class="meta-dot">·</span> Mar 11</div>
+            <div class="card-headline">Walsh Construction Pilots Autonomous Excavator on Chicago Highway Project</div>
+            <div class="card-excerpt">The pilot uses lidar-equipped machines operating overnight to reduce crew hours and accelerate the I-90 expansion timeline.</div>
+            <div class="card-readtime">4 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#dceadc;">Engineering</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag engineering">Engineering</span> <span class="meta-dot">·</span> Mar 10</div>
+            <div class="card-headline">EPA Approves First AI-Monitored Environmental Compliance System for Bridge Construction</div>
+            <div class="card-excerpt">The framework allows AI systems to submit real-time environmental data in place of quarterly manual reports.</div>
+            <div class="card-readtime">5 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#ede8dc;">Manufacturing</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag manufacturing">Manufacturing</span> <span class="meta-dot">·</span> Mar 10</div>
+            <div class="card-headline">Nucor Deploys AI Quality Control Across 8 Steel Mills, Targeting 15% Scrap Reduction</div>
+            <div class="card-excerpt">The rollout follows a 6-month pilot at the Hertford County facility that showed measurable reduction in off-spec material.</div>
+            <div class="card-readtime">3 min read</div>
+          </div>
+        </div>
+
+        <div class="article-card">
+          <div class="card-img-placeholder" style="background:#e8dce8;">AI Tools</div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag ai">AI Tools</span> <span class="meta-dot">·</span> Mar 9</div>
+            <div class="card-headline">Trimble Launches AI-Powered Machine Control Update for Road Grading</div>
+            <div class="card-excerpt">The updated platform uses real-time terrain mapping to self-correct blade positioning, reducing operator correction cycles by 40%.</div>
+            <div class="card-readtime">3 min read</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="load-more-zone">
+        <button class="load-more-btn">Load More Stories</button>
+      </div>
+    </div>
+
+    <div class="nl-band">
+      <div class="nl-eyebrow">Free Daily Briefing</div>
+      <div class="nl-title">The ACEM AI Daily</div>
+      <div class="nl-sub">What matters in construction, engineering, architecture and manufacturing — every morning at 6am.</div>
+      <button class="nl-btn">Subscribe Free →</button>
+    </div>
+
+    <div class="site-footer">
+      <div class="footer-brand">
+        <div class="logo">Industrial<em>Briefs</em></div>
+        <p>Intelligence for Architecture, Construction,<br>Engineering, and Manufacturing professionals.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Content</h4>
+        <a href="#">News</a><a href="#">Analysis</a><a href="#">Projects</a><a href="#">Data</a><a href="#">Weekly Brief</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sectors</h4>
+        <a href="#">Construction</a><a href="#">Architecture</a><a href="#">Engineering</a><a href="#">Manufacturing</a><a href="#">AI Tools</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a><a href="#">Advertise</a><a href="#">RSS</a><a href="#">API</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 IndustrialBriefs · industrialbriefs.com · Powered by Ghost</div>
+  </div>
+</div>
+
+<!-- ════ ARTICLE PAGE ════ -->
+<div class="page" id="page-article">
+  <div class="article-page">
+
+    <div class="site-header">
+      <div class="header-utility">
+        <span class="date">Saturday, March 14, 2026</span>
+        <div class="links"><a href="#">About</a><a href="#">Advertise</a><a href="#" class="highlight">RSS</a></div>
+      </div>
+      <div class="header-main">
+        <div class="masthead">Industrial<em>Briefs</em></div>
+        <div class="main-nav">
+          <a href="#">News</a><a href="#">Analysis</a><a href="#">Projects</a><a href="#">Data</a><a href="#">Weekly Brief</a>
+        </div>
+        <a href="#" class="header-cta">Subscribe Free</a>
+      </div>
+      <div class="header-sections">
+        <div class="section-tabs">
+          <div class="section-tab t-all">All</div>
+          <div class="section-tab t-construction active">Construction</div>
+          <div class="section-tab t-architecture">Architecture</div>
+          <div class="section-tab t-engineering">Engineering</div>
+          <div class="section-tab t-manufacturing">Manufacturing</div>
+          <div class="section-tab t-ai">AI Tools</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+
+    <div class="article-layout">
+      <!-- Reading column -->
+      <div class="article-column">
+        <div class="article-header">
+          <div class="breadcrumb">Home → <span>Construction</span> → News</div>
+          <div style="margin-bottom:10px;"><span class="tag construction">Construction</span></div>
+          <h1 class="article-title">AI Concrete Monitoring Reduces Construction Waste by 30% Across Major Infrastructure Sites</h1>
+          <p class="article-deck">ConcreteAI's sensor-driven platform flags curing anomalies before material failure — cutting rework costs on bridge decks, tunnels, and high-rise foundations.</p>
+          <div class="article-meta-row">
+            <span class="meta-item">IndustrialBriefs Newsroom</span>
+            <span class="meta-dot">·</span>
+            <span class="meta-item">Mar 14, 2026</span>
+            <span class="meta-dot">·</span>
+            <span class="meta-item">4 min read</span>
+          </div>
+        </div>
+
+        <div class="article-hero"></div>
+        <div class="article-caption">ConcreteAI sensor array installed at a bridge deck pour, Chicago, IL. Photo: ConcreteAI</div>
+
+        <div class="article-body">
+          <p>A new AI monitoring system from ConcreteAI is showing measurable results on large-scale infrastructure builds, reducing material waste by up to 30% by catching curing anomalies before they escalate into full rework events.</p>
+
+          <p>The platform uses embedded IoT sensors combined with a machine learning model trained on 4 million concrete pour data points. When temperature, humidity, or chemical composition deviates from expected cure curves, site managers receive a Slack or SMS alert within 90 seconds.</p>
+
+          <!-- AD UNIT 1: after paragraph 3-4 -->
+          <div class="ad-unit">
+            <div class="ad-label">Advertisement</div>
+            <div class="ad-placeholder">300×250 · Deferred load after FCP</div>
+          </div>
+
+          <h2>How the system works on a live pour</h2>
+
+          <p>Sensors are embedded at 12-inch intervals across the pour zone, transmitting readings every 30 seconds. The AI model compares incoming data against cure curve baselines for the specific mix design, ambient conditions, and pour depth in real time.</p>
+
+          <blockquote>"We caught a cold joint forming at 3am on the Lakeshore span — something that would have required a full deck section removal if we'd found it at inspection." <br>— Mark Stellan, Project Manager, Walsh Construction</blockquote>
+
+          <div class="truncate-note">· · · Article continues · · · (~600 words remaining)</div>
+        </div>
+
+        <!-- AD UNIT 2: after article body, before market widget -->
+        <div class="ad-unit">
+          <div class="ad-label">Advertisement</div>
+          <div class="ad-placeholder">728×90 Leaderboard · Deferred load</div>
+        </div>
+
+        <div style="background:#f8f7f4;border:0.5px solid var(--border);border-radius:6px;padding:14px;margin-top:8px;">
+          <div style="font-family:var(--font-sans);font-size:8px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Related Markets · ACEM & AI Stocks</div>
+          <div style="font-family:var(--font-sans);font-size:10px;color:var(--text-muted);">Market widget appears here — ADSK, TRMB, CAT, NVDA filtered to Construction sector</div>
+        </div>
+      </div>
+
+      <!-- Sidebar — white, no colour bleed -->
+      <div class="article-sidebar">
+
+        <div class="sidebar-section">
+          <div class="sidebar-hd">Key Facts</div>
+          <div class="kf-item">
+            <div class="kf-num">30%</div>
+            <div><div class="kf-label">Reduction in material waste</div><div class="kf-sub">across 12 pilot projects</div></div>
+          </div>
+          <div class="kf-item">
+            <div class="kf-num">90s</div>
+            <div><div class="kf-label">Alert response time</div><div class="kf-sub">anomaly to SMS/Slack</div></div>
+          </div>
+          <div class="kf-item">
+            <div class="kf-num">4M</div>
+            <div><div class="kf-label">Training data points</div><div class="kf-sub">concrete pour records</div></div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="rp-label">Reading Progress</div>
+          <div class="rp-bar"><div class="rp-fill"></div></div>
+          <div class="rp-pct">42% complete · 2 min remaining</div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-hd">Related Stories</div>
+          <div class="rel-item">
+            <div class="rel-headline">Robotic Formwork Cuts Labour Hours by 22% on High-Rise Pours</div>
+            <div class="rel-meta">Construction · Mar 11 · 3 min</div>
+          </div>
+          <div class="rel-item">
+            <div class="rel-headline">New ASTM Standard Covers AI-Assisted Structural Inspection</div>
+            <div class="rel-meta">Engineering · Mar 10 · 5 min</div>
+          </div>
+          <div class="rel-item">
+            <div class="rel-headline">Autodesk IQ Gets Real-Time Sensor Integration</div>
+            <div class="rel-meta">AI Tools · Mar 9 · 3 min</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nl">
+          <div class="snl-title">Get the Daily Briefing</div>
+          <div class="snl-sub">IndustrialBriefs every morning at 6am. Free.</div>
+          <input class="snl-input" type="email" placeholder="your@email.com">
+          <button class="snl-btn">Subscribe</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ BUG FIX PAGE ════ -->
+<div class="page" id="page-fix">
+  <div style="padding: 24px; background: var(--white); font-family: var(--font-sans); max-width: 760px; margin: 0 auto;">
+
+    <div style="font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px;">The green background bug — cause & fix</div>
+    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">Your Ghost theme has a tag accent colour variable that's leaking into the page body background. This is a one-line CSS fix — add it to your theme's <code style="background:#f5f3ef;padding:1px 5px;border-radius:2px;">screen.css</code></div>
+
+    <div style="background:#1a1a2e;border-radius:8px;padding:16px;margin-bottom:20px;">
+      <div style="font-size: 8px; color: #6a85a0; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">THE PROBLEM — Ghost tag colour bleeding into article background</div>
+      <pre style="font-family:monospace;font-size:11px;line-height:1.8;color:#e2ddd5;">/* Ghost sets this CSS variable based on the post's primary tag */
+/* When the tag is "Construction", Ghost sets: */
+--ghost-accent-color: #16a34a;  /* your engineering green */
+
+/* And then the theme's article template does something like: */
+.post-template {
+  background-color: var(--ghost-accent-color); /* ← THIS IS THE BUG */
+}</pre>
+    </div>
+
+    <div style="background:#1a1a2e;border-radius:8px;padding:16px;margin-bottom:20px;">
+      <div style="font-size: 8px; color: #4ade80; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">THE FIX — add these rules to screen.css</div>
+      <pre style="font-family:monospace;font-size:11px;line-height:1.8;color:#e2ddd5;"><span style="color:#7dd3fc;">/* ── GREEN BACKGROUND BUG FIX ──────────────────────── */</span>
+<span style="color:#fbbf24;">/* Force white background on ALL article/post pages */</span>
+<span style="color:#86efac;">.post-template,</span>
+<span style="color:#86efac;">.post-full,</span>
+<span style="color:#86efac;">.article-page,</span>
+<span style="color:#86efac;">.post-content-wrap,</span>
+<span style="color:#86efac;">body.post-template</span> {
+  <span style="color:#fda4af;">background-color: #ffffff !important;</span>
+  <span style="color:#fda4af;">color: #1c1c1c !important;</span>
+}
+
+<span style="color:#7dd3fc;">/* Scope accent colour ONLY to tags — never backgrounds */</span>
+<span style="color:#86efac;">.tag,</span>
+<span style="color:#86efac;">.post-tag,</span>
+<span style="color:#86efac;">.article-tag</span> {
+  background-color: #fafaf8;  <span style="color:#6a85a0;">/* cream, not the accent colour */</span>
+  color: inherit;             <span style="color:#6a85a0;">/* accent colour applied via JS class */</span>
+}
+
+<span style="color:#7dd3fc;">/* Sector tag classes — colour ONLY on text + left border */</span>
+<span style="color:#86efac;">.tag-construction</span> { color: #e96d2e; border-left: 2px solid #e96d2e; }
+<span style="color:#86efac;">.tag-engineering</span>  { color: #16a34a; border-left: 2px solid #16a34a; }
+<span style="color:#86efac;">.tag-architecture</span> { color: #3b82f6; border-left: 2px solid #3b82f6; }
+<span style="color:#86efac;">.tag-manufacturing</span>{ color: #d97706; border-left: 2px solid #d97706; }
+<span style="color:#86efac;">.tag-ai</span>           { color: #7c3aed; border-left: 2px solid #7c3aed; }</pre>
+    </div>
+
+    <div style="background:#f0fdf4;border:0.5px solid #86efac;border-radius:8px;padding:12px 14px;font-size:10px;color:#065f46;line-height:1.6;">
+      <strong>Why this happens:</strong> Ghost uses a CSS custom property <code>--ghost-accent-color</code> that it sets based on the post's primary tag colour in Ghost Admin. Some themes accidentally apply this variable to the page background instead of scoping it only to UI accent elements like buttons and tags. The fix above overrides it with an explicit white background on article templates.
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,517 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #1a2e4a; --navy-dark: #111d2e; --orange: #e96d2e;
+  --cream: #fafaf8; --white: #ffffff;
+  --text: #1c1c1c; --text-mid: #444; --text-muted: #777;
+  --border: #e8e4de; --border-light: #f0ede8;
+  --c-construction: #e96d2e; --c-architecture: #3b82f6;
+  --c-engineering: #16a34a; --c-manufacturing: #d97706; --c-ai: #7c3aed;
+  --serif: 'Lora', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+body { font-family: var(--sans); background: #e8e4de; }
+
+/* ── Layout ── */
+.stage { display: flex; gap: 24px; justify-content: center; align-items: flex-start; padding: 20px 16px; flex-wrap: wrap; }
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.phone-label { font-family: var(--sans); font-size: 9px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ── Phone frame ── */
+.phone {
+  width: 320px;
+  background: var(--white);
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+  border: 8px solid #1a1a1a;
+  position: relative;
+}
+.phone-notch {
+  background: #1a1a1a;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phone-notch-pill {
+  width: 80px; height: 18px;
+  background: #1a1a1a;
+  border-radius: 0 0 12px 12px;
+  border: 2px solid #2a2a2a;
+}
+.phone-screen {
+  background: var(--cream);
+  height: 580px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+.phone-home-bar {
+  background: var(--white);
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phone-home-pill { width: 80px; height: 4px; background: #ddd; border-radius: 2px; }
+
+/* ── Mobile header ── */
+.m-header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+.m-header-main {
+  background: var(--navy);
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+}
+.m-masthead { font-family: var(--serif); font-size: 17px; font-weight: 700; color: #fff; }
+.m-masthead em { color: var(--orange); font-style: normal; }
+.m-header-right { display: flex; align-items: center; gap: 8px; }
+.m-subscribe { font-family: var(--sans); font-size: 9px; font-weight: 700; background: var(--orange); color: #fff; padding: 5px 11px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+.m-hamburger { display: flex; flex-direction: column; gap: 4px; padding: 4px; }
+.m-hamburger span { width: 18px; height: 2px; background: rgba(255,255,255,0.7); border-radius: 1px; display: block; }
+
+/* Swipe rail */
+.m-rail { background: var(--white); border-bottom: 1px solid var(--border); padding: 8px 0; overflow-x: auto; scrollbar-width: none; display: flex; gap: 0; }
+.m-rail::-webkit-scrollbar { display: none; }
+.m-rail-label { font-family: var(--sans); font-size: 8px; font-weight: 800; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; padding: 0 12px; display: flex; align-items: center; border-right: 1px solid var(--border); flex-shrink: 0; }
+.m-rail-card { display: flex; gap: 7px; align-items: center; padding: 0 12px; border-right: 1px solid var(--border); flex-shrink: 0; min-width: 160px; }
+.m-rail-thumb { width: 32px; height: 24px; border-radius: 3px; flex-shrink: 0; }
+.m-rail-text { flex: 1; }
+.m-rail-tag { font-family: var(--sans); font-size: 7px; font-weight: 800; color: var(--orange); text-transform: uppercase; letter-spacing: 0.05em; }
+.m-rail-title { font-family: var(--sans); font-size: 9px; font-weight: 600; color: var(--navy); line-height: 1.3; }
+
+/* Section tabs — horizontal scroll */
+.m-tabs { background: var(--white); border-bottom: 2px solid var(--navy); padding: 0 0; display: flex; overflow-x: auto; scrollbar-width: none; }
+.m-tabs::-webkit-scrollbar { display: none; }
+.m-tab { font-family: var(--sans); font-size: 9px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.07em; padding: 7px 12px 6px; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; flex-shrink: 0; }
+.m-tab.active { color: var(--navy); border-bottom-color: var(--orange); }
+
+/* Trending */
+.m-trending { background: #f5f3ef; padding: 6px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; white-space: nowrap; }
+.m-trending::-webkit-scrollbar { display: none; }
+.m-trend-label { font-family: var(--sans); font-size: 7px; font-weight: 800; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; flex-shrink: 0; }
+.m-trend-pill { font-family: var(--sans); font-size: 8px; font-weight: 500; color: var(--navy); padding: 2px 8px; background: #fff; border: 0.5px solid var(--border); border-radius: 3px; flex-shrink: 0; }
+.m-trend-pill.hot { color: var(--orange); border-color: var(--orange); }
+
+/* ── HOMEPAGE MOBILE ── */
+/* Hero */
+.m-hero { background: var(--navy); padding: 18px 14px 16px; }
+.m-hero-eyebrow { font-family: var(--sans); font-size: 8px; color: #8ea5be; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.m-hero-tag { display: inline-block; background: var(--orange); color: #fff; font-family: var(--sans); font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; padding: 2px 7px; border-radius: 2px; margin-bottom: 8px; }
+.m-hero-headline { font-family: var(--serif); font-size: 19px; font-weight: 700; color: #fff; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 10px; }
+.m-hero-excerpt { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.55); line-height: 1.55; margin-bottom: 12px; }
+.m-hero-meta { font-family: var(--sans); font-size: 9px; color: #6a85a0; }
+.m-hero-read { display: inline-block; margin-top: 10px; font-family: var(--sans); font-size: 9px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid var(--orange); padding-bottom: 1px; }
+
+/* Top stories — horizontal pills on mobile */
+.m-top-stories { background: rgba(255,255,255,0.05); border-radius: 6px; margin-top: 14px; padding: 10px 12px; }
+.m-ts-hd { font-family: var(--sans); font-size: 7px; font-weight: 800; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.m-ts-item { display: flex; gap: 8px; padding: 5px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.m-ts-item:last-child { border-bottom: none; }
+.m-ts-num { font-family: var(--sans); font-size: 11px; font-weight: 800; color: var(--orange); min-width: 14px; }
+.m-ts-title { font-family: var(--sans); font-size: 9px; color: rgba(255,255,255,0.8); line-height: 1.35; font-weight: 500; }
+
+/* Article cards — single column on mobile */
+.m-content { padding: 14px; }
+.m-section-label { font-family: var(--sans); font-size: 8px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.m-section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+
+.m-card { background: var(--white); border: 0.5px solid var(--border); margin-bottom: 1px; display: flex; gap: 0; cursor: pointer; transition: box-shadow 0.15s; }
+.m-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.m-card-img { width: 90px; height: 90px; flex-shrink: 0; }
+.m-card-body { padding: 10px 12px; flex: 1; min-width: 0; }
+.m-card-meta { font-family: var(--sans); font-size: 7px; color: var(--text-muted); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+.m-card-headline { font-family: var(--serif); font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; margin-bottom: 5px; }
+.m-card-excerpt { font-family: var(--sans); font-size: 10px; color: var(--text-mid); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.m-card-readtime { font-family: var(--sans); font-size: 8px; color: var(--text-muted); margin-top: 6px; }
+
+/* Tag */
+.tag { display: inline-block; font-family: var(--sans); font-size: 7px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; background: var(--cream); color: var(--navy); border: 0.5px solid var(--border); }
+.tag.construction { color: var(--c-construction); border-left: 2px solid var(--c-construction); }
+.tag.engineering   { color: var(--c-engineering);  border-left: 2px solid var(--c-engineering); }
+.tag.architecture  { color: var(--c-architecture); border-left: 2px solid var(--c-architecture); }
+.tag.manufacturing { color: var(--c-manufacturing);border-left: 2px solid var(--c-manufacturing); }
+.tag.ai            { color: var(--c-ai);            border-left: 2px solid var(--c-ai); }
+
+.m-load-more { text-align: center; padding: 16px 0 8px; }
+.m-load-btn { font-family: var(--sans); font-size: 10px; font-weight: 600; color: var(--navy); background: var(--white); border: 1px solid var(--navy); padding: 8px 24px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* NL band mobile */
+.m-nl { background: var(--navy); padding: 20px 14px; text-align: center; }
+.m-nl-eyebrow { font-family: var(--sans); font-size: 8px; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
+.m-nl-title { font-family: var(--serif); font-size: 18px; color: #fff; font-weight: 700; margin-bottom: 5px; }
+.m-nl-sub { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.5); margin-bottom: 12px; }
+.m-nl-btn { font-family: var(--sans); font-size: 10px; font-weight: 700; background: var(--orange); color: #fff; border: none; padding: 9px 24px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── ARTICLE PAGE MOBILE ── */
+.m-article { background: var(--white) !important; }
+
+.m-article-header { background: var(--white); padding: 16px 14px 12px; border-bottom: 1px solid var(--border); }
+.m-breadcrumb { font-family: var(--sans); font-size: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.m-breadcrumb span { color: var(--c-construction); }
+.m-article-title { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 10px; }
+.m-article-deck { font-family: var(--sans); font-size: 12px; color: var(--text-mid); line-height: 1.6; font-weight: 300; margin-bottom: 12px; }
+.m-article-meta { font-family: var(--sans); font-size: 9px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.meta-dot { color: var(--border); }
+
+/* Key Facts pill strip — replaces sidebar on mobile */
+.m-kf-strip { background: #f8f7f4; border-bottom: 1px solid var(--border); padding: 10px 14px; overflow-x: auto; scrollbar-width: none; display: flex; gap: 8px; white-space: nowrap; }
+.m-kf-strip::-webkit-scrollbar { display: none; }
+.m-kf-pill { display: inline-flex; flex-direction: column; align-items: center; background: var(--white); border: 0.5px solid var(--border); border-radius: 6px; padding: 8px 12px; flex-shrink: 0; }
+.m-kf-num { font-family: var(--sans); font-size: 18px; font-weight: 700; color: var(--navy); line-height: 1; }
+.m-kf-label { font-family: var(--sans); font-size: 8px; color: var(--text-muted); margin-top: 3px; text-align: center; max-width: 80px; line-height: 1.3; }
+
+/* Article body mobile */
+.m-article-body { background: var(--white) !important; padding: 16px 14px; }
+.m-article-body p { font-family: var(--serif); font-size: 15px; line-height: 1.8; color: var(--text); margin-bottom: 18px; }
+.m-article-body h2 { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--navy); margin: 24px 0 10px; padding-top: 16px; border-top: 1px solid var(--border); }
+.m-article-body blockquote { border-left: 3px solid var(--orange); padding: 8px 12px; margin: 20px 0; background: #faf8f5; font-family: var(--serif); font-style: italic; color: var(--text-mid); font-size: 13px; line-height: 1.6; }
+.m-hero-img { width: 100%; height: 160px; background: #e8e4de; display: block; margin: 14px 0 6px; }
+.m-caption { font-family: var(--sans); font-size: 8px; color: var(--text-muted); font-style: italic; margin-bottom: 16px; }
+
+/* Ad unit mobile */
+.m-ad { background: #f8f7f4; border: 0.5px solid var(--border); border-radius: 3px; padding: 8px; text-align: center; margin: 16px 0; }
+.m-ad-label { font-family: var(--sans); font-size: 7px; color: #ccc; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+.m-ad-ph { background: #eee; height: 60px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: 8px; color: #bbb; }
+
+/* Market widget mobile — compact ticker only */
+.m-market { background: #f8f7f4; border: 0.5px solid var(--border); border-radius: 6px; margin: 0 14px 16px; overflow: hidden; }
+.m-market-hd { background: var(--navy); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
+.m-market-title { font-family: var(--sans); font-size: 11px; font-weight: 700; color: #fff; }
+.m-market-title em { color: var(--orange); font-style: normal; }
+.m-market-live { font-family: var(--sans); font-size: 8px; color: #4ade80; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 4px; }
+.m-market-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
+.m-ticker { background: #111d2e; padding: 4px 0; overflow: hidden; white-space: nowrap; }
+.m-ticker-inner { display: inline-flex; animation: scroll 25s linear infinite; }
+.tick { display: inline-flex; align-items: center; gap: 4px; padding: 0 12px; border-right: 1px solid rgba(255,255,255,0.07); }
+.tick-sym { font-family: var(--sans); font-size: 8px; font-weight: 800; color: #fff; }
+.tick-price { font-family: var(--sans); font-size: 8px; color: rgba(255,255,255,0.6); }
+.tick-up { font-family: var(--sans); font-size: 8px; font-weight: 700; color: #4ade80; }
+.tick-down { font-family: var(--sans); font-size: 8px; font-weight: 700; color: #f87171; }
+@keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.m-market-note { font-family: var(--sans); font-size: 8px; color: var(--text-muted); padding: 6px 12px; text-align: center; }
+
+/* Related stories mobile — below article */
+.m-related { padding: 0 14px 16px; background: var(--white); }
+.m-related-hd { font-family: var(--sans); font-size: 8px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.m-related-hd::after { content:''; flex:1; height:0.5px; background:var(--border); }
+.m-rel-card { display: flex; gap: 10px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 0.5px solid var(--border-light); }
+.m-rel-img { width: 56px; height: 44px; border-radius: 3px; flex-shrink: 0; }
+.m-rel-body { flex: 1; }
+.m-rel-title { font-family: var(--serif); font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 3px; }
+.m-rel-meta { font-family: var(--sans); font-size: 8px; color: var(--text-muted); }
+
+/* Share strip mobile */
+.m-share { padding: 12px 14px; background: #f8f7f4; border-top: 0.5px solid var(--border); display: flex; gap: 8px; }
+.m-share-btn { flex: 1; font-family: var(--sans); font-size: 9px; font-weight: 600; color: var(--navy); background: var(--white); border: 0.5px solid var(--border); padding: 7px 6px; border-radius: 4px; text-align: center; }
+</style>
+
+<div style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.06em; text-align: center; padding: 16px 0 4px;">Mobile screens — scroll inside each phone to see the full page</div>
+
+<div class="stage">
+
+  <!-- PHONE 1: Homepage -->
+  <div class="phone-wrap">
+    <div class="phone-label">Homepage</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+      <div class="phone-screen">
+
+        <!-- Header -->
+        <div class="m-header">
+          <div class="m-header-main">
+            <div class="m-masthead">Industrial<em>Briefs</em></div>
+            <div class="m-header-right">
+              <div class="m-subscribe">Subscribe</div>
+              <div class="m-hamburger"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <!-- Swipe rail -->
+          <div class="m-rail">
+            <div class="m-rail-label">Today</div>
+            <div class="m-rail-card">
+              <div class="m-rail-thumb" style="background:#c5d5e5;"></div>
+              <div class="m-rail-text"><div class="m-rail-tag">Construction</div><div class="m-rail-title">AI Concrete Cuts Waste 30%</div></div>
+            </div>
+            <div class="m-rail-card">
+              <div class="m-rail-thumb" style="background:#b8d4c0;"></div>
+              <div class="m-rail-text"><div class="m-rail-tag">Engineering</div><div class="m-rail-title">Bridge Sensor Grid Passes Tests</div></div>
+            </div>
+            <div class="m-rail-card">
+              <div class="m-rail-thumb" style="background:#d4c4b0;"></div>
+              <div class="m-rail-text"><div class="m-rail-tag">Manufacturing</div><div class="m-rail-title">Robotic Welding Up 40% Q1</div></div>
+            </div>
+          </div>
+          <!-- Section tabs -->
+          <div class="m-tabs">
+            <div class="m-tab active">All</div>
+            <div class="m-tab">Construction</div>
+            <div class="m-tab">Architecture</div>
+            <div class="m-tab">Engineering</div>
+            <div class="m-tab">Manufacturing</div>
+            <div class="m-tab">AI Tools</div>
+          </div>
+          <!-- Trending -->
+          <div class="m-trending">
+            <span class="m-trend-label">Trending</span>
+            <span class="m-trend-pill hot">Data Centers</span>
+            <span class="m-trend-pill">Steel Tariffs</span>
+            <span class="m-trend-pill">Robotics</span>
+            <span class="m-trend-pill">ASTM Updates</span>
+          </div>
+        </div>
+
+        <!-- Hero -->
+        <div class="m-hero">
+          <div class="m-hero-eyebrow">Featured Story</div>
+          <div class="m-hero-tag">Construction</div>
+          <div class="m-hero-headline">AI Concrete Monitoring Reduces Construction Waste by 30%</div>
+          <div class="m-hero-excerpt">ConcreteAI's sensor platform flags curing anomalies before failure — cutting rework costs on bridge decks and tunnels.</div>
+          <div class="m-hero-meta">Mar 14, 2026 · 4 min read</div>
+          <div class="m-hero-read">Read Full Story →</div>
+
+          <div class="m-top-stories">
+            <div class="m-ts-hd">Top Stories Today</div>
+            <div class="m-ts-item"><div class="m-ts-num">1</div><div class="m-ts-title">Bridge Sensor Grid Passes Federal Load Tests</div></div>
+            <div class="m-ts-item"><div class="m-ts-num">2</div><div class="m-ts-title">Robotic Welding Adoption Surges 40% in Q1</div></div>
+            <div class="m-ts-item"><div class="m-ts-num">3</div><div class="m-ts-title">Autodesk IQ Gets Real-Time Sensor Layer</div></div>
+          </div>
+        </div>
+
+        <!-- Article cards — single column, image left thumb -->
+        <div class="m-content">
+          <div class="m-section-label">Latest News</div>
+
+          <div class="m-card">
+            <div class="m-card-img" style="background:#dce8f0;"></div>
+            <div class="m-card-body">
+              <div class="m-card-meta"><span class="tag construction">Construction</span><span>Mar 14</span></div>
+              <div class="m-card-headline">Balfour Beatty Targets Record US Data Center Backlog</div>
+              <div class="m-card-excerpt">The firm expects revenue to exceed previous highs driven by hyperscaler demand.</div>
+              <div class="m-card-readtime">3 min read</div>
+            </div>
+          </div>
+
+          <div class="m-card">
+            <div class="m-card-img" style="background:#dceadc;"></div>
+            <div class="m-card-body">
+              <div class="m-card-meta"><span class="tag engineering">Engineering</span><span>Mar 13</span></div>
+              <div class="m-card-headline">New ASTM Standard Covers AI-Assisted Structural Inspection</div>
+              <div class="m-card-excerpt">The updated framework provides protocols for AI in load-bearing assessments.</div>
+              <div class="m-card-readtime">5 min read</div>
+            </div>
+          </div>
+
+          <div class="m-card">
+            <div class="m-card-img" style="background:#ede8dc;"></div>
+            <div class="m-card-body">
+              <div class="m-card-meta"><span class="tag manufacturing">Manufacturing</span><span>Mar 12</span></div>
+              <div class="m-card-headline">Siemens and NVIDIA Expand AI Factory Simulation Partnership</div>
+              <div class="m-card-excerpt">Full digital twin simulation with real-time telemetry across assembly lines.</div>
+              <div class="m-card-readtime">4 min read</div>
+            </div>
+          </div>
+
+          <div class="m-card">
+            <div class="m-card-img" style="background:#e8dce8;"></div>
+            <div class="m-card-body">
+              <div class="m-card-meta"><span class="tag ai">AI Tools</span><span>Mar 12</span></div>
+              <div class="m-card-headline">Autodesk Construction IQ Gets Real-Time Sensor Layer</div>
+              <div class="m-card-excerpt">AI platform now flags site hazards within 60 seconds of sensor detection.</div>
+              <div class="m-card-readtime">3 min read</div>
+            </div>
+          </div>
+
+          <div class="m-card">
+            <div class="m-card-img" style="background:#dce4f0;"></div>
+            <div class="m-card-body">
+              <div class="m-card-meta"><span class="tag architecture">Architecture</span><span>Mar 11</span></div>
+              <div class="m-card-headline">Zaha Hadid Deploys Generative AI for Sagrada Família Restoration</div>
+              <div class="m-card-excerpt">AI validates Gaudí's structural calculations against modern load requirements.</div>
+              <div class="m-card-readtime">6 min read</div>
+            </div>
+          </div>
+
+          <div class="m-load-more"><button class="m-load-btn">Load More</button></div>
+        </div>
+
+        <div class="m-nl">
+          <div class="m-nl-eyebrow">Free Daily Briefing</div>
+          <div class="m-nl-title">The ACEM AI Daily</div>
+          <div class="m-nl-sub">Every morning at 6am. Free.</div>
+          <button class="m-nl-btn">Subscribe Free →</button>
+        </div>
+
+      </div>
+      <div class="phone-home-bar"><div class="phone-home-pill"></div></div>
+    </div>
+  </div>
+
+  <!-- PHONE 2: Article page -->
+  <div class="phone-wrap">
+    <div class="phone-label">Article Page</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+      <div class="phone-screen">
+
+        <!-- Sticky header — compact -->
+        <div class="m-header">
+          <div class="m-header-main">
+            <div class="m-masthead">Industrial<em>Briefs</em></div>
+            <div class="m-header-right">
+              <div class="m-subscribe">Subscribe</div>
+              <div class="m-hamburger"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <!-- Section tabs — Construction active -->
+          <div class="m-tabs">
+            <div class="m-tab">All</div>
+            <div class="m-tab active">Construction</div>
+            <div class="m-tab">Architecture</div>
+            <div class="m-tab">Engineering</div>
+            <div class="m-tab">Manufacturing</div>
+          </div>
+        </div>
+
+        <!-- Article header -->
+        <div class="m-article-header">
+          <div class="m-breadcrumb">Home → <span>Construction</span></div>
+          <div style="margin-bottom:8px;"><span class="tag construction">Construction</span></div>
+          <div class="m-article-title">AI Concrete Monitoring Reduces Construction Waste by 30%</div>
+          <div class="m-article-deck">ConcreteAI's sensor platform flags curing anomalies before failure — cutting rework costs on bridge decks and tunnels.</div>
+          <div class="m-article-meta">
+            <span>IndustrialBriefs Newsroom</span>
+            <span class="meta-dot">·</span>
+            <span>Mar 14, 2026</span>
+            <span class="meta-dot">·</span>
+            <span>4 min read</span>
+          </div>
+        </div>
+
+        <!-- Key Facts pill strip — replaces sidebar -->
+        <div class="m-kf-strip">
+          <div class="m-kf-pill">
+            <div class="m-kf-num">30%</div>
+            <div class="m-kf-label">Material waste reduction</div>
+          </div>
+          <div class="m-kf-pill">
+            <div class="m-kf-num">90s</div>
+            <div class="m-kf-label">Alert response time</div>
+          </div>
+          <div class="m-kf-pill">
+            <div class="m-kf-num">4M</div>
+            <div class="m-kf-label">Training data points</div>
+          </div>
+          <div class="m-kf-pill">
+            <div class="m-kf-num">3</div>
+            <div class="m-kf-label">Contractors piloting</div>
+          </div>
+        </div>
+
+        <!-- Article body -->
+        <div class="m-article-body">
+          <div class="m-hero-img"></div>
+          <div class="m-caption">ConcreteAI sensor array, Chicago bridge deck. Photo: ConcreteAI</div>
+
+          <p>A new AI monitoring system from ConcreteAI is reducing material waste by up to 30% by catching curing anomalies before they escalate into full rework events.</p>
+
+          <p>The platform uses embedded IoT sensors combined with a machine learning model trained on 4 million concrete pour data points.</p>
+
+          <!-- Ad unit 1 — mid article -->
+          <div class="m-ad">
+            <div class="m-ad-label">Advertisement</div>
+            <div class="m-ad-ph">300×250 · Deferred load</div>
+          </div>
+
+          <h2>How the system works</h2>
+
+          <p>Sensors transmit readings every 30 seconds. The AI model compares incoming data against cure curve baselines for the specific mix design and ambient conditions.</p>
+
+          <blockquote>"We caught a cold joint forming at 3am — something that would have required a full deck section removal at inspection." — Walsh Construction PM</blockquote>
+
+          <div style="text-align:center;font-family:var(--sans);font-size:8px;color:#ccc;padding:10px 0;border-top:0.5px dashed var(--border);margin:14px 0;letter-spacing:0.08em;">· · · Article continues · · ·</div>
+        </div>
+
+        <!-- Share strip -->
+        <div class="m-share">
+          <div class="m-share-btn">𝕏 Share stat</div>
+          <div class="m-share-btn">in LinkedIn</div>
+          <div class="m-share-btn">⎘ Copy link</div>
+        </div>
+
+        <!-- Ad unit 2 — after body -->
+        <div style="padding: 0 14px;">
+          <div class="m-ad" style="margin-top:14px;">
+            <div class="m-ad-label">Advertisement</div>
+            <div class="m-ad-ph">320×50 Mobile Banner</div>
+          </div>
+        </div>
+
+        <!-- Market widget — compact on mobile -->
+        <div class="m-market">
+          <div class="m-market-hd">
+            <div class="m-market-title">ACEM <em>&</em> AI Markets</div>
+            <div class="m-market-live"><div class="m-market-dot"></div>Live</div>
+          </div>
+          <div class="m-ticker">
+            <div class="m-ticker-inner">
+              <div class="tick"><span class="tick-sym">ADSK</span><span class="tick-price">$284.15</span><span class="tick-up">▲ +0.82%</span></div>
+              <div class="tick"><span class="tick-sym">CAT</span><span class="tick-price">$347.82</span><span class="tick-down">▼ -1.00%</span></div>
+              <div class="tick"><span class="tick-sym">NVDA</span><span class="tick-price">$118.60</span><span class="tick-up">▲ +1.56%</span></div>
+              <div class="tick"><span class="tick-sym">TRMB</span><span class="tick-price">$62.40</span><span class="tick-up">▲ +1.34%</span></div>
+              <div class="tick"><span class="tick-sym">DE</span><span class="tick-price">$412.30</span><span class="tick-up">▲ +0.44%</span></div>
+              <div class="tick"><span class="tick-sym">ADSK</span><span class="tick-price">$284.15</span><span class="tick-up">▲ +0.82%</span></div>
+              <div class="tick"><span class="tick-sym">CAT</span><span class="tick-price">$347.82</span><span class="tick-down">▼ -1.00%</span></div>
+              <div class="tick"><span class="tick-sym">NVDA</span><span class="tick-price">$118.60</span><span class="tick-up">▲ +1.56%</span></div>
+              <div class="tick"><span class="tick-sym">TRMB</span><span class="tick-price">$62.40</span><span class="tick-up">▲ +1.34%</span></div>
+              <div class="tick"><span class="tick-sym">DE</span><span class="tick-price">$412.30</span><span class="tick-up">▲ +0.44%</span></div>
+            </div>
+          </div>
+          <div class="m-market-note">Tap to expand · Not financial advice · 15min delayed</div>
+        </div>
+
+        <!-- Related stories -->
+        <div class="m-related">
+          <div class="m-related-hd">Related Stories</div>
+          <div class="m-rel-card">
+            <div class="m-rel-img" style="background:#c5d5e5;"></div>
+            <div class="m-rel-body">
+              <div class="m-rel-title">Robotic Formwork Cuts Labour Hours by 22% on High-Rise Pours</div>
+              <div class="m-rel-meta">Construction · Mar 11 · 3 min</div>
+            </div>
+          </div>
+          <div class="m-rel-card">
+            <div class="m-rel-img" style="background:#b8d4c0;"></div>
+            <div class="m-rel-body">
+              <div class="m-rel-title">New ASTM Standard Covers AI-Assisted Structural Inspection</div>
+              <div class="m-rel-meta">Engineering · Mar 10 · 5 min</div>
+            </div>
+          </div>
+          <div class="m-rel-card">
+            <div class="m-rel-img" style="background:#c8b8d4;"></div>
+            <div class="m-rel-body">
+              <div class="m-rel-title">Autodesk IQ Gets Real-Time Sensor Integration</div>
+              <div class="m-rel-meta">AI Tools · Mar 9 · 3 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="m-nl" style="margin-top:0;">
+          <div class="m-nl-eyebrow">Free Daily Briefing</div>
+          <div class="m-nl-title">The ACEM AI Daily</div>
+          <div class="m-nl-sub">Every morning at 6am. Free.</div>
+          <button class="m-nl-btn">Subscribe Free →</button>
+        </div>
+
+      </div>
+      <div class="phone-home-bar"><div class="phone-home-pill"></div></div>
+    </div>
+  </div>
+
+</div>
