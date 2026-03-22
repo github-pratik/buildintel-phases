@@ -89,6 +89,7 @@ Pages support **light/dark mode** toggle (persisted in `localStorage`).
 ## Tech
 
 - **Hosting:** Vercel (Hobby — free)
+- **Alt hosting:** DigitalOcean App Platform
 - **Repo:** GitHub (Free)
 - **Build:** Static HTML — no framework, no build step
 - **Fonts:** Google Fonts (Cormorant Garamond, JetBrains Mono, DM Sans)
@@ -130,6 +131,39 @@ https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase2-
 https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase3-website.md
 https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase4-build.md
 ```
+
+---
+
+## Deploy On DigitalOcean
+
+This repo can also be deployed on **DigitalOcean App Platform** as a static site from the company repository:
+
+- **GitHub repo:** `visioneeritsolutions/industrialbriefs`
+- **Branch:** `master`
+- **App spec:** `.do/app.yaml`
+- **Deploy mode:** auto-deploy on push
+
+### Recommended setup
+
+1. Push this code to the `company` remote:
+   ```bash
+   git push company master
+   ```
+2. In DigitalOcean, go to **Apps** → **Create App**.
+3. Choose **GitHub** as the source and authorize DigitalOcean to access `visioneeritsolutions/industrialbriefs`.
+4. Select the `master` branch and keep the source directory as `/`.
+5. Confirm the app is detected as a **Static Site**.
+6. After the first deploy, add your custom domain in the app's **Networking** tab.
+
+### CLI Option
+
+If you use `doctl`, you can create the app from the included spec:
+
+```bash
+doctl apps create --spec .do/app.yaml
+```
+
+DigitalOcean will provide an `ondigitalocean.app` starter domain after deployment, and you can map your production domain afterward.
 
 ---
 

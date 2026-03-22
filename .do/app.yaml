@@ -1,0 +1,12 @@
+name: industrialbriefs
+region: nyc
+
+static_sites:
+  - name: industrialbriefs-site
+    environment_slug: html
+    github:
+      repo: visioneeritsolutions/industrialbriefs
+      branch: master
+      deploy_on_push: true
+    source_dir: /
+    index_document: index.html
