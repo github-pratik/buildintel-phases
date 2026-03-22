@@ -1,14 +1,14 @@
-# BuildIntel — Phase Dashboard
+# Industrailbriefs — Phase Dashboard
 
 > **Live site:** [buildintel-phases.vercel.app](https://buildintel-phases.vercel.app)
 
-A public documentation hub for the **BuildIntel** project — an AI-powered automated news intelligence platform for the Architecture, Construction, Engineering & Manufacturing (ACEM) industry.
+A public documentation hub for the **Industrailbriefs** project — an AI-powered automated news intelligence platform for the Architecture, Engineering, Construction, & Manufacturing (AECM) industry.
 
 ---
 
 ## What Is This?
 
-BuildIntel is a planned automated news media company. This repo contains the **planning and design phases** in two formats for each phase:
+Industrailbriefs is a planned automated news media company. This repo contains the **planning and design phases** in two formats for each phase:
 
 - **HTML** — rich interactive documents with diagrams, timelines, and architecture visuals  
 - **Markdown** — raw memory files for feeding directly into AI coding tools like Cursor, Claude Code, and Windsurf
