@@ -167,4 +167,4 @@ DigitalOcean will provide an `ondigitalocean.app` starter domain after deploymen
 
 ---
 
-*BuildIntel — Automated News Intelligence for Architecture, Construction, Engineering & Manufacturing*
+*IndustrialBriefs — Automated News Intelligence for Architecture, Construction, Engineering & Manufacturing*
