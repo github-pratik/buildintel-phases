@@ -49,6 +49,7 @@
       font-family: var(--body);
       min-height: 100vh;
       overflow-x: hidden;
+      padding-top: 50px;
     }
 
     body::before {
@@ -62,100 +63,67 @@
       z-index: 0;
     }
 
-    /* ── TOP NAV ── */
-    .topnav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      z-index: 200;
-      background: rgba(8,9,13,0.97);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 20px;
-      gap: 16px;
+    /* ── NAV ── */
+    .pnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: rgba(6,7,10,0.96);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      height: 50px; display: flex; align-items: center;
+      justify-content: space-between; padding: 0 24px;
+      font-family: 'JetBrains Mono', monospace;
     }
-
-    [data-theme="light"] .topnav {
-      background: rgba(244,243,239,0.97);
+    [data-theme="light"] .pnav { background: rgba(244,243,239,0.96); border-bottom-color: rgba(0,0,0,0.08); }
+    .pnav-brand { font-size: 13px; font-weight: 700; color: #f0efe8; text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
+    [data-theme="light"] .pnav-brand { color: #1a1814; }
+    .pnav-brand em { color: #e8863a; font-style: italic; }
+    .pnav-phases { display: flex; align-items: center; gap: 3px; flex: 1; justify-content: center; }
+    .pnav-btn {
+      padding: 4px 13px; font-family: inherit; font-size: 9px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(240,239,232,0.3); background: transparent; border: 1px solid transparent;
+      border-radius: 100px; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; white-space: nowrap;
     }
+    .pnav-btn:hover { color: rgba(240,239,232,0.75); background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.09); }
+    .pnav-btn.active { color: #e8863a; background: rgba(232,134,58,0.1); border-color: rgba(232,134,58,0.28); }
+    .pnav-btn.done { color: rgba(92,184,122,0.65); }
+    .pnav-btn.done:hover { color: #5cb87a; background: rgba(92,184,122,0.06); border-color: rgba(92,184,122,0.15); }
+    .pnav-sep { width: 18px; height: 1px; background: rgba(255,255,255,0.07); flex-shrink: 0; }
+    .pnav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .pnav-arrow {
+      padding: 4px 11px; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(240,239,232,0.35); border: 1px solid rgba(255,255,255,0.07); border-radius: 100px;
+      text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .pnav-arrow:hover { color: #f0efe8; border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.04); }
 
     .hamburger-btn {
-      width: 36px; height: 36px;
-      border: 1px solid var(--border2);
-      background: var(--glass);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      flex-shrink: 0;
-      transition: background 0.2s, border-color 0.2s;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      flex-shrink: 0; transition: background 0.2s, border-color 0.2s;
     }
-    .hamburger-btn:hover { background: var(--glass2); border-color: var(--orange); }
+    .hamburger-btn:hover { background: rgba(232,134,58,0.1); border-color: rgba(232,134,58,0.4); }
     .hamburger-btn span {
-      display: block;
-      width: 16px; height: 1.5px;
-      background: var(--text);
-      border-radius: 1px;
-      transition: background 0.2s, transform 0.25s, opacity 0.25s;
-      transform-origin: center;
+      display: block; width: 14px; height: 1.5px;
+      background: var(--text); border-radius: 1px;
+      transition: background 0.2s, transform 0.25s, opacity 0.25s; transform-origin: center;
     }
-    .hamburger-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
     .hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .hamburger-btn.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
-    .nav-brand {
-      flex: 1;
-      font-family: var(--display);
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.01em;
-      text-decoration: none;
-      line-height: 1;
+    .theme-toggle {
+      background: rgba(232,134,58,0.1); border: 2px solid #e8863a; color: #f0efe8; font-size: 15px;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: inline-flex;
+      align-items: center; justify-content: center; transition: all 0.25s; flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(232,134,58,0.3);
     }
-    .nav-brand em { color: var(--orange); font-style: italic; }
-
-    .nav-phase {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--dim);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    .nav-home {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
-    .nav-home:hover { color: var(--orange); border-color: var(--orange); }
-
-    .theme-btn {
-      width: 34px; height: 34px;
-      border: 1px solid var(--border2);
-      background: var(--glass);
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 15px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
-    .theme-btn:hover { background: rgba(232,134,58,0.12); border-color: var(--orange); transform: rotate(20deg); }
+    [data-theme="light"] .theme-toggle { background: rgba(201,107,26,0.1); border-color: #c96b1a; color: #1a1814; }
+    .theme-toggle:hover { background: rgba(232,134,58,0.2); box-shadow: 0 0 16px rgba(232,134,58,0.5); transform: rotate(20deg) scale(1.1); }
 
     /* ── DRAWER OVERLAY ── */
     .drawer-overlay {
@@ -376,7 +344,7 @@
     .page-header {
       max-width: 960px;
       margin: 0 auto;
-      padding: 56px 40px 36px;
+      padding: 28px 40px 36px;
     }
 
     .page-tag {
@@ -690,24 +658,41 @@
       .design-tabs { padding: 0 20px 16px; }
       .design-panels { padding: 0 20px 60px; }
       .info-cards { grid-template-columns: 1fr; }
-      .nav-phase { display: none; }
-      .nav-home { display: none; }
+      .pnav-phases .pnav-btn:not(.active) { display: none; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- TOP NAV -->
-  <nav class="topnav">
-    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open navigation">
-      <span></span><span></span><span></span>
-    </button>
-    <a href="/index.html" class="nav-brand">Industrial<em>Briefs</em></a>
-    <span class="nav-phase">Phase 3.1 · UI Showcase</span>
-    <a href="/index.html" class="nav-home">← Dashboard</a>
-    <button class="theme-btn" id="themeBtn" title="Toggle theme">☀️</button>
+  <nav class="pnav">
+    <a href="/" class="pnav-brand">Industrial<em>Briefs</em></a>
+    <div class="pnav-phases">
+      <a href="/phase1-masterplan.html" class="pnav-btn done">✓ P1 — Strategy</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase2-agents.html" class="pnav-btn done">✓ P2 — Agents</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase3-website.html" class="pnav-btn done">✓ P3 — Website</a>
+      <div class="pnav-sep"></div>
+      <span class="pnav-btn active">
+        <span style="width:5px;height:5px;border-radius:50%;background:#e8863a;flex-shrink:0;animation:pnd 2s ease-in-out infinite;display:inline-block;"></span>
+        P3.1 — UI
+      </span>
+      <div class="pnav-sep"></div>
+      <a href="/phase3.5-pipeline.html" class="pnav-btn">P3.5 — Pipeline</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase4-build.html" class="pnav-btn">P4 — Upgrade</a>
+    </div>
+    <div class="pnav-right">
+      <a href="/phase3-website.html" class="pnav-arrow">← Prev</a>
+      <a href="/phase3.5-pipeline.html" class="pnav-arrow">Next →</a>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open navigation" title="View designs">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">☀️</button>
+    </div>
   </nav>
+  <style>@keyframes pnd{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}</style>
 
   <!-- DRAWER OVERLAY -->
   <div class="drawer-overlay" id="drawerOverlay"></div>
@@ -1003,10 +988,10 @@
     (function () {
       var saved = localStorage.getItem('ib-theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
-      document.getElementById('themeBtn').textContent = saved === 'light' ? '🌙' : '☀️';
+      document.getElementById('themeToggle').textContent = saved === 'light' ? '🌙' : '☀️';
     })();
 
-    document.getElementById('themeBtn').addEventListener('click', function () {
+    document.getElementById('themeToggle').addEventListener('click', function () {
       var cur = document.documentElement.getAttribute('data-theme');
       var next = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);

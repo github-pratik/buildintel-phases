@@ -298,6 +298,79 @@
     [data-theme="light"] .theme-toggle { background: rgba(201,107,26,0.1); border-color: #c96b1a; color: #1a1814; box-shadow: 0 0 8px rgba(201,107,26,0.25); }
     .theme-toggle:hover { border-color: #e8863a; background: rgba(232,134,58,0.2); box-shadow: 0 0 16px rgba(232,134,58,0.5); transform: rotate(20deg) scale(1.12); }
 
+    /* ── COMPETITIVE ADVANTAGE ── */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      margin-bottom: 52px;
+    }
+
+    .adv-card {
+      background: rgba(92,184,122,0.04);
+      border: 1px solid rgba(92,184,122,0.15);
+      padding: 32px;
+    }
+    .adv-header { margin-bottom: 28px; }
+    .adv-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 8px;
+    }
+    .adv-title {
+      font-family: var(--display); font-size: 28px; font-weight: 700; line-height: 1.1;
+    }
+    .adv-title em { font-style: italic; color: var(--green); }
+    .adv-items { display: flex; flex-direction: column; gap: 20px; }
+    .adv-item { display: flex; gap: 16px; align-items: flex-start; }
+    .adv-num {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      color: var(--green); flex-shrink: 0; width: 24px; padding-top: 2px;
+    }
+    .adv-name { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+    .adv-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    .comp-table {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 28px 28px 24px;
+    }
+    .ct-head {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+    }
+    .ct-section-label {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 8px;
+    }
+    .ct-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 12px;
+    }
+    .ct-row:last-of-type { border-bottom: none; }
+    .ct-name { font-size: 12.5px; font-weight: 500; flex-shrink: 0; }
+    .ct-tag {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+      padding: 3px 9px; border-radius: 100px; border: 1px solid;
+      text-align: right; white-space: nowrap;
+    }
+    .ct-red   { color: rgba(220,80,70,0.8);  border-color: rgba(220,80,70,0.2);  background: rgba(220,80,70,0.06); }
+    .ct-amber { color: var(--gold);           border-color: rgba(212,168,67,0.25); background: rgba(212,168,67,0.06); }
+    .ct-blue  { color: var(--blue);           border-color: rgba(91,155,213,0.25); background: rgba(91,155,213,0.06); }
+    .ct-verdict {
+      margin-top: 20px; padding: 14px 16px;
+      background: rgba(92,184,122,0.05);
+      border: 1px solid rgba(92,184,122,0.18);
+      font-size: 12px; color: var(--muted); line-height: 1.65;
+    }
+
+    [data-theme="light"] .adv-card { background: rgba(58,143,84,0.04); border-color: rgba(58,143,84,0.14); }
+    [data-theme="light"] .comp-table { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.07); }
+    [data-theme="light"] .ct-row { border-bottom-color: rgba(0,0,0,0.05); }
+    [data-theme="light"] .ct-verdict { background: rgba(58,143,84,0.04); border-color: rgba(58,143,84,0.15); }
+
+    @media(max-width:900px) { .comp-grid { grid-template-columns: 1fr; } }
+
     @keyframes pnd { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.6); } }
   </style>
 </head>
@@ -493,6 +566,102 @@
         <div class="m-val" style="color:var(--gold);">$109</div>
         <div class="m-label">Monthly Op Cost</div>
       </div>
+    </div>
+
+    <!-- COMPETITIVE ADVANTAGE -->
+    <div class="section-label" style="margin-top:64px;">Market Position</div>
+
+    <div class="comp-grid">
+
+      <!-- Niche Advantages -->
+      <div class="adv-card">
+        <div class="adv-header">
+          <div class="adv-label">Your Niche Advantage</div>
+          <div class="adv-title">Where Competitors<br><em>Don't Compete</em></div>
+        </div>
+        <div class="adv-items">
+          <div class="adv-item">
+            <div class="adv-num">01</div>
+            <div>
+              <div class="adv-name">AI-Synthesized Multi-Source News</div>
+              <div class="adv-desc">Unique, authoritative content built from multiple sources simultaneously — not a single RSS rewrite. No competitor does this at the AECM layer.</div>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-num">02</div>
+            <div>
+              <div class="adv-name">Regulatory Intelligence</div>
+              <div class="adv-desc">Real-time analysis of Acts, Mandates, and Compliance deadlines with AECM sector impact — deeper than UpCodes (codes only) and missing from every news outlet.</div>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-num">03</div>
+            <div>
+              <div class="adv-name">B2B Lead Generation</div>
+              <div class="adv-desc">AI-generated industry insights designed to drive vendor leads — a monetisation layer that editorial competitors (Construction Dive, ENR) don't have.</div>
+            </div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-num">04</div>
+            <div>
+              <div class="adv-name">Industry-Specific AI Integration</div>
+              <div class="adv-desc">AI applied to extract AECM-specific insights — not generic tech coverage. Autodesk and Smart Cities Dive are tools/infra plays, not intelligence publishers.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competitor Grid -->
+      <div class="comp-table">
+        <div class="ct-head">Competitive Landscape</div>
+
+        <div class="ct-section-label">Direct</div>
+        <div class="ct-row">
+          <div class="ct-name">AEC Magazine</div>
+          <div class="ct-tag ct-red">Human editorial, no AI synthesis</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-name">Construction Dive</div>
+          <div class="ct-tag ct-red">Broad, no regulatory depth</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-name">Engineering News-Record</div>
+          <div class="ct-tag ct-red">Paywalled, slow publish cadence</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-name">Construction Executive</div>
+          <div class="ct-tag ct-red">Magazine format, not real-time</div>
+        </div>
+
+        <div class="ct-section-label" style="margin-top:16px;">Indirect</div>
+        <div class="ct-row">
+          <div class="ct-name">TechCrunch / VentureBeat</div>
+          <div class="ct-tag ct-amber">AI-focused, not AECM-specific</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-name">MIT Tech Review / Wired</div>
+          <div class="ct-tag ct-amber">Broad tech, low industry depth</div>
+        </div>
+
+        <div class="ct-section-label" style="margin-top:16px;">Hidden</div>
+        <div class="ct-row">
+          <div class="ct-name">Autodesk / BIM 360</div>
+          <div class="ct-tag ct-blue">Product tools, not content</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-name">UpCodes</div>
+          <div class="ct-tag ct-blue">Regulatory codes only, no news</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-name">Smart Cities Dive</div>
+          <div class="ct-tag ct-blue">Urban infra, not AECM-specific</div>
+        </div>
+
+        <div class="ct-verdict">
+          <span style="color:var(--green);font-weight:600;">IndustrialBriefs</span> is the only platform combining AI multi-source synthesis + regulatory intelligence + B2B monetisation in a single AECM-native product.
+        </div>
+      </div>
+
     </div>
 
     <!-- NEXT PHASE CTA -->
