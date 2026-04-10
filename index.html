@@ -405,6 +405,10 @@
       animation-delay: 0.5s;
     }
 
+    .card:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+
     @keyframes fadeIn {
       to {
         opacity: 1;
@@ -456,23 +460,36 @@
         <div class="card-arrow">View Phase →</div>
       </a>
 
-      <!-- Phase 3 — Planned -->
-      <a href="/phase3-website.html" class="card card-planned" id="phase3-card">
+      <!-- Phase 3 — Done -->
+      <a href="/phase3-website.html" class="card card-done" id="phase3-card">
         <div class="card-phase">Phase 03</div>
         <div class="card-title">Website Design &amp; UI</div>
         <div class="card-desc">Reader experience design — glassmorphism UI, mobile-first layout, ad placement strategy,
           MCP connection panel, and hot keyword system.</div>
-        <div class="status status-planned">
-          Planned
+        <div class="status status-done">
+          <span class="check-icon">✓</span>
+          Done
         </div>
         <div class="card-arrow">View Phase →</div>
       </a>
 
-      <!-- Phase 3.1 — In Progress -->
-      <a href="/phase3.1-ui-showcase.html" class="card card-progress" id="phase3-1-card">
+      <!-- Phase 3.1 — Done -->
+      <a href="/phase3.1-ui-showcase.html" class="card card-done" id="phase3-1-card">
         <div class="card-phase">Phase 3.1</div>
         <div class="card-title">UI Design Showcase</div>
         <div class="card-desc">Interactive showcase of all platform UI designs — mobile app mockup, desktop redesign, and ACEM markets widget. Includes downloadable AI-executable design spec.</div>
+        <div class="status status-done">
+          <span class="check-icon">✓</span>
+          Done
+        </div>
+        <div class="card-arrow">View Phase →</div>
+      </a>
+
+      <!-- Phase 3.5 — In Progress -->
+      <a href="/phase3.5-pipeline.html" class="card card-progress" id="phase3-5-card">
+        <div class="card-phase">Phase 3.5</div>
+        <div class="card-title">Pipeline Live</div>
+        <div class="card-desc">AI newsroom fully automated — Scout, Writer &amp; Publisher agents running 24/7. 27 feeds, ~15 articles/day published directly to Ghost CMS.</div>
         <div class="status status-progress">
           <span class="pulse-dot"></span>
           In Progress
@@ -483,9 +500,8 @@
       <!-- Phase 4 — Planned -->
       <a href="/phase4-build.html" class="card card-planned" id="phase4-card">
         <div class="card-phase">Phase 04</div>
-        <div class="card-title">Build &amp; Execution</div>
-        <div class="card-desc">Production build plan — Next.js setup, Supabase integration, agent deployment, CI/CD
-          pipeline, and launch checklist.</div>
+        <div class="card-title">Intelligence Upgrade</div>
+        <div class="card-desc">Advanced pipeline — trending clustering, 1,500-word long-form journalism, automated SEO Agent, regulatory intelligence, and LinkedIn distribution.</div>
         <div class="status status-planned">
           Planned
         </div>
