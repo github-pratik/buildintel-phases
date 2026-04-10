@@ -1,6 +1,6 @@
 # Industrailbriefs — Phase Dashboard
 
-> **Live site:** [buildintel-phases.vercel.app](https://buildintel-phases.vercel.app)
+> **Live site:** [https://coral-app-74pa4.ondigitalocean.app](https://coral-app-74pa4.ondigitalocean.app/))
 
 A public documentation hub for the **Industrailbriefs** project — an AI-powered automated news intelligence platform for the Architecture, Engineering, Construction, & Manufacturing (AECM) industry.
 
