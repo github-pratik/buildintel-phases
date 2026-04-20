@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IndustrialBriefs — Phase 4: Intelligence Upgrade</title>
+  <title>IndustrialBriefs — Phase 4: Production Hardening</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
@@ -249,7 +249,7 @@
       <div class="pnav-sep"></div>
       <span class="pnav-btn active">
         <span style="width:5px;height:5px;border-radius:50%;background:#e8863a;flex-shrink:0;animation:pnd 2s ease-in-out infinite;display:inline-block;"></span>
-        P4 — Upgrade
+        P4 — Hardening
       </span>
     </div>
     <div class="pnav-right">
@@ -264,101 +264,113 @@
 
     <div class="phase-badge">
       <span class="badge-dot"></span>
-      Phase 4 — Intelligence Upgrade
+      Phase 4 — Production Hardening
     </div>
-    <h1>Smarter,<br><em>Deeper</em></h1>
-    <p class="sub">The pipeline is live — now we make it authoritative. Trending detection groups multi-source stories, Writer v4 produces 1,500-word long-form journalism, and a dedicated SEO Agent automates every post's metadata before it touches Ghost.</p>
+    <h1>Stable,<br><em>Live</em></h1>
+    <p class="sub">This phase turned the prototype newsroom into a credentialized production pipeline. Scout, Writer Hybrid, WF6 SEO, Publisher v3, WF5 Clustering, and WF5.1 Fact Sheets are all active on n8n, writing through Supabase and publishing to Ghost.</p>
 
     <!-- WHY UPGRADE -->
-    <div class="section-label">Current Limitations</div>
+    <div class="section-label">What This Phase Fixed</div>
     <div class="limits-card">
       <div class="limits-grid">
         <div class="limit-item">
           <div class="limit-x">✕</div>
           <div>
-            <div class="limit-label">500-word commodity rewrites</div>
-            <div class="limit-desc">Single-source, surface-level articles. No depth, no authority, no differentiation from the original RSS post.</div>
+            <div class="limit-label">Expired Groq dependency</div>
+            <div class="limit-desc">Writer moved to OpenAI gpt-4o and then Writer v3.1-Hybrid, using the active n8n OpenAI credential path instead of the broken Groq setup.</div>
           </div>
         </div>
         <div class="limit-item">
           <div class="limit-x">✕</div>
           <div>
-            <div class="limit-label">No trending detection</div>
-            <div class="limit-desc">Every story treated equally — a major industry event and a minor product update get the same priority and treatment.</div>
+            <div class="limit-label">Hardcoded Ghost publishing</div>
+            <div class="limit-desc">Publisher v3 now uses the n8n Ghost Admin credential, dedup checks, CLAIMING recovery, thumbnail fallback, and stable Supabase updates.</div>
           </div>
         </div>
         <div class="limit-item">
           <div class="limit-x">✕</div>
           <div>
-            <div class="limit-label">No automated SEO</div>
-            <div class="limit-desc">Ghost receives raw content with no seo_title, meta_description, focus_keyword, or slug optimisation. All left blank.</div>
+            <div class="limit-label">No SEO workflow</div>
+            <div class="limit-desc">WF6 is now active and generates seo_title, meta_description, focus_keyword, slug, and seo_ready through the n8n OpenAI credential.</div>
           </div>
         </div>
         <div class="limit-item">
           <div class="limit-x">✕</div>
           <div>
-            <div class="limit-label">No regulatory intelligence</div>
-            <div class="limit-desc">High-impact legislation (Acts, Mandates, Compliance deadlines) processed the same as general news — no special analysis.</div>
+            <div class="limit-label">Unverified side workflows</div>
+            <div class="limit-desc">WF5 Clustering and WF5.1 Fact Sheet were credentialized, redeployed, and validated so the parallel intelligence layer can run safely.</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- NEW PIPELINE FLOW -->
-    <div class="section-label">New Pipeline Architecture</div>
+    <div class="section-label">Current Live Pipeline</div>
     <div class="pipeline-flow">
       <div class="pf-step">
         <div class="pf-num">WF1</div>
-        <div class="pf-name">Scout v4</div>
-        <span class="pf-version pf-upgrade">Upgrade</span>
-        <div class="pf-desc">Jaccard clustering groups stories by topic. Trending flag fires when 3+ sources cover the same event within 2 hours. Triggers Writer immediately.</div>
+        <div class="pf-name">Scout v3</div>
+        <span class="pf-version pf-upgrade">Active</span>
+        <div class="pf-desc">Fetches 26 active RSS feeds, scores stories, dedupes against Supabase, scrapes full content, and inserts queue rows when genuinely new items appear.</div>
       </div>
       <div class="pf-step">
         <div class="pf-num">WF2</div>
-        <div class="pf-name">Writer v4</div>
-        <span class="pf-version pf-upgrade">Upgrade</span>
-        <div class="pf-desc">1,000–1,500 word long-form articles. Six-section journalism structure. Trending articles jump the queue and are prioritised.</div>
+        <div class="pf-name">Writer Hybrid</div>
+        <span class="pf-version pf-upgrade">Active</span>
+        <div class="pf-desc">Writer v3.1-Hybrid uses OpenAI gpt-4o, writes completed articles to Supabase, and leaves Ghost publishing to Publisher.</div>
       </div>
       <div class="pf-step">
-        <div class="pf-num">WF5</div>
+        <div class="pf-num">WF6</div>
         <div class="pf-name">SEO Agent</div>
-        <span class="pf-version pf-new">New</span>
-        <div class="pf-desc">GPT-4.1-mini generates seo_title, meta_description, focus_keyword, and slug per article. Cost: ~$0.00007 each.</div>
+        <span class="pf-version pf-new">Active</span>
+        <div class="pf-desc">Generates seo_title, meta_description, focus_keyword, slug, and seo_ready with credential-backed OpenAI gpt-4o-mini.</div>
       </div>
       <div class="pf-step">
         <div class="pf-num">WF3</div>
         <div class="pf-name">Publisher v3</div>
-        <span class="pf-version pf-upgrade">Upgrade</span>
-        <div class="pf-desc">Waits for seo_ready = TRUE before picking up an article. Passes all SEO fields directly to Ghost — og_title, meta, slug.</div>
+        <span class="pf-version pf-upgrade">Active</span>
+        <div class="pf-desc">Claims rows, generates missing thumbnails, checks Ghost slugs, publishes via Ghost Admin credential, and releases failed claims safely.</div>
+      </div>
+      <div class="pf-step">
+        <div class="pf-num">WF5</div>
+        <div class="pf-name">Clustering</div>
+        <span class="pf-version pf-new">Parallel</span>
+        <div class="pf-desc">Clusters recent queue articles into story_clusters and cluster_articles using credential-backed OpenAI gpt-4o-mini.</div>
+      </div>
+      <div class="pf-step">
+        <div class="pf-num">WF5.1</div>
+        <div class="pf-name">Fact Sheets</div>
+        <span class="pf-version pf-new">Parallel</span>
+        <div class="pf-desc">Builds structured story_fact_sheets from clusters with credential-backed OpenAI gpt-4o, without publishing to Ghost.</div>
       </div>
     </div>
 
     <!-- UPGRADE DETAIL CARDS -->
-    <div class="section-label">What Changes in Each Agent</div>
+    <div class="section-label">What Changed in Each Agent</div>
     <div class="upgrades">
 
       <div class="upgrade-card">
         <div class="uc-left">
           <div class="uc-wf">WF1 · Scout Agent</div>
-          <div class="uc-name">Scout v4</div>
-          <span class="uc-version building">Building</span>
+          <div class="uc-name">Scout v3</div>
+          <span class="uc-version new-wf">Live</span>
         </div>
         <div class="uc-right">
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Jaccard clustering</strong> — tokenises article titles and groups any two with similarity &gt; 0.25 into the same cluster</div>
+            <div class="uc-change-text"><strong>Healthy production ingest</strong> — latest validation fetched 576 feed items, scored 40, and completed cleanly with 26 feeds attempted and 0 failed</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Trending detection</strong> — if a cluster has 3+ sources published within 2 hours, it's flagged <code style="font-family:var(--mono);font-size:11px;">is_trending = TRUE</code> with a <code style="font-family:var(--mono);font-size:11px;">source_count</code></div>
+            <div class="uc-change-text"><strong>Dedup-first behavior</strong> — the system now refuses to force duplicate content; if no fresh RSS items exist, Scout queues 0 and downstream agents no-op safely</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Immediate Writer trigger</strong> — trending clusters bypass the 30-min queue and fire a Writer webhook instantly</div>
+            <div class="uc-change-text"><strong>Pipeline run cleanup</strong> — historical March rows stuck in <code style="font-family:var(--mono);font-size:11px;">running</code> were marked terminal; current Scout logs now reflect real completion</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>New queue columns</strong> — <code style="font-family:var(--mono);font-size:11px;">is_trending</code>, <code style="font-family:var(--mono);font-size:11px;">source_count</code>, <code style="font-family:var(--mono);font-size:11px;">cluster_id</code> added via migration</div>
+            <div class="uc-change-text"><strong>Source of truth synced</strong> — live Scout workflow was synced into <code style="font-family:var(--mono);font-size:11px;">n8n.json</code> without changing its working production behavior</div>
           </div>
         </div>
       </div>
@@ -366,51 +378,51 @@
       <div class="upgrade-card">
         <div class="uc-left">
           <div class="uc-wf">WF2 · Writer Agent</div>
-          <div class="uc-name">Writer v4</div>
-          <span class="uc-version building">Building</span>
+          <div class="uc-name">Writer v3.1-Hybrid</div>
+          <span class="uc-version new-wf">Live</span>
         </div>
         <div class="uc-right">
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>1,000–1,500 words</strong> — max_tokens raised from 1,200 → 2,500. Turns surface rewrites into authoritative analysis</div>
+            <div class="uc-change-text"><strong>OpenAI migration</strong> — Groq was removed from the production path; Writer uses OpenAI gpt-4o through the active Hybrid workflow</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Six-section structure</strong> — Hook · What Happened · Why It Matters (cost / timeline / supply-chain impact) · Industry Context · What's Next · Bottom Line</div>
+            <div class="uc-change-text"><strong>Credential-safe reference</strong> — Writer Hybrid is the reference workflow for OpenAI credential usage in n8n rather than ad hoc env access</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Trending priority</strong> — query adds <code style="font-family:var(--mono);font-size:11px;">ORDER BY is_trending DESC</code> so breaking stories are written first</div>
+            <div class="uc-change-text"><strong>Idle path verified</strong> — when Scout queues nothing new, Writer exits successfully with <code style="font-family:var(--mono);font-size:11px;">No pending articles in queue</code></div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Cost per article</strong> — ~$0.02–0.025 (up from ~$0.008 for 500-word articles)</div>
+            <div class="uc-change-text"><strong>Supabase handoff intact</strong> — Writer still owns article generation; SEO, thumbnails, Ghost creation, and retries are handled downstream</div>
           </div>
         </div>
       </div>
 
       <div class="upgrade-card">
         <div class="uc-left">
-          <div class="uc-wf">WF5 · New Workflow</div>
+          <div class="uc-wf">WF6 · New Workflow</div>
           <div class="uc-name">SEO Agent</div>
-          <span class="uc-version new-wf">New WF5</span>
+          <span class="uc-version new-wf">Live</span>
         </div>
         <div class="uc-right">
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Polls published table</strong> — picks up every article where <code style="font-family:var(--mono);font-size:11px;">seo_ready = FALSE</code> on a 30-min cron</div>
+            <div class="uc-change-text"><strong>Migration applied</strong> — <code style="font-family:var(--mono);font-size:11px;">published</code> now has seo_title, meta_description, focus_keyword, slug, and seo_ready</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>GPT-4.1-mini</strong> generates: <code style="font-family:var(--mono);font-size:11px;">seo_title</code>, <code style="font-family:var(--mono);font-size:11px;">meta_description</code>, <code style="font-family:var(--mono);font-size:11px;">focus_keyword</code>, <code style="font-family:var(--mono);font-size:11px;">slug</code></div>
+            <div class="uc-change-text"><strong>Credentialized OpenAI</strong> — the old Code-node <code style="font-family:var(--mono);font-size:11px;">OPENAI_API_KEY</code> path was replaced by an HTTP Request node using the n8n OpenAI credential</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Cost</strong> — ~$0.00007 per article (10× cheaper than Writer). SEO layer costs under $0.01/day at current volume</div>
+            <div class="uc-change-text"><strong>Validation run</strong> — execution <code style="font-family:var(--mono);font-size:11px;">4911</code> processed a controlled row, saved SEO metadata, enforced a 153-character meta description, and cleaned up the test row</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Sets seo_ready = TRUE</strong> — Publisher v3 only picks up articles after this flag is set, ensuring nothing reaches Ghost without optimised meta</div>
+            <div class="uc-change-text"><strong>Safe rollout</strong> — Publisher gating remains unchanged for now, so SEO cannot block publication while the workflow proves itself in production</div>
           </div>
         </div>
       </div>
@@ -418,21 +430,51 @@
       <div class="upgrade-card">
         <div class="uc-left">
           <div class="uc-wf">WF3 · Publisher Agent</div>
-          <div class="uc-name">Publisher v3</div>
-          <span class="uc-version building">Building</span>
+          <div class="uc-name">Publisher v3 Credentialized</div>
+          <span class="uc-version new-wf">Live</span>
         </div>
         <div class="uc-right">
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>SEO gate</strong> — query filter adds <code style="font-family:var(--mono);font-size:11px;">seo_ready=eq.true</code> so no article publishes without a slug and meta description</div>
+            <div class="uc-change-text"><strong>Ghost credential migration</strong> — hardcoded Ghost JWT logic was replaced by n8n's <code style="font-family:var(--mono);font-size:11px;">Ghost Admin account</code> credential</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Ghost SEO payload</strong> — passes <code style="font-family:var(--mono);font-size:11px;">og_title</code>, <code style="font-family:var(--mono);font-size:11px;">meta_description</code>, <code style="font-family:var(--mono);font-size:11px;">slug</code>, <code style="font-family:var(--mono);font-size:11px;">custom_excerpt</code> directly to Ghost Admin API</div>
+            <div class="uc-change-text"><strong>Thumbnail fallback</strong> — missing images trigger OpenAI image generation, Ghost image upload, and Supabase image_url patching before publish</div>
           </div>
           <div class="uc-change">
             <div class="uc-arrow">→</div>
-            <div class="uc-change-text"><strong>Newsletter</strong> — using Ghost's built-in newsletter distribution. No external Beehiiv dependency. Curator Agent (WF4) deactivated.</div>
+            <div class="uc-change-text"><strong>Key facts newline fix</strong> — replaced the broken template carrier that rendered visible <code style="font-family:var(--mono);font-size:11px;">\n</code> with the theme-supported <code style="font-family:var(--mono);font-size:11px;">IB_KEY_FACTS:</code> image-alt carrier</div>
+          </div>
+          <div class="uc-change">
+            <div class="uc-arrow">→</div>
+            <div class="uc-change-text"><strong>Retry safety</strong> — CLAIMING rows are released on failure, duplicate slugs reuse existing Ghost posts, and Publisher validation left <code style="font-family:var(--mono);font-size:11px;">CLAIMING=0</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-card">
+        <div class="uc-left">
+          <div class="uc-wf">WF5 + WF5.1 · Intelligence Layer</div>
+          <div class="uc-name">Clustering + Fact Sheets</div>
+          <span class="uc-version new-wf">Live</span>
+        </div>
+        <div class="uc-right">
+          <div class="uc-change">
+            <div class="uc-arrow">→</div>
+            <div class="uc-change-text"><strong>WF5 Clustering</strong> — active workflow <code style="font-family:var(--mono);font-size:11px;">kGhPKcmF0bk98Awc</code> reads recent queue rows and writes story_clusters / cluster_articles</div>
+          </div>
+          <div class="uc-change">
+            <div class="uc-arrow">→</div>
+            <div class="uc-change-text"><strong>WF5.1 Fact Sheets</strong> — active workflow <code style="font-family:var(--mono);font-size:11px;">fa2Asr28rd2Sm4qS</code> creates story_fact_sheets for clusters without touching Ghost</div>
+          </div>
+          <div class="uc-change">
+            <div class="uc-arrow">→</div>
+            <div class="uc-change-text"><strong>Credentialized OpenAI</strong> — both workflows now use n8n OpenAI credentials instead of Code-node OpenAI key access</div>
+          </div>
+          <div class="uc-change">
+            <div class="uc-arrow">→</div>
+            <div class="uc-change-text"><strong>Validated paths</strong> — WF5 execution <code style="font-family:var(--mono);font-size:11px;">4870</code> and WF5.1 execution <code style="font-family:var(--mono);font-size:11px;">4871</code> completed successfully after deployment</div>
           </div>
         </div>
       </div>
@@ -440,27 +482,27 @@
     </div>
 
     <!-- EXPECTED IMPACT -->
-    <div class="section-label">Expected Impact</div>
+    <div class="section-label">Production Result</div>
     <div class="impact-row">
       <div class="impact-card">
-        <div class="ic-before">500 words</div>
-        <div class="ic-after">1,500</div>
-        <div class="ic-label">Words / Article</div>
+        <div class="ic-before">partial</div>
+        <div class="ic-after">6 active</div>
+        <div class="ic-label">n8n Workflows</div>
       </div>
       <div class="impact-card">
-        <div class="ic-before">Single source</div>
-        <div class="ic-after">Clustered</div>
-        <div class="ic-label">Trending Stories</div>
+        <div class="ic-before">hardcoded</div>
+        <div class="ic-after">Creds</div>
+        <div class="ic-label">OpenAI + Ghost</div>
       </div>
       <div class="impact-card">
-        <div class="ic-before">No meta</div>
-        <div class="ic-after">Auto SEO</div>
-        <div class="ic-label">Every Article</div>
+        <div class="ic-before">manual</div>
+        <div class="ic-after">WF6</div>
+        <div class="ic-label">SEO Agent Live</div>
       </div>
       <div class="impact-card">
-        <div class="ic-before">~$15/mo</div>
-        <div class="ic-after">~$40</div>
-        <div class="ic-label">Monthly AI Cost</div>
+        <div class="ic-before">stuck rows</div>
+        <div class="ic-after">0</div>
+        <div class="ic-label">Pending / CLAIMING</div>
       </div>
     </div>
 
@@ -468,15 +510,15 @@
     <div class="section-label">Further Roadmap</div>
     <div class="roadmap-items">
       <div class="rm-item">
-        <div class="rm-phase">WF6</div>
+        <div class="rm-phase">WF7</div>
         <div>
           <div class="rm-label">Regulatory Intelligence</div>
-          <div class="rm-desc">Detect high-impact regulations (Acts, Mandates, Compliance deadlines). Route through a Research Agent + Adversarial Fact-Checker (Claude 3.5 Sonnet, confidence &gt; 0.9). Extract AECM sector impacts, deadlines, legal language → plain English.</div>
+          <div class="rm-desc">Detect high-impact regulations (Acts, Mandates, Compliance deadlines). Route through a Research Agent + adversarial fact-check pass using OpenAI gpt-4o. Extract AECM sector impacts, deadlines, and legal language → plain English.</div>
           <span class="rm-tag" style="color:var(--blue);border-color:rgba(91,155,213,0.3);background:rgba(91,155,213,0.07);">Planned</span>
         </div>
       </div>
       <div class="rm-item">
-        <div class="rm-phase">WF7</div>
+        <div class="rm-phase">WF8</div>
         <div>
           <div class="rm-label">LinkedIn Distribution Agent</div>
           <div class="rm-desc">Auto-generates Problem → Impact → Solution posts after each Ghost publication. Targets AECM decision-makers. Builds domain authority via consistent LinkedIn presence.</div>
@@ -492,7 +534,7 @@
         </div>
       </div>
       <div class="rm-item">
-        <div class="rm-phase">WF8</div>
+        <div class="rm-phase">WF9</div>
         <div>
           <div class="rm-label">Monetisation Engine</div>
           <div class="rm-desc">Scan article clusters for high-intent B2B keywords. Auto-generate vendor comparison guides. Lead-gen CTAs targeting Autodesk, Siemens, Hilti buyers. Ghost paid membership tiers for premium regulatory alerts.</div>
