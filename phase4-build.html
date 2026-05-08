@@ -633,7 +633,7 @@
     </div>
 
     <!-- LIVE SCREENSHOTS -->
-    <div class="section-label">Live System Screenshots</div>
+    <div class="section-label">Live System — IndustrialBriefs</div>
     <div class="screenshots-grid">
 
       <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/ib-site-articles.png','IndustrialBriefs — Homepage (Apr 26, 2026)')">
@@ -641,7 +641,7 @@
         <div class="ss-caption">
           <div class="ss-tag">Ghost CMS · Live Site</div>
           <div class="ss-title">IndustrialBriefs Homepage</div>
-          <div class="ss-desc">Auto-published AECM articles — Daily Brief + article cards visible</div>
+          <div class="ss-desc">Auto-published AECM articles — Daily Brief + article cards live</div>
         </div>
       </div>
 
@@ -650,7 +650,7 @@
         <div class="ss-caption">
           <div class="ss-tag">Daily Brief · Newsletter</div>
           <div class="ss-title">Daily Brief — Apr 28, 2026</div>
-          <div class="ss-desc">Google's AI deal with Pentagon lead brief — auto-curated by pipeline</div>
+          <div class="ss-desc">Google's AI deal with Pentagon — auto-curated lead brief</div>
         </div>
       </div>
 
@@ -659,27 +659,104 @@
         <div class="ss-caption">
           <div class="ss-tag">Email Delivery · Outlook</div>
           <div class="ss-title">Daily Brief in Inbox</div>
-          <div class="ss-desc">IndustrialBriefs Daily Brief email landing in Focused inbox</div>
+          <div class="ss-desc">IndustrialBriefs Daily Brief landing in Focused inbox</div>
         </div>
       </div>
 
-      <!-- n8n workflow placeholders -->
-      <div class="ss-placeholder">
-        <div class="ss-placeholder-icon">⚙️</div>
-        <div class="ss-placeholder-label">n8n · Scout Agent WF1</div>
-        <div class="ss-placeholder-hint">Add screenshot of WF1 canvas<br>from <code style="font-family:var(--mono);font-size:10px;">n8n-primary-production-e002.up.railway.app</code></div>
+    </div>
+
+    <!-- N8N WORKFLOW SCREENSHOTS -->
+    <div class="section-label" style="margin-top:52px;">n8n Workflow Canvases — Live on Railway</div>
+    <div class="screenshots-grid">
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-scout.png','WF1 — Scout Agent v3')">
+        <img src="/ui-designs/screenshots/n8n-scout.png" alt="Scout Agent v3" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">WF1 · Active · Every 6h</div>
+          <div class="ss-title">Scout Agent v3</div>
+          <div class="ss-desc">ENTRY → INIT → FETCH → NORMALIZE → QUALITY → OUTPUT · 26 feeds</div>
+        </div>
       </div>
 
-      <div class="ss-placeholder">
-        <div class="ss-placeholder-icon">✍️</div>
-        <div class="ss-placeholder-label">n8n · Writer + Publisher WF2/WF3</div>
-        <div class="ss-placeholder-hint">Add screenshot of WF2 &amp; WF3 workflow canvases from n8n dashboard</div>
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-source-discovery.png','Source Discovery Workflow')">
+        <img src="/ui-designs/screenshots/n8n-source-discovery.png" alt="Source Discovery" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">Scout · Source Discovery</div>
+          <div class="ss-title">Source Discovery</div>
+          <div class="ss-desc">Feed ingestion and search discovery sub-workflow</div>
+        </div>
       </div>
 
-      <div class="ss-placeholder">
-        <div class="ss-placeholder-icon">📊</div>
-        <div class="ss-placeholder-label">Google Search Console</div>
-        <div class="ss-placeholder-hint">Add screenshot from<br><code style="font-family:var(--mono);font-size:10px;">search.google.com/search-console</code><br>for industrialbriefs.com property</div>
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-writer.png','WF2 — Writer Agent v3.1-Hybrid')">
+        <img src="/ui-designs/screenshots/n8n-writer.png" alt="Writer Agent" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">WF2 · Active · Every 30m</div>
+          <div class="ss-title">Writer Agent v3.1-Hybrid</div>
+          <div class="ss-desc">OpenAI gpt-4o via n8n credential — writes to Supabase published</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-publisher.png','WF3 — Publisher Agent v3 Credentialized')">
+        <img src="/ui-designs/screenshots/n8n-publisher.png" alt="Publisher Agent" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">WF3 · Active · Every 30m</div>
+          <div class="ss-title">Publisher Agent v3</div>
+          <div class="ss-desc">Ghost Admin credential · 9 AM UTC schedule · thumbnail fallback</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-seo.png','WF6 — SEO Agent v1')">
+        <img src="/ui-designs/screenshots/n8n-seo.png" alt="SEO Agent" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">WF6 · Active · Validating</div>
+          <div class="ss-title">SEO Agent v1</div>
+          <div class="ss-desc">seo_title · meta_description · focus_keyword · slug · seo_ready</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-clustering.png','WF5 — Clustering Agent v2')">
+        <img src="/ui-designs/screenshots/n8n-clustering.png" alt="Clustering Agent" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">WF5 · Active · Every 4h</div>
+          <div class="ss-title">Clustering Agent v2</div>
+          <div class="ss-desc">Reads queue → writes story_clusters + cluster_articles</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-fact-sheet.png','WF5.1 — Fact Sheet Agent v1')">
+        <img src="/ui-designs/screenshots/n8n-fact-sheet.png" alt="Fact Sheet Agent" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">WF5.1 · Active</div>
+          <div class="ss-title">Fact Sheet Agent v1</div>
+          <div class="ss-desc">Builds story_fact_sheets from clusters — intelligence layer only</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-google-indexing.png','Google Indexing API Workflow')">
+        <img src="/ui-designs/screenshots/n8n-google-indexing.png" alt="Google Indexing API" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">Google Indexing API</div>
+          <div class="ss-title">Google Indexing Agent</div>
+          <div class="ss-desc">Pings Google Indexing API after each Ghost publish for fast indexing</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-maintainer.png','Maintainer Agent')">
+        <img src="/ui-designs/screenshots/n8n-maintainer.png" alt="Maintainer Agent" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">Maintainer Agent</div>
+          <div class="ss-title">Maintainer Agent</div>
+          <div class="ss-desc">Pipeline health maintenance and queue cleanup workflow</div>
+        </div>
+      </div>
+
+      <div class="ss-item" onclick="openLightbox('/ui-designs/screenshots/n8n-error-handler.png','Error Handler v3')">
+        <img src="/ui-designs/screenshots/n8n-error-handler.png" alt="Error Handler v3" loading="lazy">
+        <div class="ss-caption">
+          <div class="ss-tag">Error Handler v3 · Active</div>
+          <div class="ss-title">Error Handler v3</div>
+          <div class="ss-desc">Catches workflow failures — Telegram alert + Supabase error logging</div>
+        </div>
       </div>
 
     </div>
