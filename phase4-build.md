@@ -1,195 +1,133 @@
-# BuildIntel — Phase 4: Build & Deploy
-**GPT Memory Context File | Status: 🔘 NOT STARTED | Last Updated: March 2026**
+# IndustrialBriefs — Phase 4: Production Hardening
+**Status: ✅ LIVE | Last Updated: May 2026**
 
 ---
 
-## 🎯 What This Phase Is
+## What This Phase Delivered
 
-Phase 4 is the actual construction of BuildIntel — writing code, deploying infrastructure, connecting all services, and going live with the first automated articles publishing to the real website.
-
----
-
-## 🗓️ Build Sequence (Week by Week)
-
-### Week 1–2: Infrastructure Setup
-- [ ] Railway account → deploy n8n instance
-- [ ] Supabase project → create Memory Agent schema
-- [ ] Vercel account → connect GitHub repo
-- [ ] Cloudflare → DNS, CDN setup
-- [ ] Sanity.io → create project, define content schema
-- [ ] Beehiiv → create account, set up 5 newsletter publications
-- [ ] Claude API key → add to n8n Anthropic credential
-- [ ] Domain setup → buildintel.com (or chosen domain)
-
-### Week 3–4: Sanity CMS Schema
-```typescript
-// Core content types to define in Sanity
-- Article { title, slug, body, summary, sector, tags, author, publishedAt, sources, confidence, seoTitle, metaDescription }
-- Author { name, bio, linkedIn, role }
-- Section { name, slug, description, color }
-- Tag { name, slug, relatedTags }
-- DataPoint { tracker, value, date, source }
-```
-
-### Week 5–6: Scout + Memory Agent
-- Build Scout Agent workflow in n8n (RSS + API fetching)
-- Build Memory Agent with Supabase read/write
-- Connect first 10 RSS feeds
-- Test deduplication logic
-- Verify state persistence on workflow restart
-
-### Week 7–8: Writer + Hallucination Checker
-- Build Writer Agent with Claude Sonnet node
-- Craft and test rewrite prompt (Semafor format)
-- Build Hallucination Checker workflow
-- Test confidence scoring against known articles
-- Calibrate threshold (70 pass / reject)
-
-### Week 9–10: Department Heads + SEO Agent
-- Build 5 Department Head workflows
-- Calibrate sector scoring prompts per department
-- Build SEO Agent with Claude Haiku
-- Test full chain: Scout → Dept Head → Writer → Checker → SEO
-
-### Week 11–12: Human Approval + Publisher
-- Set up Slack workspace + approval bot
-- Build Slack notification workflow (Approve/Edit/Reject buttons)
-- Build Publisher Agent (Sanity write + Beehiiv push + IndexNow ping)
-- Test full pipeline end-to-end with real articles
-- Verify article appears on site within 60 seconds of approval
-
-### Week 13–14: Next.js Website
-- Initialize Next.js 15 project with App Router
-- Connect Sanity via GROQ queries
-- Build homepage layout (hero, section blocks, trending topics)
-- Build article page template with JSON-LD schema
-- Set up Meilisearch for site search
-- Mobile bottom tab bar implementation
-- Deploy to Vercel
-
-### Week 15–16: Newsletter Automation
-- Build Curator Agent in n8n
-- Connect to Beehiiv API (create draft post endpoint)
-- Set up 5:30am cron trigger
-- Build Slack approval for newsletter
-- Test full newsletter flow: articles → curation → draft → Beehiiv → send
-
-### Week 17–18: Orchestrator + Monitor
-- Build Monitor Agent (health checks every 10 min)
-- Build Orchestrator (60-min system review)
-- Connect Orchestrator to all Dept Head agents
-- Add Slack daily summary (9am report)
-- Load test full pipeline (stress test 24h run)
-
-### Week 19–20: SEO & Launch Prep
-- Submit to Google News Publisher Center
-- Submit XML sitemap to Google Search Console
-- Set up IndexNow for all published articles
-- Write first 20 hand-crafted articles (seed content)
-- Publish first 5 SEO pillar pages (Tier 1 keywords)
-- Add JSON-LD to all page types
-- Create LLMs.txt
-
-### Week 21–24: MCP Server
-- Build public REST API (`/api/v1/articles`, `/api/v1/regulations`, etc.)
-- Set up Unkey.dev for API key management + rate limiting
-- Build MCP server using @anthropic-ai/mcp-sdk
-- Set up SSE transport at `mcp.buildintel.com/sse`
-- Test with Claude Desktop and ChatGPT custom GPT
-- Publish MCP documentation page
-
-### Week 25–28: Community + Monetization
-- Set up Beehiiv paid subscription tiers
-- Apply to Beehiiv Ad Network (requires 1,000+ active subs)
-- Set up direct advertiser contact form + media kit page
-- Launch community Slack/Discord
-- First monthly virtual roundtable event
+Phase 4 turned the prototype newsroom into a credentialized, fully automated production pipeline. All six active workflows are live on n8n v2.18.5 (Railway), writing through Supabase, and publishing to Ghost CMS.
 
 ---
 
-## 🛠️ Development Tools
+## Infrastructure
 
-| Tool | Purpose |
+| Service | Details |
 |---|---|
-| **Cursor IDE** | Primary code editor — vibe code in plain English |
-| **Claude Code CLI** | Terminal — deployment, debugging, complex logic |
-| **GitHub** | Version control for all code |
-| **Railway** | n8n hosting + background workers |
-| **Vercel** | Next.js deployment |
-| **Supabase Studio** | Database management UI |
-| **n8n UI** | Workflow monitoring + editing |
-| **Sanity Studio** | Content editing UI (editor-facing) |
+| **n8n** | v2.18.5 on Railway (`https://n8n-primary-production-e002.up.railway.app`) |
+| **Supabase** | Free tier — core tables + clustering schema |
+| **Ghost CMS** | `https://industrial-briefs.ghost.io` |
+| **Vercel** | Landing + Phase dashboard (`buildintel-phases.vercel.app`) |
 
 ---
 
-## 📁 Project File Structure
+## Active Workflows
 
-```
-buildintel/
-├── apps/
-│   ├── web/                    ← Next.js website
-│   │   ├── app/
-│   │   │   ├── page.tsx        ← Homepage
-│   │   │   ├── [section]/      ← Section pages
-│   │   │   ├── article/[slug]/ ← Article pages
-│   │   │   ├── topic/[tag]/    ← Topic cluster pages
-│   │   │   ├── data/           ← Data tracker pages
-│   │   │   └── api/v1/         ← Public REST API
-│   │   ├── components/
-│   │   ├── lib/
-│   │   └── sanity/             ← Sanity client + queries
-│   └── studio/                 ← Sanity Studio
-├── agents/                     ← n8n workflow JSON exports
-│   ├── scout-agent.json
-│   ├── writer-agent.json
-│   ├── hallucination-checker.json
-│   ├── seo-agent.json
-│   ├── curator-agent.json
-│   ├── publisher-agent.json
-│   ├── memory-agent.json
-│   ├── monitor-agent.json
-│   └── orchestrator-agent.json
-├── docs/                       ← Phase MD memory files
-│   ├── phase1-masterplan.md
-│   ├── phase2-agents.md
-│   ├── phase3-website.md
-│   └── phase4-build.md
-└── mcp/                        ← MCP server
-    └── server.ts
+| ID | Workflow | Version | Schedule | Status |
+|---|---|---|---|---|
+| `N2HuAM6ThXrc4aGM` | WF1 Scout Agent | v3 | Every 6h | ✅ Active |
+| `LO93zvn51g2JG2sJ` | WF2 Writer Agent | v3 (Hybrid) | Every 30m | ✅ Active |
+| `6EbAxLnKpc7ZXXC1` | WF3 Publisher Agent | v3 | Every 30m | ✅ Active |
+| `PNszQlAAeKVhkE6X` | WF4 Curator Agent | v1 | Manual | ⚠️ Inactive (Beehiiv key) |
+| `kGhPKcmF0bk98Awc` | WF5 Clustering Agent | v2 | Every 4h | ✅ Active |
+| `fa2Asr28rd2Sm4qS` | WF5.1 Fact Sheet Agent | v1 | Trigger | ✅ Active |
+| `l0fJW1JwVzUBMe1Y` | Error Handler | v3 | On error | ✅ Active |
+
+---
+
+## What Was Fixed / Built
+
+### WF1 — Scout Agent v3
+- Fetches 26+ active RSS feeds from Supabase `feeds` table (tier-weighted)
+- Scores and deduplicates against Supabase `queue` — refuses to enqueue duplicates
+- Scrapes full content; logs every run to `pipeline_runs` with granular metrics
+- Auto-disables feeds after 5 consecutive failures (`increment_feed_failures` RPC)
+- Category balance: min 2 / max 5 per sector, ~15 articles per 6h run (~60/day)
+- ENR RSS permanently dead — disabled in feeds
+
+### WF2 — Writer Agent v3.1-Hybrid
+- Migrated from Groq (expired key) to OpenAI `gpt-4o` via n8n OpenAI credential
+- Writes completed articles to Supabase `published` table (title, content, image_url, tags)
+- Exits cleanly with `No pending articles in queue` when Scout queues nothing new
+- Queue status lifecycle: `pending → processing → completed/failed`
+
+### WF3 — Publisher Agent v3
+- Migrated from hardcoded Ghost JWT (blocked in n8n sandbox) to `Ghost Admin account` n8n credential
+- Missing thumbnails trigger OpenAI image generation → Ghost image upload → Supabase patch
+- Key facts newline fix: replaced broken `\n` template with `IB_KEY_FACTS:` image-alt carrier (theme-rendered)
+- Ghost posts scheduled at next **9:00 AM UTC** (changed from +4h relative delay on 2026-05-06)
+- CLAIMING recovery: failed rows auto-released; duplicate slugs reuse existing Ghost posts
+- Dedup check prevents re-publishing already-published articles
+
+### WF5 — Clustering Agent v2
+- Reads recent `queue` rows, writes to `story_clusters` and `cluster_articles`
+- Uses n8n OpenAI credential with `gpt-4o-mini`
+- Validated: execution `4870` completed successfully post-deployment
+
+### WF5.1 — Fact Sheet Agent v1
+- Builds structured `story_fact_sheets` from clusters using `gpt-4o`
+- Does NOT publish to Ghost — intelligence layer only
+- Validated: execution `4871` completed successfully
+
+### WF6 — SEO Agent (Deployed, Validating)
+- Export: `exports/n8n-workflows/n8n-seo-agent.json`
+- Generates `seo_title`, `meta_description`, `focus_keyword`, `slug`, `seo_ready` on `published` rows
+- Migration applied: `supabase_migrations/2026-04-10-seo-agent-columns.sql`
+- Validation: execution `4911` processed a test row, enforced 153-char meta description
+- Publisher gating NOT yet enforced (safe rollout — SEO can't block publication yet)
+
+---
+
+## Supabase Schema (Phase 4 Additions)
+
+```sql
+-- published table additions
+ALTER TABLE published ADD COLUMN content TEXT;
+ALTER TABLE published ADD COLUMN image_url TEXT;
+ALTER TABLE published ADD COLUMN tags JSONB;
+ALTER TABLE published ADD COLUMN seo_title TEXT;
+ALTER TABLE published ADD COLUMN meta_description TEXT;
+ALTER TABLE published ADD COLUMN focus_keyword TEXT;
+ALTER TABLE published ADD COLUMN slug TEXT;
+ALTER TABLE published ADD COLUMN seo_ready BOOLEAN DEFAULT FALSE;
+
+-- Clustering tables
+CREATE TABLE story_clusters (...);
+CREATE TABLE cluster_articles (...);
+CREATE TABLE story_fact_sheets (...);
 ```
 
 ---
 
-## 💰 Monthly Cost at Full Operation
+## n8n Key Patterns (Hard-Won)
 
-| Service | Cost |
+- **No `process.env.*`** — n8n Code nodes block it. Hardcode all keys or use n8n credentials.
+- **No `require('crypto')`** — also blocked. Use pure-JS HMAC-SHA256 (as in publisher).
+- **No `{{ }}` expressions** in Code nodes. Use hardcoded values or `$getWorkflowStaticData()`.
+- **Always init `staticData.metrics`** per node — nodes may run standalone in n8n UI.
+- **`webhook/` vs `webhook-test/`** — production uses `/webhook/`; test requires UI "Listen" mode.
+- **n8n API**: PUT for workflow updates — only `name/nodes/connections/settings` (no `versionId`/`pinData`). The `active` field is read-only.
+
+---
+
+## Production Metrics (as of May 2026)
+
+| Metric | Value |
 |---|---|
-| n8n on Railway | $20/mo |
-| Claude API (Haiku + Sonnet + Opus) | $40–60/mo |
-| Vercel Pro | $20/mo |
-| Sanity.io | $0 (free tier) |
-| Supabase | $0 (free tier) |
-| Beehiiv | $0 → $43/mo at 2,500+ subs |
-| Cloudflare | $0 |
-| Crunchbase API | $29/mo |
-| Domain | $15/yr |
-| **Total Phase 1 operating** | **~$109–130/mo** |
+| Active n8n workflows | 6 (+ 1 error handler) |
+| RSS feeds monitored | 26 active |
+| Articles auto-published to Ghost | 150+ |
+| Pipeline uptime | 99%+ (Railway) |
+| Ghost posts scheduled at | 9:00 AM UTC daily |
+| Supabase tables | 8 (queue, published, feeds, pipeline_runs, story_clusters, cluster_articles, story_fact_sheets, draft_articles) |
+| n8n version | 2.18.5 (upgraded 2026-05-03) |
 
 ---
 
-## 🎯 Launch Success Metrics (Day 90)
+## Roadmap (Phase 5+)
 
-- [ ] 500+ newsletter subscribers
-- [ ] 1,000+ articles indexed by Google
-- [ ] Appearing in Google News carousels
-- [ ] 15+ auto-published articles per day
-- [ ] First 3 Tier 1 keywords ranking page 1 (EU AI Act construction, OSHA AI, etc.)
-- [ ] First advertiser inquiry received
-- [ ] MCP server live and tested with Claude Desktop
-
----
-
-## ⏮️ Previous Phase
-
-**Phase 3 — Website Design & UI**
-See: `phase3-website.html` and `phase3-website.md`
+- **WF7 — Regulatory Intelligence**: Detect Acts, Mandates, Compliance deadlines → plain English AECM impact summaries
+- **WF8 — LinkedIn Distribution Agent**: Auto-generate Problem→Impact→Solution posts after each Ghost publish
+- **WF4 Fix** — Get correct Beehiiv API key (`bh_*`) to activate Curator Agent for newsletter
+- **SEO Gating** — Enable `seo_ready=true` gate on Publisher once WF6 is fully stable
+- **MCP Server** — REST `/api/v1/articles`, Unkey.dev rate limiting, SSE transport at `mcp.industrialbriefs.com/sse`
+- **WF9 — Monetisation Engine** — Vendor comparison guides, lead-gen CTAs, Ghost paid membership tiers
