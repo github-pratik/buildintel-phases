@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Industrial Briefs — Phase Dashboard</title>
   <meta name="description"
-    content="BuildIntel project phases — Strategy, AI Agents, Website Design, and Build execution for the automated ACEM news platform.">
+    content="IndustrialBriefs project phases — Strategy, AI Agents, Website Design, and Build execution for the automated ACEM news platform.">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet">
@@ -174,6 +174,31 @@
       margin-bottom: 56px;
     }
 
+    /* ── VERSION CHIP ── */
+    .version-chip {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(92, 184, 122, 0.08);
+      border: 1px solid rgba(92, 184, 122, 0.25);
+      padding: 7px 16px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: all 0.2s;
+    }
+
+    .version-chip:hover {
+      background: rgba(92, 184, 122, 0.14);
+      border-color: rgba(92, 184, 122, 0.4);
+    }
+
     /* ── DIVIDER ── */
     .divider {
       height: 1px;
@@ -243,6 +268,32 @@
 
     .card-planned::before {
       background: linear-gradient(to right, var(--grey), transparent);
+    }
+
+    /* ── FEATURED CARD (Version 5) ── */
+    .card-featured {
+      grid-column: 1 / -1;
+      background: rgba(92, 184, 122, 0.045);
+      border-color: rgba(92, 184, 122, 0.18);
+    }
+
+    .card-featured::before {
+      height: 2px;
+      opacity: 1;
+      background: linear-gradient(to right, var(--green), var(--orange), transparent);
+    }
+
+    .card-featured:hover {
+      background: rgba(92, 184, 122, 0.08);
+      border-color: rgba(92, 184, 122, 0.3);
+    }
+
+    .card-featured .card-title {
+      font-size: 30px;
+    }
+
+    .card-featured .card-desc {
+      max-width: 640px;
     }
 
     /* ── CARD CONTENT ── */
@@ -405,10 +456,6 @@
       animation-delay: 0.5s;
     }
 
-    .card:nth-child(6) {
-      animation-delay: 0.6s;
-    }
-
     @keyframes fadeIn {
       to {
         opacity: 1;
@@ -428,11 +475,28 @@
     <h1 class="brand">Industrial<em>Briefs</em></h1>
     <p class="sub">The complete blueprint for an automated news intelligence platform — from strategy through AI agents,
       website design, and production build.</p>
+    <a href="/version5-platform.html" class="version-chip">
+      <span class="pulse-dot"></span> Now on Version 5 — The Live Platform →
+    </a>
 
     <div class="divider"></div>
     <div class="section-label">Project Phases</div>
 
     <div class="cards">
+
+      <!-- Version 5 — Live (featured, merges old Phase 2 + Phase 3) -->
+      <a href="/version5-platform.html" class="card card-featured" id="version5-card">
+        <div class="card-phase">Version 5 · Live</div>
+        <div class="card-title">AI Agents + Website — The Live Platform</div>
+        <div class="card-desc">The newsroom (16 AI agents) and the reader experience are now one connected system —
+          2,495+ articles published, 100% SEO coverage, 0 errors/24h. See the full workflow map, the version history,
+          and the new UI.</div>
+        <div class="status status-done">
+          <span class="pulse-dot"></span>
+          Live &amp; Publishing
+        </div>
+        <div class="card-arrow">View Version 5 →</div>
+      </a>
 
       <!-- Phase 1 — Done -->
       <a href="/phase1-masterplan.html" class="card card-done" id="phase1-card">
@@ -440,32 +504,6 @@
         <div class="card-title">Strategy &amp; Master Plan</div>
         <div class="card-desc">Complete technical blueprint — data pipeline architecture, tech stack selection, SEO
           strategy, GPT-readable design, MCP server plan, and build roadmap.</div>
-        <div class="status status-done">
-          <span class="check-icon">✓</span>
-          Done
-        </div>
-        <div class="card-arrow">View Phase →</div>
-      </a>
-
-      <!-- Phase 2 — In Progress -->
-      <a href="/phase2-agents.html" class="card card-progress" id="phase2-card">
-        <div class="card-phase">Phase 02</div>
-        <div class="card-title">AI Agent Architecture</div>
-        <div class="card-desc">9-agent system design — ingestion, enrichment, classification, publishing, and monitoring
-          agents with full data flow and technology mapping.</div>
-        <div class="status status-progress">
-          <span class="pulse-dot"></span>
-          In Progress
-        </div>
-        <div class="card-arrow">View Phase →</div>
-      </a>
-
-      <!-- Phase 3 — Done -->
-      <a href="/phase3-website.html" class="card card-done" id="phase3-card">
-        <div class="card-phase">Phase 03</div>
-        <div class="card-title">Website Design &amp; UI</div>
-        <div class="card-desc">Reader experience design — glassmorphism UI, mobile-first layout, ad placement strategy,
-          MCP connection panel, and hot keyword system.</div>
         <div class="status status-done">
           <span class="check-icon">✓</span>
           Done

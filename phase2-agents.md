@@ -149,7 +149,7 @@ WORLD (internet)
 - [x] Supabase schema — `published` table created and verified ✅
 - [ ] Ghost local install + Admin API key
 - [x] First 10 RSS feeds → now 25 verified feeds ✅
-- [x] Groq API key in n8n (using Groq LLaMA 3.3 instead of Claude) ✅
+- [x] OpenAI API key in n8n (`OPENAI_API_KEY`, Writer uses gpt-4o) ✅
 
 ---
 
@@ -173,7 +173,7 @@ WORLD (internet)
 **Infrastructure:**
 - n8n: `https://n8n-primary-production-e002.up.railway.app` ✅
 - Supabase: `https://hcforutxssuhikfzylhe.supabase.co` ✅ (`published` table live)
-- Groq LLaMA 3.3 70B: `https://api.groq.com/openai/v1/` ✅
+- OpenAI Chat Completions (`gpt-4o`): `https://api.openai.com/v1/chat/completions` ✅
 - Ghost CMS: ⏳ Not set up yet
 - Beehiiv: ⏳ Not set up yet
 
@@ -232,7 +232,7 @@ WORLD (internet)
 │  Parse Article JSON                                     │
 │  - Validates required fields: title, link, fullContent  │
 │    ↓                                                    │
-│  Groq LLaMA 3.3 70B API Call                           │
+│  OpenAI gpt-4o API call                                │
 │  - System: Senior journalist, Semafor format            │
 │  - Prompt: title + source + fullContent (4000 chars)    │
 │  - Returns JSON: { title, body, summary, tags }         │
@@ -301,7 +301,7 @@ Internet (25 RSS feeds)
     ↓ every 6h
 [Scout] Score + Scrape → top 30 articles
     ↓ new only (Supabase dedup)
-[Writer] Groq LLaMA 3.3 → full article JSON
+[Writer] OpenAI gpt-4o → full article JSON
     ↓
 [Supabase] published table ← source_url, title, summary, category
     ↓
@@ -348,7 +348,7 @@ Content-Type: application/json
   "posts": [{
     "title": "AI Reshapes Modular Construction Timelines",
     "html": "<p>Full article HTML...</p>",
-    "custom_excerpt": "Two sentence summary from Groq",
+    "custom_excerpt": "Two sentence summary from OpenAI",
     "tags": [{"name": "construction"}, {"name": "ai"}],
     "feature_image": "https://og-image-from-scraper",
     "status": "published"

@@ -1,11 +1,11 @@
-# BuildIntel — Phase 3: Website Design & UI
+# IndustrialBriefs — Phase 3: Website Design & UI
 **GPT Memory Context File | Status: 🔵 PLANNED | Last Updated: March 2026**
 
 ---
 
 ## 🎯 What This Phase Is
 
-Phase 3 designs and builds the actual BuildIntel website — the reader-facing product. This is where all the automated content from Phase 2 appears. The design must balance editorial authority, mobile usability, AI-readability, and ad monetization.
+Phase 3 designs and builds the actual IndustrialBriefs website — the reader-facing product. This is where all the automated content from Phase 2 appears. The design must balance editorial authority, mobile usability, AI-readability, and ad monetization.
 
 ---
 
@@ -139,11 +139,11 @@ Keywords like "EU AI Act", "Built Robotics", "Digital Twins", "Generative AI" ge
 
 ## 🔌 MCP Connection Panel
 
-Located in footer and article sidebar. Allows readers to connect BuildIntel as a data source for their AI tools.
+Located in footer and article sidebar. Allows readers to connect IndustrialBriefs as a data source for their AI tools.
 
 ### UI Elements
 - "Connect to your AI" section with tool logos (ChatGPT, Claude, Perplexity, Custom)
-- Copy MCP server URL: `mcp.buildintel.com/sse`
+- Copy MCP server URL: `mcp.industrialbriefs.com/sse`
 - API key generation for authenticated access
 - Rate limit tiers displayed: Free (100 req/day) | Pro ($49/mo, 10k req/day)
 

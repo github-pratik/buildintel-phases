@@ -795,7 +795,7 @@
         <div class="sec-title-block">
           <div class="sec-eyebrow" style="color:var(--green);">Workflow 2 · Active · Webhook Trigger</div>
           <h2 class="sec-title">Writer Agent</h2>
-          <p class="sec-desc">Receives enriched article data from Scout, calls Groq LLaMA 3.3 70B to generate a full news article in Semafor format, validates the output, and saves it to Supabase ready for the Publisher.</p>
+          <p class="sec-desc">Receives enriched article data from Scout, calls OpenAI (gpt-4o) to generate a full news article in Semafor format, validates the output, and saves it to Supabase ready for the Publisher.</p>
         </div>
       </div>
 
@@ -803,7 +803,7 @@
         <div class="agent-header">
           <div class="agent-icon" style="background:rgba(92,184,122,0.1);border:1px solid rgba(92,184,122,0.2);">✍️</div>
           <div class="agent-meta">
-            <div class="agent-id">n8n · ID: LO93zvn51g2JG2sJ · Groq LLaMA 3.3 70B</div>
+            <div class="agent-id">n8n · ID: LO93zvn51g2JG2sJ · OpenAI gpt-4o</div>
             <div class="agent-name">Vision_News — Writer Agent</div>
             <div class="agent-desc">Article Generator · JSON Validator · Supabase Publisher</div>
           </div>
@@ -830,7 +830,7 @@
               <div class="agent-stat-label">Article Sections</div>
             </div>
             <div class="agent-stat">
-              <div class="agent-stat-val" style="color:var(--gold);">Groq</div>
+              <div class="agent-stat-val" style="color:var(--gold);">OpenAI</div>
               <div class="agent-stat-label">AI Provider</div>
             </div>
             <div class="agent-stat">
@@ -864,7 +864,7 @@
             <div class="pipeline-step">
               <div class="pipe-dot" style="background:var(--gold);"></div>
               <div>
-                <div class="pipe-title">Groq LLaMA 3.3 70B — Article Generation</div>
+                <div class="pipe-title">OpenAI gpt-4o — Article Generation</div>
                 <div class="pipe-detail">System prompt: Senior journalist at IndustrialBriefs, covering ACEM + AI sectors, Semafor format (What Happened / Why It Matters / What's Next). User prompt: title + source + fullContent (4,000 chars). Returns strict JSON: { title, body, summary, tags }.</div>
               </div>
             </div>
@@ -899,7 +899,7 @@
 
           <!-- LLM prompt -->
           <div style="margin-top:28px;">
-            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-family:var(--mono);">Groq API Prompt</div>
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;font-family:var(--mono);">OpenAI API prompt</div>
             <div class="code-block">
 <span class="comment">// System message</span><br>
 <span class="val">"You are a senior journalist at IndustrialBriefs, an AI-powered<br>
@@ -913,7 +913,7 @@
 &nbsp;Source: {source}\n<br>
 &nbsp;Category: {category}\n<br>
 &nbsp;Content: {fullContent}"</span><br><br>
-<span class="comment">// Model: llama-3.3-70b-versatile · Temperature: 0.7</span>
+<span class="comment">// Model: gpt-4o · Temperature: 0.6</span>
             </div>
           </div>
 
@@ -1027,7 +1027,7 @@
     <div class="page" style="padding-bottom:0;">
       <div class="summary-block fade-up">
         <div class="summary-title">Phase 2.1 Complete</div>
-        <p class="summary-desc">Scout Agent is pulling and scoring news from 25 verified sources every 6 hours. Writer Agent is generating full Semafor-format articles using Groq LLaMA 3.3 70B and saving them to Supabase. The core intelligence pipeline is live.</p>
+        <p class="summary-desc">Scout Agent is pulling and scoring news from 25 verified sources every 6 hours. Writer Agent is generating full Semafor-format articles using OpenAI gpt-4o and saving them to Supabase. The core intelligence pipeline is live.</p>
         <div class="summary-metrics">
           <div class="sm-item">
             <div class="sm-val" style="color:var(--green);">2/4</div>

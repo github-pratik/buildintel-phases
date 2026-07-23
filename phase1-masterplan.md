@@ -1,11 +1,11 @@
-# BuildIntel — Phase 1: Strategy & Master Plan
+# IndustrialBriefs — Phase 1: Strategy & Master Plan
 **GPT Memory Context File | Last Updated: March 2026**
 
 ---
 
 ## 🎯 What This Phase Is
 
-Phase 1 is the complete strategic foundation for BuildIntel — an AI-powered news intelligence platform covering Architecture, Construction, Engineering & Manufacturing (ACEM) with an AI-first editorial lens.
+Phase 1 is the complete strategic foundation for IndustrialBriefs — an AI-powered news intelligence platform covering Architecture, Construction, Engineering & Manufacturing (ACEM) with an AI-first editorial lens.
 
 This file gives any GPT/AI assistant full context to continue planning, building, or advising on this project.
 
@@ -13,7 +13,7 @@ This file gives any GPT/AI assistant full context to continue planning, building
 
 ## 📌 Core Concept
 
-**BuildIntel** = The first news publication that covers all four ACEM sectors (Architecture, Construction, Engineering, Manufacturing) under one AI-first editorial lens, with automated content creation, a human editorial gate, and a public MCP server for AI agent integration.
+**IndustrialBriefs** = The first news publication that covers all four ACEM sectors (Architecture, Construction, Engineering, Manufacturing) under one AI-first editorial lens, with automated content creation, a human editorial gate, and a public MCP server for AI agent integration.
 
 **The gap being filled:** Construction Dive covers construction. ENR covers engineering. AEC Magazine covers architecture. Manufacturing Dive covers manufacturing. Nobody covers all four under one AI-first roof.
 

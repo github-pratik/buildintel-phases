@@ -1,14 +1,19 @@
-# Industrailbriefs — Phase Dashboard
+# industrialBriefs — Phase Dashboard
 
-> **Live site:** [buildintel-phases.vercel.app](https://buildintel-phases.vercel.app)
+> **Live site:** [coral-app-74pa4.ondigitalocean.app](https://coral-app-74pa4.ondigitalocean.app/)
 
-A public documentation hub for the **Industrailbriefs** project — an AI-powered automated news intelligence platform for the Architecture, Engineering, Construction, & Manufacturing (AECM) industry.
+**Repositories**
+
+- **Phase dashboard (primary GitHub):** [github-pratik/industrialbriefs](https://github.com/github-pratik/industrialbriefs) — same static site as below; develop here, then sync to the company repo for App Platform.
+- **DigitalOcean App Platform (deployed from company org):** [visioneeritsolutions/industrialbriefs](https://github.com/visioneeritsolutions/industrialbriefs) — **live URL:** [coral-app-74pa4.ondigitalocean.app](https://coral-app-74pa4.ondigitalocean.app/)
+
+A public documentation hub for the **industrialBriefs** project — an AI-powered automated news intelligence platform for the Architecture, Engineering, Construction, & Manufacturing (AECM) industry.
 
 ---
 
 ## What Is This?
 
-Industrailbriefs is a planned automated news media company. This repo contains the **planning and design phases** in two formats for each phase:
+**industrialBriefs** is a planned automated news media company. This repo contains the **planning and design phases** in two formats for each phase:
 
 - **HTML** — rich interactive documents with diagrams, timelines, and architecture visuals  
 - **Markdown** — raw memory files for feeding directly into AI coding tools like Cursor, Claude Code, and Windsurf
@@ -19,10 +24,14 @@ Industrailbriefs is a planned automated news media company. This repo contains t
 
 | Phase | Title | Status | HTML | MD |
 |-------|-------|--------|------|----|
-| **P1** | Strategy & Master Plan | ✅ Done | [phase1-masterplan.html](https://buildintel-phases.vercel.app/phase1-masterplan.html) | [phase1-masterplan.md](https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase1-masterplan.md) |
-| **P2** | AI Agent Architecture | 🟠 In Progress | [phase2-agents.html](https://buildintel-phases.vercel.app/phase2-agents.html) | [phase2-agents.md](https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase2-agents.md) |
-| **P3** | Website Design & UI | ⬜ Planned | [phase3-website.html](https://buildintel-phases.vercel.app/phase3-website.html) | [phase3-website.md](https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase3-website.md) |
-| **P4** | Build & Execution | ⬜ Planned | [phase4-build.html](https://buildintel-phases.vercel.app/phase4-build.html) | [phase4-build.md](https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase4-build.md) |
+| **P1** | Strategy & Master Plan | ✅ Done | [phase1-masterplan.html](https://coral-app-74pa4.ondigitalocean.app/phase1-masterplan.html) | [phase1-masterplan.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase1-masterplan.md) |
+| **P2** | AI Agent Architecture | 🟠 In Progress | [phase2-agents.html](https://coral-app-74pa4.ondigitalocean.app/phase2-agents.html) | [phase2-agents.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase2-agents.md) |
+| **P2.2** | Regulatory Automation | ✅ Done | [phase2.2-regulatory-automation.md](News-plan/phase2.2-regulatory-automation.md) |
+| **P5** | Visibility & Monetization | ✅ Done | [phase5-monetization-visibility.md](News-plan/phase5-monetization-visibility.md) |
+| **P-ALL** | **CONSOLIDATED ROADMAP** | 🚀 Ready | [ROADMAP-CONSOLIDATED.md](News-plan/ROADMAP-CONSOLIDATED.md) |
+| **P-BUILD** | **MASTER BUILD PLAN** | 🛠️ Active | [MASTER_BUILD_PLAN.md](News-plan/MASTER_BUILD_PLAN.md) |
+| **P3** | Website Design & UI | ⬜ Planned | [phase3-website.html](https://coral-app-74pa4.ondigitalocean.app/phase3-website.html) | [phase3-website.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase3-website.md) |
+| **P4** | Build & Execution | ⬜ Planned | [phase4-build.html](https://coral-app-74pa4.ondigitalocean.app/phase4-build.html) | [phase4-build.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase4-build.md) |
 
 ---
 
@@ -88,19 +97,18 @@ Pages support **light/dark mode** toggle (persisted in `localStorage`).
 
 ## Tech
 
-- **Hosting:** Vercel (Hobby — free)
-- **Alt hosting:** DigitalOcean App Platform
-- **Repo:** GitHub (Free)
+- **Live site:** [DigitalOcean App Platform](https://coral-app-74pa4.ondigitalocean.app/) (`coral-app-74pa4.ondigitalocean.app`)
+- **Repos:** [github-pratik/industrialbriefs](https://github.com/github-pratik/industrialbriefs) (primary) · [visioneeritsolutions/industrialbriefs](https://github.com/visioneeritsolutions/industrialbriefs) (company org → DO deploy)
 - **Build:** Static HTML — no framework, no build step
 - **Fonts:** Google Fonts (Cormorant Garamond, JetBrains Mono, DM Sans)
-- **Auto-deploy:** Every push to `master` triggers a Vercel deploy
+- **Auto-deploy:** Push to `master` on the App Platform–connected GitHub repo triggers a new DigitalOcean deploy
 
 ---
 
 ## File Structure
 
 ```
-buildintel-phases/
+industrialbriefs/
 ├── index.html              # Phase dashboard homepage
 ├── phase1-masterplan.html  # Phase 1 interactive document
 ├── phase1-masterplan.md    # Phase 1 AI memory file
@@ -110,7 +118,7 @@ buildintel-phases/
 ├── phase3-website.md       # Phase 3 AI memory file
 ├── phase4-build.html       # Phase 4 interactive document
 ├── phase4-build.md         # Phase 4 AI memory file
-└── vercel.json             # Vercel config (clean URLs, no-cache)
+└── vercel.json             # Optional — if using Vercel alongside DO (clean URLs, no-cache)
 ```
 
 ---
@@ -126,34 +134,44 @@ Read phase1-masterplan.md and use it as the project blueprint.
 
 **Raw MD URLs:**
 ```
-https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase1-masterplan.md
-https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase2-agents.md
-https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase3-website.md
-https://raw.githubusercontent.com/github-pratik/buildintel-phases/master/phase4-build.md
+https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase1-masterplan.md
+https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase2-agents.md
+https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase3-website.md
+https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase4-build.md
 ```
 
 ---
 
 ## Deploy On DigitalOcean
 
-This repo can also be deployed on **DigitalOcean App Platform** as a static site from the company repository:
+The same static phase dashboard can be deployed from the **company** repository on **DigitalOcean App Platform**:
 
-- **GitHub repo:** `visioneeritsolutions/industrialbriefs`
+- **GitHub repo:** [visioneeritsolutions/industrialbriefs](https://github.com/visioneeritsolutions/industrialbriefs)
 - **Branch:** `master`
-- **App spec:** `.do/app.yaml`
+- **App spec:** `.do/app.yaml` (at repository root)
 - **Deploy mode:** auto-deploy on push
+
+Keep [github-pratik/industrialbriefs](https://github.com/github-pratik/industrialbriefs) aligned with [visioneeritsolutions/industrialbriefs](https://github.com/visioneeritsolutions/industrialbriefs); the company repo is what DigitalOcean builds — public URL: [coral-app-74pa4.ondigitalocean.app](https://coral-app-74pa4.ondigitalocean.app/).
 
 ### Recommended setup
 
-1. Push this code to the `company` remote:
+1. Add the company remote (once per clone) and sync if the remote already has commits:
    ```bash
-   git push company master
+   git remote add company https://github.com/visioneeritsolutions/industrialbriefs.git
+   git fetch company
+   git pull company master --no-rebase   # resolve any conflicts, or merge as needed
    ```
-2. In DigitalOcean, go to **Apps** → **Create App**.
-3. Choose **GitHub** as the source and authorize DigitalOcean to access `visioneeritsolutions/industrialbriefs`.
-4. Select the `master` branch and keep the source directory as `/`.
-5. Confirm the app is detected as a **Static Site**.
-6. After the first deploy, add your custom domain in the app's **Networking** tab.
+2. Push your branch to `master` on the company remote (use `main:master` if your local default branch is `main`):
+   ```bash
+   git push company master               # if you are on branch master
+   # or
+   git push company main:master          # if your local branch is main
+   ```
+3. In DigitalOcean, go to **Apps** → **Create App** (or open the existing app).
+4. Choose **GitHub** as the source and authorize DigitalOcean to access [visioneeritsolutions/industrialbriefs](https://github.com/visioneeritsolutions/industrialbriefs).
+5. Select the `master` branch and keep the source directory as `/`.
+6. Confirm the app is detected as a **Static Site**.
+7. After the first deploy, add your custom domain in the app's **Networking** tab.
 
 ### CLI Option
 
@@ -163,8 +181,8 @@ If you use `doctl`, you can create the app from the included spec:
 doctl apps create --spec .do/app.yaml
 ```
 
-DigitalOcean will provide an `ondigitalocean.app` starter domain after deployment, and you can map your production domain afterward.
+DigitalOcean assigns an `ondigitalocean.app` URL (this project uses [coral-app-74pa4.ondigitalocean.app](https://coral-app-74pa4.ondigitalocean.app/)); you can map a custom domain in **Networking**.
 
 ---
 
-*BuildIntel — Automated News Intelligence for Architecture, Construction, Engineering & Manufacturing*
+*industrialBriefs — Automated News Intelligence for Architecture, Construction, Engineering & Manufacturing*

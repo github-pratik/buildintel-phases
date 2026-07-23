@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndustrialBriefs — Version 5: The Live Platform</title>
+  <meta name="description"
+    content="IndustrialBriefs Version 5 — the live AI newsroom. 16 connected agents, a modern reader website, and the growth to prove it.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <script>document.documentElement.classList.add('js-anim');</script>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg2: #0e1730;
+      --grid: rgba(240, 160, 50, 0.06);
+      --grid2: rgba(242, 178, 72, 0.11);
+      --panel: rgba(130, 170, 235, 0.045);
+      --panel2: rgba(130, 170, 235, 0.08);
+      --border: rgba(130, 170, 235, 0.15);
+      --border2: rgba(130, 170, 235, 0.26);
+      --text: #eaf0fb;
+      --muted: rgba(234, 240, 251, 0.52);
+      --dim: rgba(234, 240, 251, 0.3);
+      --blue: #4da3ff;
+      --orange: #f0a83c;
+      --amber: #f0a83c;
+      --gold: #f4b95e;
+      --green: #57c99a;
+      --teal: #3ec6c0;
+      --purple: #9db4ff;
+      --grey: rgba(234, 240, 251, 0.28);
+      --tick: rgba(77, 163, 255, 0.5);
+      --display: 'Archivo', sans-serif;
+      --body: 'IBM Plex Sans', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #e9edf4;
+      --bg2: #ffffff;
+      --grid: rgba(205, 120, 25, 0.11);
+      --grid2: rgba(205, 120, 25, 0.18);
+      --panel: rgba(30, 70, 150, 0.028);
+      --panel2: rgba(30, 70, 150, 0.055);
+      --border: rgba(30, 70, 150, 0.17);
+      --border2: rgba(30, 70, 150, 0.3);
+      --text: #12233f;
+      --muted: rgba(18, 35, 63, 0.58);
+      --dim: rgba(18, 35, 63, 0.42);
+      --blue: #2f6fd0;
+      --orange: #c8791a;
+      --amber: #c8791a;
+      --gold: #b6791f;
+      --green: #2e9d72;
+      --teal: #1f9b95;
+      --purple: #5f76c8;
+      --grey: rgba(18, 35, 63, 0.34);
+      --tick: rgba(47, 111, 208, 0.55);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      padding-top: 50px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* blueprint grid */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        linear-gradient(var(--grid2) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid2) 1px, transparent 1px);
+      background-size: 30px 30px, 30px 30px, 150px 150px, 150px 150px;
+      background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+    }
+    /* soft drafting-light wash */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 90% 55% at 50% -12%, rgba(242, 175, 70, 0.11), transparent 60%);
+    }
+
+    /* aurora / accent drift */
+    .aura { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aura span { position: absolute; display: block; border-radius: 50%; filter: blur(90px); opacity: 0.26; will-change: transform; }
+    .aura .a1 { width: 44vw; height: 44vw; max-width: 540px; max-height: 540px; top: -14%; left: 2%; background: radial-gradient(circle, var(--amber), transparent 68%); animation: aura1 28s ease-in-out infinite alternate; }
+    .aura .a2 { width: 38vw; height: 38vw; max-width: 480px; max-height: 480px; top: 8%; right: 0%; background: radial-gradient(circle, var(--amber), transparent 68%); opacity: 0.18; animation: aura2 33s ease-in-out infinite alternate; }
+    .aura .a3 { width: 32vw; height: 32vw; max-width: 400px; max-height: 400px; top: 30%; left: 42%; background: radial-gradient(circle, var(--teal), transparent 70%); opacity: 0.14; animation: aura3 37s ease-in-out infinite alternate; }
+    [data-theme="light"] .aura span { opacity: 0.16; }
+    @keyframes aura1 { from { transform: translate(0, 0) scale(1); } to { transform: translate(7%, 9%) scale(1.16); } }
+    @keyframes aura2 { from { transform: translate(0, 0) scale(1.06); } to { transform: translate(-8%, 6%) scale(1); } }
+    @keyframes aura3 { from { transform: translate(0, 0) scale(1); } to { transform: translate(6%, -7%) scale(1.14); } }
+
+    .spotlight { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .5s ease;
+      background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 50%), rgba(242, 175, 70, 0.08), transparent 42%); }
+    .spotlight.on { opacity: 1; }
+
+    /* corner registration ticks */
+    .framed { position: relative; }
+    .framed::after {
+      content: ''; position: absolute; inset: 7px; pointer-events: none; z-index: 3;
+      background:
+        linear-gradient(var(--tick), var(--tick)) left top / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) left top / 1px 9px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right top / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right top / 1px 9px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) left bottom / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) left bottom / 1px 9px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right bottom / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right bottom / 1px 9px no-repeat;
+    }
+
+    /* ── NAV ── */
+    .pnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: rgba(8, 14, 28, 0.94);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border-bottom: 1px solid var(--border);
+      height: 50px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 22px; font-family: var(--mono);
+    }
+    [data-theme="light"] .pnav { background: rgba(233, 237, 244, 0.94); }
+    .pnav-brand { font-size: 13px; font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: 0.02em; flex-shrink: 0; font-family: var(--display); }
+    .pnav-brand em { color: var(--blue); font-style: normal; }
+    .pnav-phases { display: flex; align-items: center; gap: 3px; flex: 1; justify-content: center; }
+    .pnav-btn {
+      padding: 4px 12px; font-family: inherit; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+      background: transparent; border: 1px solid transparent; border-radius: 2px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; white-space: nowrap;
+    }
+    .pnav-btn:hover { color: var(--text); background: var(--panel2); border-color: var(--border); }
+    .pnav-btn.active { color: var(--blue); background: rgba(77, 163, 255, 0.1); border-color: rgba(77, 163, 255, 0.32); }
+    .pnav-btn.done { color: rgba(87, 201, 154, 0.7); }
+    .pnav-btn.done:hover { color: var(--green); background: rgba(87, 201, 154, 0.07); border-color: rgba(87, 201, 154, 0.18); }
+    .pnav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); flex-shrink: 0; animation: pnd 2s ease-in-out infinite; }
+    @keyframes pnd { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.6); } }
+    .pnav-sep { width: 14px; height: 1px; background: var(--border); flex-shrink: 0; }
+    .pnav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .pnav-rev { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; color: var(--amber); border: 1px solid rgba(240, 168, 60, 0.3); background: rgba(240, 168, 60, 0.08); padding: 3px 9px; border-radius: 2px; }
+    .pnav-arrow {
+      padding: 4px 10px; font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--border); border-radius: 2px; text-decoration: none;
+      transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .pnav-arrow:hover { color: var(--text); border-color: var(--border2); background: var(--panel2); }
+    .theme-toggle {
+      background: rgba(77, 163, 255, 0.1); border: 1.5px solid var(--blue); color: var(--text);
+      font-size: 14px; width: 32px; height: 32px; border-radius: 2px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; transition: all 0.25s;
+      flex-shrink: 0; box-shadow: 0 0 8px rgba(77, 163, 255, 0.25);
+    }
+    .theme-toggle:hover { background: rgba(77, 163, 255, 0.2); box-shadow: 0 0 16px rgba(77, 163, 255, 0.5); }
+
+    /* ── LAYOUT ── */
+    .wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 66px 48px 120px; }
+    section { margin-top: 92px; }
+
+    /* dimension-line eyebrow */
+    .eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); margin-bottom: 22px; }
+    .eyebrow .fig { color: var(--amber); font-weight: 600; }
+    .eyebrow .rule { flex: 1; height: 8px; position: relative; min-width: 40px; }
+    .eyebrow .rule::before { content: ''; position: absolute; left: 0; right: 6px; top: 50%; height: 1px;
+      background: repeating-linear-gradient(90deg, var(--border2) 0 5px, transparent 5px 10px); }
+    .eyebrow .rule::after { content: ''; position: absolute; right: 0; top: calc(50% - 3.5px); width: 1px; height: 8px; background: var(--border2); }
+
+    h2.sec-h { font-family: var(--display); font-size: clamp(28px, 4.2vw, 46px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.06; margin-bottom: 14px; }
+    h2.sec-h em { font-style: normal; color: var(--blue); }
+    .sec-lead { font-size: 15px; color: var(--muted); max-width: 660px; line-height: 1.75; font-weight: 300; }
+
+    /* ── HERO ── */
+    .dwg-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--dim); margin-bottom: 22px; }
+    .hero-chip {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--green); background: rgba(87, 201, 154, 0.08); border: 1px solid rgba(87, 201, 154, 0.28);
+      padding: 6px 15px; border-radius: 2px; display: inline-flex; align-items: center; gap: 9px; margin-bottom: 26px;
+    }
+    .hero-chip .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pnd 2s ease-in-out infinite; }
+    h1.hero { font-family: var(--display); font-size: clamp(52px, 9vw, 96px); font-weight: 800; line-height: 0.96; letter-spacing: -0.035em; margin-bottom: 22px; }
+    h1.hero em { font-style: normal; color: var(--blue); }
+    .hero-sub { font-size: 18px; color: var(--muted); max-width: 600px; line-height: 1.7; font-weight: 300; margin-bottom: 30px; }
+    .ver-track { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 40px; }
+    .ver-pill { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 2px; border: 1px solid var(--border); color: var(--dim); }
+    .ver-pill.done { color: rgba(87, 201, 154, 0.62); border-color: rgba(87, 201, 154, 0.2); }
+    .ver-pill.now { color: var(--blue); border-color: rgba(77, 163, 255, 0.42); background: rgba(77, 163, 255, 0.08); }
+    .ver-arrow { color: var(--dim); font-size: 11px; }
+
+    /* drafting title block */
+    .titleblock { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--border2); background: var(--panel); max-width: 620px; }
+    .titleblock div { padding: 12px 16px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+    .titleblock div:last-child { border-right: none; }
+    .titleblock .k { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
+    .titleblock .v { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text); }
+
+    /* ── METRIC BAND ── */
+    .metric-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: 44px; border: 1px solid var(--border); }
+    .metric { background: var(--panel); padding: 24px 14px; text-align: center; position: relative; overflow: hidden; border-right: 1px solid var(--border); }
+    .metric:last-child { border-right: none; }
+    .metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent, var(--blue)); opacity: 0.85; }
+    .m-val { font-family: var(--display); font-size: 34px; font-weight: 700; line-height: 1; margin-bottom: 7px; letter-spacing: -0.02em; }
+    .m-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); line-height: 1.4; }
+
+    /* ── STATUS CARDS ── */
+    .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 34px; }
+    .status-card { background: var(--panel); border: 1px solid var(--border); padding: 30px 32px; position: relative; overflow: hidden; }
+    .status-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .sc-orange::before { background: linear-gradient(to right, var(--amber), transparent); }
+    .sc-blue::before { background: linear-gradient(to right, var(--blue), transparent); }
+    .sc-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 10px; }
+    .sc-title { font-family: var(--display); font-size: 22px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.015em; }
+    .sc-body { font-size: 13px; color: var(--muted); line-height: 1.75; font-weight: 300; }
+
+    /* ── FLOWMAP ── */
+    .flow-wrap { margin-top: 34px; background: var(--panel); border: 1px solid var(--border); padding: 0; }
+    .flow-ruler { display: flex; justify-content: space-between; padding: 8px 18px 6px; border-bottom: 1px solid var(--border);
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: var(--dim); }
+    .flow-ruler span { position: relative; padding-top: 8px; }
+    .flow-ruler span::before { content: ''; position: absolute; top: 0; left: 50%; width: 1px; height: 4px; background: var(--border2); }
+    .flow-pad { padding: 20px; }
+    .flow-scroll { overflow-x: auto; }
+    .flow-svg { width: 100%; min-width: 900px; height: auto; display: block; }
+    .flow-svg text { font-family: var(--body); }
+    .flow-svg .n-title { font-family: var(--display); font-weight: 700; font-size: 15px; fill: var(--text); }
+    .flow-svg .n-sub { font-family: var(--mono); font-size: 8.5px; fill: var(--muted); letter-spacing: 0.02em; }
+    .flow-svg .n-tag { font-family: var(--mono); font-size: 9px; font-weight: 600; }
+    .flow-svg .lane { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.18em; fill: var(--dim); }
+    .flow-svg .cap { font-family: var(--mono); font-size: 9px; fill: var(--dim); letter-spacing: 0.06em; }
+    .flow-svg .node { fill: var(--panel2); rx: 3px; }
+    .flow-svg .pipe { stroke: var(--border2); stroke-width: 2; fill: none; }
+    .flow-svg .branch { stroke: var(--dim); stroke-width: 1.5; fill: none; }
+    .flow-svg .ops { stroke: var(--dim); stroke-width: 1.4; stroke-dasharray: 3 4; fill: none; }
+    .flow-svg .ld-ping { fill: var(--green); transform-box: fill-box; transform-origin: center; animation: ldPing 2.6s cubic-bezier(0.35, 0, 0.25, 1) infinite; }
+    .flow-svg .ld-core { fill: var(--green); transform-box: fill-box; transform-origin: center; filter: drop-shadow(0 0 2.5px var(--green)); animation: ldCore 2.6s ease-in-out infinite; }
+    @keyframes ldPing { 0% { transform: scale(1); opacity: 0.5; } 70% { transform: scale(3.6); opacity: 0; } 100% { transform: scale(3.6); opacity: 0; } }
+    @keyframes ldCore { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.85; } }
+    .flow-svg .flow-dash { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 2 11; filter: drop-shadow(0 0 2.6px currentColor); animation: flowdash 1.15s linear infinite; }
+    @keyframes flowdash { to { stroke-dashoffset: -13; } }
+    .flow-legend { display: flex; flex-wrap: wrap; gap: 14px 20px; padding: 16px 20px 18px; border-top: 1px solid var(--border); }
+    .leg { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .leg .sw { width: 9px; height: 9px; }
+
+    /* ── TIMELINE ── */
+    .timeline { margin-top: 34px; position: relative; padding-left: 30px; }
+    .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--green), var(--blue)); opacity: 0.45; }
+    .tl-item { position: relative; padding: 0 0 34px 8px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot { position: absolute; left: -30px; top: 3px; width: 12px; height: 12px; background: var(--bg); border: 2px solid var(--green); }
+    .tl-item.now .tl-dot { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(77, 163, 255, 0.14); }
+    .tl-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 7px; flex-wrap: wrap; }
+    .tl-ver { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: var(--green); }
+    .tl-item.now .tl-ver { color: var(--blue); }
+    .tl-title { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+    .tl-badge { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 9px; border-radius: 2px; border: 1px solid rgba(87, 201, 154, 0.28); color: var(--green); }
+    .tl-item.now .tl-badge { border-color: rgba(77, 163, 255, 0.42); color: var(--blue); background: rgba(77, 163, 255, 0.07); }
+    .tl-body { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; max-width: 680px; }
+    .tl-body strong { color: var(--text); font-weight: 500; }
+
+    /* ── UI SHOWCASE ── */
+    .ui-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 34px; }
+    .ui-card { background: var(--panel); border: 1px solid var(--border); overflow: hidden; transition: transform 0.25s, border-color 0.25s; }
+    .ui-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+    .ui-shot { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top center; display: block; border-bottom: 1px solid var(--border); background: var(--panel2); }
+    .ui-cap { padding: 15px 18px; }
+    .ui-cap .t { font-family: var(--display); font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+    .ui-cap .d { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+    .ui-notes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .ui-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--muted); background: var(--panel); border: 1px solid var(--border); padding: 7px 12px; border-radius: 2px; }
+    .ui-tag b { color: var(--blue); font-weight: 600; }
+    .ui-links { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .ui-link { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--blue); background: rgba(77, 163, 255, 0.07); border: 1px solid rgba(77, 163, 255, 0.24); padding: 8px 13px; border-radius: 2px; text-decoration: none; transition: all 0.2s; }
+    .ui-link:hover { background: rgba(77, 163, 255, 0.14); border-color: rgba(77, 163, 255, 0.42); }
+
+    /* ── AGENT ROSTER ── */
+    .roster { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 34px; border: 1px solid var(--border); border-right: none; border-bottom: none; }
+    .agent { background: var(--panel); padding: 18px 18px 16px; position: relative; overflow: hidden; transition: background 0.2s; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .agent:hover { background: var(--panel2); }
+    .agent::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: var(--accent, var(--blue)); opacity: 0.7; }
+    .ag-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .ag-name { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+    .ag-ver { font-family: var(--mono); font-size: 8.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--accent, var(--blue)); }
+    .ag-role { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; min-height: 34px; }
+    .ag-foot { display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .ag-cadence { color: var(--dim); }
+    .ag-status { display: inline-flex; align-items: center; gap: 5px; color: var(--green); }
+    .ag-status .d { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pnd 2s ease-in-out infinite; }
+    .ag-status.standby { color: var(--grey); }
+    .ag-status.standby .d { background: var(--grey); animation: none; }
+    .gallery-note { margin-top: 18px; font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 0.05em; }
+    .gallery { display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; padding-bottom: 6px; }
+    .gallery a { flex-shrink: 0; }
+    .gallery img { height: 78px; width: auto; border: 1px solid var(--border); display: block; transition: border-color 0.2s, transform 0.2s; background: var(--panel2); }
+    .gallery img:hover { border-color: var(--blue); transform: translateY(-2px); }
+
+    /* ── ANALYTICS ── */
+    .analytics { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; margin-top: 34px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); padding: 26px 28px; }
+    .panel-h { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); margin-bottom: 4px; }
+    .panel-t { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 3px; letter-spacing: -0.01em; }
+    .panel-note { font-size: 11px; color: var(--muted); margin-bottom: 18px; }
+    .chart-svg { width: 100%; height: auto; display: block; }
+    .chart-svg text { font-family: var(--mono); font-size: 9px; fill: var(--muted); }
+    .chart-svg .grid { stroke: var(--border); stroke-width: 1; }
+    .chart-svg .axis { fill: var(--dim); }
+    .chart-svg .line { stroke: var(--blue); stroke-width: 2.5; fill: none; }
+    .chart-svg .dot { fill: var(--blue); }
+    .chart-svg .val { fill: var(--text); font-weight: 600; }
+    .bars { display: flex; flex-direction: column; gap: 11px; }
+    .bar-row { display: grid; grid-template-columns: 92px 1fr 30px; align-items: center; gap: 10px; }
+    .bar-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.02em; color: var(--muted); text-transform: capitalize; }
+    .bar-track { height: 8px; background: var(--panel2); overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(to right, var(--blue), var(--teal)); }
+    .bar-val { font-family: var(--mono); font-size: 9.5px; color: var(--dim); text-align: right; }
+    .rel-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+    .rel-row .metric { border: 1px solid var(--border); }
+
+    /* ── FOOTER ── */
+    .foot { margin-top: 96px; padding-top: 30px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+    .foot-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .foot-link { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 7px 13px; border-radius: 2px; text-decoration: none; transition: all 0.2s; }
+    .foot-link:hover { color: var(--text); border-color: var(--border2); background: var(--panel2); }
+    .foot-text { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+
+    /* ── SCROLL REVEAL ── */
+    .js-anim .wrap > header, .js-anim .wrap > section, .js-anim .metric, .js-anim .status-card,
+    .js-anim .ui-card, .js-anim .agent, .js-anim .panel, .js-anim .tl-item, .js-anim .flow-wrap {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1);
+    }
+    .js-anim .in { opacity: 1 !important; transform: none !important; }
+    .count { font-variant-numeric: tabular-nums; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .metric-row { grid-template-columns: repeat(3, 1fr); }
+      .metric:nth-child(3n) { border-right: none; }
+      .roster { grid-template-columns: repeat(2, 1fr); }
+      .analytics { grid-template-columns: 1fr; }
+      .titleblock { grid-template-columns: repeat(2, 1fr); }
+      .titleblock div:nth-child(2) { border-right: none; }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 52px 18px 90px; }
+      section { margin-top: 66px; }
+      .cards-2 { grid-template-columns: 1fr; }
+      .ui-grid { grid-template-columns: 1fr; }
+      .metric-row { grid-template-columns: 1fr 1fr; }
+      .metric:nth-child(3n) { border-right: 1px solid var(--border); }
+      .metric:nth-child(2n) { border-right: none; }
+      .roster { grid-template-columns: 1fr; }
+      .rel-row { grid-template-columns: 1fr 1fr; }
+      .pnav-phases .pnav-btn:not(.active) { display: none; }
+      .bar-row { grid-template-columns: 78px 1fr 26px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aura span, .spotlight { animation: none !important; }
+      .flow-svg .flow-dash, .flow-svg .ld-ping { animation: none; opacity: 0; }
+      .js-anim .wrap > header, .js-anim .wrap > section, .js-anim .metric, .js-anim .status-card,
+      .js-anim .ui-card, .js-anim .agent, .js-anim .panel, .js-anim .tl-item, .js-anim .flow-wrap {
+        opacity: 1; transform: none; transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+  <nav class="pnav">
+    <a href="/" class="pnav-brand">Industrial<em>Briefs</em></a>
+    <div class="pnav-phases">
+      <a href="/phase1-masterplan.html" class="pnav-btn done">P1 — Strategy</a>
+      <div class="pnav-sep"></div>
+      <span class="pnav-btn active"><span class="pnav-dot"></span> V5 — Platform</span>
+      <div class="pnav-sep"></div>
+      <a href="/phase3.1-ui-showcase.html" class="pnav-btn done">UI Showcase</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase3.5-pipeline.html" class="pnav-btn done">Pipeline</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase4-build.html" class="pnav-btn done">Roadmap</a>
+    </div>
+    <div class="pnav-right">
+      <span class="pnav-rev">REV 5</span>
+      <a href="/phase1-masterplan.html" class="pnav-arrow">← Prev</a>
+      <a href="/phase3.1-ui-showcase.html" class="pnav-arrow">Next →</a>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">☀️</button>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- ══ HERO ══ -->
+    <header>
+      <div class="dwg-label">DWG. IB—V5 · Platform Architecture</div>
+      <div class="hero-chip"><span class="pulse"></span> Version 5 · Live &amp; Publishing</div>
+      <h1 class="hero">The Live <em>Platform</em></h1>
+      <p class="hero-sub">AI agents that write the news. A website that ships it. What started as a plan is now a
+        newsroom running 24/7 — connected end-to-end, and sharper with every revision.</p>
+      <div class="ver-track">
+        <span class="ver-pill done">v1 · Strategy</span><span class="ver-arrow">→</span>
+        <span class="ver-pill done">v2 · Agents</span><span class="ver-arrow">→</span>
+        <span class="ver-pill done">v3 · Website</span><span class="ver-arrow">→</span>
+        <span class="ver-pill done">v4 · Pipeline Live</span><span class="ver-arrow">→</span>
+        <span class="ver-pill now">v5 · Intelligence</span>
+      </div>
+      <div class="titleblock framed">
+        <div><span class="k">Project</span><span class="v">IndustrialBriefs</span></div>
+        <div><span class="k">Revision</span><span class="v">05 — Live</span></div>
+        <div><span class="k">Agents</span><span class="v">16 · 15 live</span></div>
+        <div><span class="k">Status</span><span class="v" style="color:var(--green)">● Publishing</span></div>
+      </div>
+    </header>
+
+    <!-- ══ METRIC BAND ══ -->
+    <div class="metric-row">
+      <div class="metric" style="--accent:var(--amber)"><div class="m-val" style="color:var(--amber)"><span class="count" data-count="2495" data-comma="1">0</span><span style="font-size:20px">+</span></div><div class="m-label">Articles Published</div></div>
+      <div class="metric" style="--accent:var(--green)"><div class="m-val" style="color:var(--green)"><span class="count" data-count="100">0</span>%</div><div class="m-label">SEO Coverage</div></div>
+      <div class="metric" style="--accent:var(--teal)"><div class="m-val" style="color:var(--teal)"><span class="count" data-count="0">0</span></div><div class="m-label">Errors / 24h</div></div>
+      <div class="metric" style="--accent:var(--blue)"><div class="m-val" style="color:var(--blue)"><span class="count" data-count="16">0</span></div><div class="m-label">AI Agents</div></div>
+      <div class="metric" style="--accent:var(--gold)"><div class="m-val" style="color:var(--gold)"><span class="count" data-count="5">0</span><span style="font-size:20px">/5</span></div><div class="m-label">Content Quality</div></div>
+      <div class="metric" style="--accent:var(--purple)"><div class="m-val" style="color:var(--purple)"><span class="count" data-count="27">0</span></div><div class="m-label">Live Sources</div></div>
+    </div>
+
+    <!-- ══ MERGED INTRO ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.01</span> Agents + Website — One System <span class="rule"></span></div>
+      <h2 class="sec-h">Two halves that became <em>one platform</em></h2>
+      <p class="sec-lead">Phase 2 built the AI newsroom. Phase 3 built the reader experience. In Version 5 they run as a
+        single loop — agents research and write, the site publishes and distributes, and the whole thing improves itself.</p>
+      <div class="cards-2">
+        <div class="status-card sc-orange framed">
+          <div class="sc-eyebrow">The Newsroom · was Phase 2</div>
+          <div class="sc-title">16 agents, working like a company</div>
+          <div class="sc-body">A Scout finds stories across 27 sources, a Writer drafts them with GPT-4o, an SEO agent
+            optimises, and a Publisher ships to the live site — with Clustering, Fact-Sheet and Content-Intelligence
+            agents enriching everything in parallel. Maintainer and Error-Handler agents keep it healthy 24/7.</div>
+        </div>
+        <div class="status-card sc-blue framed">
+          <div class="sc-eyebrow">The Reader Experience · was Phase 3</div>
+          <div class="sc-title">A site with Apple-level polish</div>
+          <div class="sc-body">Modern dark UI, editorial headlines, mobile-first bottom-tab navigation, hot-keyword
+            highlighting, and an MCP "Use in AI" panel so ChatGPT, Claude and Perplexity can read the newsroom directly.
+            Sub-1.5s load, credible over flashy.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FLOWMAP ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.02</span> How the agents connect <span class="rule"></span></div>
+      <h2 class="sec-h">The <em>workflow</em>, mapped</h2>
+      <p class="sec-lead">Every box is a live n8n agent. The main line is the publishing pipeline; the lane above
+        enriches it; the ops layer keeps it running; and every stage reads and writes to one shared Supabase data plane.</p>
+
+      <div class="flow-wrap framed">
+        <div class="flow-ruler"><span>x·0</span><span>240</span><span>480</span><span>720</span><span>960</span><span>1200</span></div>
+        <div class="flow-pad">
+        <div class="flow-scroll">
+          <svg class="flow-svg" viewBox="0 0 1200 600" role="img" aria-label="IndustrialBriefs agent workflow map">
+            <defs>
+              <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M1,1 L8,4.5 L1,8" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+              <g id="livedot"><circle class="ld-ping" r="3.4"/><circle class="ld-core" r="3.4"/></g>
+            </defs>
+
+            <text class="lane" x="24" y="104">ENRICH</text>
+            <text class="lane" x="24" y="284">PIPELINE</text>
+            <text class="lane" x="24" y="434">OPS</text>
+            <text class="lane" x="24" y="544">DATA</text>
+
+            <!-- ENRICHMENT -->
+            <g>
+              <rect class="node" x="285" y="76" width="150" height="48" rx="9" stroke="var(--blue)" stroke-opacity="0.4"/>
+              <use href="#livedot" x="299" y="90"/>
+              <text class="n-title" x="313" y="98" font-size="14">Clustering</text>
+              <text class="n-tag" x="420" y="92" text-anchor="end" fill="var(--blue)">v2</text>
+              <text class="n-sub" x="313" y="113">groups related stories · 4h</text>
+            </g>
+            <g>
+              <rect class="node" x="450" y="76" width="150" height="48" rx="9" stroke="var(--blue)" stroke-opacity="0.4"/>
+              <use href="#livedot" x="464" y="90"/>
+              <text class="n-title" x="478" y="98" font-size="14">Fact Sheet</text>
+              <text class="n-tag" x="585" y="92" text-anchor="end" fill="var(--blue)">v1</text>
+              <text class="n-sub" x="478" y="113">extracts key facts</text>
+            </g>
+            <g>
+              <rect class="node" x="868" y="76" width="160" height="48" rx="9" stroke="var(--purple)" stroke-opacity="0.45"/>
+              <use href="#livedot" x="882" y="90"/>
+              <text class="n-title" x="896" y="98" font-size="14">Content Intel</text>
+              <text class="n-tag" x="1013" y="92" text-anchor="end" fill="var(--purple)">v1</text>
+              <text class="n-sub" x="896" y="113">links + related coverage</text>
+            </g>
+
+            <path class="branch" d="M355,124 C355,180 420,190 420,247" marker-end="url(#ah)" stroke="var(--blue)" stroke-opacity="0.55"/>
+            <path class="branch" d="M520,124 C520,185 440,190 438,247" marker-end="url(#ah)" stroke="var(--blue)" stroke-opacity="0.55"/>
+            <path class="branch" d="M948,124 L948,247" marker-end="url(#ah)" stroke="var(--purple)" stroke-opacity="0.55"/>
+
+            <!-- PIPELINE -->
+            <g>
+              <rect class="node" x="16" y="249" width="142" height="62" rx="10" stroke="var(--teal)" stroke-opacity="0.45"/>
+              <text class="n-title" x="32" y="284">Sources</text>
+              <text class="n-sub" x="32" y="300">27 feeds · RSS</text>
+            </g>
+            <g>
+              <rect class="node" x="187" y="249" width="142" height="62" rx="10" stroke="var(--orange)" stroke-opacity="0.5"/>
+              <use href="#livedot" x="201" y="265"/>
+              <text class="n-title" x="215" y="284">Scout</text>
+              <text class="n-tag" x="315" y="268" text-anchor="end" fill="var(--orange)">v3</text>
+              <text class="n-sub" x="215" y="300">every 6h · dedup + score</text>
+            </g>
+            <g>
+              <rect class="node" x="358" y="249" width="142" height="62" rx="10" stroke="var(--blue)" stroke-opacity="0.5"/>
+              <use href="#livedot" x="372" y="265"/>
+              <text class="n-title" x="386" y="284">Writer</text>
+              <text class="n-tag" x="486" y="268" text-anchor="end" fill="var(--blue)">v3.1</text>
+              <text class="n-sub" x="386" y="300">gpt-4o · structured</text>
+            </g>
+            <g>
+              <rect class="node" x="529" y="249" width="142" height="62" rx="10" stroke="var(--gold)" stroke-opacity="0.5"/>
+              <use href="#livedot" x="543" y="265"/>
+              <text class="n-title" x="557" y="284">SEO</text>
+              <text class="n-tag" x="657" y="268" text-anchor="end" fill="var(--gold)">v1</text>
+              <text class="n-sub" x="557" y="300">meta + schema gate</text>
+            </g>
+            <g>
+              <rect class="node" x="700" y="249" width="142" height="62" rx="10" stroke="var(--green)" stroke-opacity="0.5"/>
+              <use href="#livedot" x="714" y="265"/>
+              <text class="n-title" x="728" y="284">Publisher</text>
+              <text class="n-tag" x="828" y="268" text-anchor="end" fill="var(--green)">v3</text>
+              <text class="n-sub" x="728" y="300">Ghost + DALL·E</text>
+            </g>
+            <g>
+              <rect class="node" x="871" y="249" width="142" height="62" rx="10" stroke="var(--orange)" stroke-opacity="0.5"/>
+              <use href="#livedot" x="885" y="265"/>
+              <text class="n-title" x="899" y="284">Ghost Site</text>
+              <text class="n-sub" x="899" y="300">live · 2,495+ posts</text>
+            </g>
+            <g>
+              <rect class="node" x="1042" y="249" width="142" height="62" rx="10" stroke="var(--teal)" stroke-opacity="0.45"/>
+              <text class="n-title" x="1058" y="281" font-size="15">Readers</text>
+              <text class="n-sub" x="1058" y="298">Brief · Breaking</text>
+              <text class="n-sub" x="1058" y="308">· LinkedIn</text>
+            </g>
+
+            <path class="pipe" d="M158,280 L185,280" marker-end="url(#ah)"/>
+            <path class="pipe" d="M329,280 L356,280" marker-end="url(#ah)"/>
+            <path class="pipe" d="M500,280 L527,280" marker-end="url(#ah)"/>
+            <path class="pipe" d="M671,280 L698,280" marker-end="url(#ah)"/>
+            <path class="pipe" d="M842,280 L869,280" marker-end="url(#ah)"/>
+            <path class="pipe" d="M1013,280 L1040,280" marker-end="url(#ah)"/>
+
+            <!-- OPS -->
+            <g>
+              <rect class="node" x="187" y="407" width="150" height="46" rx="9" stroke="var(--grey)" stroke-opacity="0.6"/>
+              <text class="n-title" x="201" y="428" font-size="14">Maintainer</text>
+              <text class="n-sub" x="201" y="443">health + auto-repair</text>
+            </g>
+            <g>
+              <rect class="node" x="700" y="407" width="160" height="46" rx="9" stroke="var(--grey)" stroke-opacity="0.6"/>
+              <text class="n-title" x="714" y="428" font-size="14">Error Handler</text>
+              <text class="n-tag" x="845" y="422" text-anchor="end" fill="var(--muted)">v3</text>
+              <text class="n-sub" x="714" y="443">classifies + alerts</text>
+            </g>
+            <path class="ops" d="M258,407 L258,313"/>
+            <path class="ops" d="M780,407 L771,313"/>
+            <line class="ops" x1="337" y1="430" x2="700" y2="430"/>
+            <text class="cap" x="600" y="392" text-anchor="middle">Ops layer — monitors &amp; auto-repairs all 15 live workflows</text>
+
+            <!-- DATA PLANE -->
+            <g>
+              <rect class="node" x="120" y="524" width="128" height="30" rx="4" stroke="var(--border2)"/>
+              <text class="n-sub" x="184" y="543" text-anchor="middle" font-size="10">feeds</text>
+              <rect class="node" x="318" y="524" width="128" height="30" rx="4" stroke="var(--border2)"/>
+              <text class="n-sub" x="382" y="543" text-anchor="middle" font-size="10">queue</text>
+              <rect class="node" x="516" y="524" width="150" height="30" rx="4" stroke="var(--border2)"/>
+              <text class="n-sub" x="591" y="543" text-anchor="middle" font-size="10">story_clusters</text>
+              <rect class="node" x="736" y="524" width="150" height="30" rx="4" stroke="var(--border2)"/>
+              <text class="n-sub" x="811" y="543" text-anchor="middle" font-size="10">fact_sheets</text>
+              <rect class="node" x="956" y="524" width="128" height="30" rx="4" stroke="var(--border2)"/>
+              <text class="n-sub" x="1020" y="543" text-anchor="middle" font-size="10">published</text>
+              <path class="branch" d="M248,539 L316,539" marker-end="url(#ah)" stroke="var(--dim)"/>
+              <path class="branch" d="M446,539 L514,539" marker-end="url(#ah)" stroke="var(--dim)"/>
+              <path class="branch" d="M666,539 L734,539" marker-end="url(#ah)" stroke="var(--dim)"/>
+              <path class="branch" d="M886,539 L954,539" marker-end="url(#ah)" stroke="var(--dim)"/>
+            </g>
+            <text class="cap" x="1176" y="588" text-anchor="end">Supabase data plane — one shared source of truth</text>
+
+            <!-- ═ animated data flow ═ -->
+            <g class="flowlayer" aria-hidden="true">
+              <path class="flow-dash" style="color:var(--green)" d="M158,280 L185,280"/>
+              <path class="flow-dash" style="color:var(--green); animation-delay:-0.18s" d="M329,280 L356,280"/>
+              <path class="flow-dash" style="color:var(--green); animation-delay:-0.36s" d="M500,280 L527,280"/>
+              <path class="flow-dash" style="color:var(--green); animation-delay:-0.54s" d="M671,280 L698,280"/>
+              <path class="flow-dash" style="color:var(--green); animation-delay:-0.72s" d="M842,280 L869,280"/>
+              <path class="flow-dash" style="color:var(--green); animation-delay:-0.90s" d="M1013,280 L1040,280"/>
+              <path class="flow-dash" style="color:var(--blue)" d="M355,124 C355,180 420,190 420,247"/>
+              <path class="flow-dash" style="color:var(--blue); animation-delay:-0.4s" d="M520,124 C520,185 440,190 438,247"/>
+              <path class="flow-dash" style="color:var(--purple)" d="M948,124 L948,247"/>
+              <path class="flow-dash" style="color:var(--teal); stroke-width:2" d="M248,539 L316,539"/>
+              <path class="flow-dash" style="color:var(--teal); stroke-width:2; animation-delay:-0.3s" d="M446,539 L514,539"/>
+              <path class="flow-dash" style="color:var(--teal); stroke-width:2; animation-delay:-0.6s" d="M666,539 L734,539"/>
+              <path class="flow-dash" style="color:var(--teal); stroke-width:2; animation-delay:-0.9s" d="M886,539 L954,539"/>
+            </g>
+          </svg>
+        </div>
+        </div>
+        <div class="flow-legend">
+          <span class="leg"><span class="sw" style="background:var(--teal)"></span> Ingest</span>
+          <span class="leg"><span class="sw" style="background:var(--orange)"></span> Scout</span>
+          <span class="leg"><span class="sw" style="background:var(--blue)"></span> Write / Cluster</span>
+          <span class="leg"><span class="sw" style="background:var(--gold)"></span> Optimise</span>
+          <span class="leg"><span class="sw" style="background:var(--green)"></span> Publish</span>
+          <span class="leg"><span class="sw" style="background:var(--purple)"></span> Enrich</span>
+          <span class="leg"><span class="sw" style="background:var(--grey)"></span> Ops</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ EVOLUTION TIMELINE ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.03</span> How it kept improving <span class="rule"></span></div>
+      <h2 class="sec-h">Five revisions of <em>getting sharper</em></h2>
+      <p class="sec-lead">Nothing here was built once and left alone. Each revision tightened the loop — and the core agents
+        were re-shipped as they learned: Scout v1→v3, Writer v1→v3.1, Publisher v1→v3.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V1</span><span class="tl-title">Strategy &amp; Master Plan</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The full blueprint — data-pipeline architecture, tech-stack decisions, SEO playbook,
+            GPT-readable design, and an MCP server plan. The map before the build.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V2</span><span class="tl-title">Agent Architecture</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The AI newsroom designed like a company — Scout, Writer, and Publisher as the core
+            worker agents, with a safety layer and clear hand-offs between them.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V3</span><span class="tl-title">Website &amp; UI Locked</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The reader experience — modern dark theme, editorial type, mobile-first
+            navigation, hot-keyword highlighting, and the MCP connection panel. <strong>The New UI.</strong></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V4</span><span class="tl-title">Pipeline Live · 24/7</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The switch flipped — Scout v3, Writer and Publisher running on their own around the
+            clock, publishing straight to Ghost. The plan became a working machine.</div>
+        </div>
+        <div class="tl-item now">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V5</span><span class="tl-title">Intelligence Upgrade</span><span class="tl-badge">Now — Live</span></div>
+          <div class="tl-body">Where it stands today — <strong>Clustering, Fact-Sheet, SEO and Content-Intelligence</strong>
+            agents added on top of the core pipeline, plus <strong>Contracts, LinkedIn and a Daily Brief</strong>.
+            16 agents, 2,495+ articles, 100% SEO coverage, zero errors a day.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ NEW UI SHOWCASE ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.04</span> The New UI <span class="rule"></span></div>
+      <h2 class="sec-h">What readers <em>actually see</em></h2>
+      <p class="sec-lead">The live reader website — the same design language throughout, and content the agents produced
+        automatically.</p>
+
+      <div class="ui-grid">
+        <div class="ui-card">
+          <img class="ui-shot" src="ui-designs/screenshots/ib-site-articles.png" alt="IndustrialBriefs live article feed" loading="lazy">
+          <div class="ui-cap"><div class="t">Article Feed</div><div class="d">The live homepage — auto-published stories, trending strip, sector sections.</div></div>
+        </div>
+        <div class="ui-card">
+          <img class="ui-shot" src="ui-designs/screenshots/ib-daily-brief.png" alt="IndustrialBriefs daily brief" loading="lazy">
+          <div class="ui-cap"><div class="t">Daily Brief</div><div class="d">The 9AM digest agent — top stories bundled and sent to members automatically.</div></div>
+        </div>
+        <div class="ui-card">
+          <img class="ui-shot" src="ui-designs/screenshots/ib-inbox-emails.png" alt="IndustrialBriefs newsletter in inbox" loading="lazy">
+          <div class="ui-cap"><div class="t">In the Inbox</div><div class="d">Newsletters landing with readers — the distribution half of the loop.</div></div>
+        </div>
+      </div>
+
+      <div class="ui-notes">
+        <span class="ui-tag"><b>Modern</b> dark UI</span>
+        <span class="ui-tag"><b>Editorial</b> headlines</span>
+        <span class="ui-tag"><b>Mobile-first</b> bottom tab bar</span>
+        <span class="ui-tag"><b>Hot-keyword</b> highlighting</span>
+        <span class="ui-tag"><b>MCP</b> "Use in AI" panel</span>
+        <span class="ui-tag"><b>&lt;1.5s</b> load</span>
+      </div>
+      <div class="ui-links">
+        <a class="ui-link" href="ui-designs/industrialbriefs_redesign_clean.html" target="_blank">↗ Desktop mockup</a>
+        <a class="ui-link" href="ui-designs/industrialbriefs_mobile_mockup.html" target="_blank">↗ Mobile mockup</a>
+        <a class="ui-link" href="ui-designs/acem_market_stats_widget.html" target="_blank">↗ Markets widget</a>
+        <a class="ui-link" href="ui-designs/IndustrialBriefs-UI-Spec-AI-Executable.pdf" target="_blank">⬇ UI spec (PDF)</a>
+      </div>
+    </section>
+
+    <!-- ══ AGENT ROSTER ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.05</span> The agents, working <span class="rule"></span></div>
+      <h2 class="sec-h">Sixteen agents on the <em>payroll</em></h2>
+      <p class="sec-lead">Each one owns a job and runs on its own schedule. Fifteen are live right now; one is on standby.</p>
+
+      <div class="roster">
+        <div class="agent" style="--accent:var(--orange)"><div class="ag-top"><span class="ag-name">Scout</span><span class="ag-ver">v3</span></div><div class="ag-role">Finds &amp; scores stories across 27 sources, dedups, tags by sector.</div><div class="ag-foot"><span class="ag-cadence">every 6h</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--blue)"><div class="ag-top"><span class="ag-name">Writer</span><span class="ag-ver">v3.1</span></div><div class="ag-role">Drafts each article with GPT-4o and structured output.</div><div class="ag-foot"><span class="ag-cadence">every 30m</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--green)"><div class="ag-top"><span class="ag-name">Publisher</span><span class="ag-ver">v3</span></div><div class="ag-role">Ships to Ghost, generates DALL·E thumbnails, schedules posts.</div><div class="ag-foot"><span class="ag-cadence">every 30m</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--gold)"><div class="ag-top"><span class="ag-name">SEO</span><span class="ag-ver">v1</span></div><div class="ag-role">Writes meta titles, descriptions &amp; schema before publish.</div><div class="ag-foot"><span class="ag-cadence">continuous</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--blue)"><div class="ag-top"><span class="ag-name">Clustering</span><span class="ag-ver">v2</span></div><div class="ag-role">Groups related stories into topic clusters for context.</div><div class="ag-foot"><span class="ag-cadence">every 4h</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--blue)"><div class="ag-top"><span class="ag-name">Fact Sheet</span><span class="ag-ver">v1</span></div><div class="ag-role">Extracts structured key facts attached to each article.</div><div class="ag-foot"><span class="ag-cadence">continuous</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--purple)"><div class="ag-top"><span class="ag-name">Content Intel</span><span class="ag-ver">v1</span></div><div class="ag-role">Injects related-coverage links into published posts.</div><div class="ag-foot"><span class="ag-cadence">every 30m</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--teal)"><div class="ag-top"><span class="ag-name">Contracts</span><span class="ag-ver">v1</span></div><div class="ag-role">Scouts SAM.gov / USASpending, writes contract briefs.</div><div class="ag-foot"><span class="ag-cadence">daily 6AM</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--teal)"><div class="ag-top"><span class="ag-name">Source Discovery</span><span class="ag-ver">v1</span></div><div class="ag-role">Finds &amp; scores new AECM feeds to grow coverage.</div><div class="ag-foot"><span class="ag-cadence">scheduled</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--purple)"><div class="ag-top"><span class="ag-name">LinkedIn Publisher</span><span class="ag-ver">v1</span></div><div class="ag-role">Posts live articles to LinkedIn with a first-comment CTA.</div><div class="ag-foot"><span class="ag-cadence">scheduled</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--purple)"><div class="ag-top"><span class="ag-name">LinkedIn Growth</span><span class="ag-ver">v1</span></div><div class="ag-role">Automates audience-growth actions on LinkedIn.</div><div class="ag-foot"><span class="ag-cadence">scheduled</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--orange)"><div class="ag-top"><span class="ag-name">Daily Brief</span><span class="ag-ver">v1</span></div><div class="ag-role">Bundles top stories into the 9AM member digest.</div><div class="ag-foot"><span class="ag-cadence">daily 9AM</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--orange)"><div class="ag-top"><span class="ag-name">Breaking News</span><span class="ag-ver">v1</span></div><div class="ag-role">Sends urgent stories straight to the newsletter.</div><div class="ag-foot"><span class="ag-cadence">event</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--grey)"><div class="ag-top"><span class="ag-name">Maintainer</span><span class="ag-ver">v1</span></div><div class="ag-role">Health-checks every workflow, resets anything stuck.</div><div class="ag-foot"><span class="ag-cadence">scheduled</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--grey)"><div class="ag-top"><span class="ag-name">Error Handler</span><span class="ag-ver">v3</span></div><div class="ag-role">Classifies failures by type, alerts to Slack with fingerprints.</div><div class="ag-foot"><span class="ag-cadence">continuous</span><span class="ag-status"><span class="d"></span>Live</span></div></div>
+        <div class="agent" style="--accent:var(--grey)"><div class="ag-top"><span class="ag-name">Curator</span><span class="ag-ver">v2</span></div><div class="ag-role">Beehiiv newsletter curation — held for a future channel.</div><div class="ag-foot"><span class="ag-cadence">—</span><span class="ag-status standby"><span class="d"></span>Standby</span></div></div>
+      </div>
+
+      <div class="gallery-note">↓ The real n8n canvases behind these agents</div>
+      <div class="gallery">
+        <a href="ui-designs/screenshots/n8n-scout.png" target="_blank"><img src="ui-designs/screenshots/n8n-scout.png" alt="Scout agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-writer.png" target="_blank"><img src="ui-designs/screenshots/n8n-writer.png" alt="Writer agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-publisher.png" target="_blank"><img src="ui-designs/screenshots/n8n-publisher.png" alt="Publisher agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-seo.png" target="_blank"><img src="ui-designs/screenshots/n8n-seo.png" alt="SEO agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-clustering.png" target="_blank"><img src="ui-designs/screenshots/n8n-clustering.png" alt="Clustering agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-fact-sheet.png" target="_blank"><img src="ui-designs/screenshots/n8n-fact-sheet.png" alt="Fact Sheet agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-source-discovery.png" target="_blank"><img src="ui-designs/screenshots/n8n-source-discovery.png" alt="Source Discovery agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-maintainer.png" target="_blank"><img src="ui-designs/screenshots/n8n-maintainer.png" alt="Maintainer agent n8n canvas" loading="lazy"></a>
+        <a href="ui-designs/screenshots/n8n-error-handler.png" target="_blank"><img src="ui-designs/screenshots/n8n-error-handler.png" alt="Error Handler agent n8n canvas" loading="lazy"></a>
+      </div>
+    </section>
+
+    <!-- ══ GROWTH / ANALYTICS ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.06</span> The proof it's growing <span class="rule"></span></div>
+      <h2 class="sec-h">Numbers, <em>not vibes</em></h2>
+      <p class="sec-lead">The honest growth story is scale and reliability: the newsroom keeps producing, every article is
+        covered, and the pipeline runs clean.</p>
+
+      <div class="analytics">
+        <div class="panel framed">
+          <div class="panel-h">Cumulative articles · Supabase</div>
+          <div class="panel-t">Climbing ~25 a day</div>
+          <div class="panel-note">Total published articles, early July 2026. Axis starts at 2,000 to show the climb.</div>
+          <svg class="chart-svg" viewBox="0 0 640 240" role="img" aria-label="Cumulative published articles trending up">
+            <line class="grid" x1="52" y1="210" x2="632" y2="210"/>
+            <line class="grid" x1="52" y1="129" x2="632" y2="129"/>
+            <line class="grid" x1="52" y1="48" x2="632" y2="48"/>
+            <text class="axis" x="46" y="213" text-anchor="end">2,000</text>
+            <text class="axis" x="46" y="132" text-anchor="end">2,250</text>
+            <text class="axis" x="46" y="51" text-anchor="end">2,500</text>
+            <path d="M60,210 L60,190 172,145 284,71.6 396,69.3 508,56.2 620,48 L620,210 Z" fill="var(--blue)" fill-opacity="0.10"/>
+            <polyline class="line" points="60,190 172,145 284,71.6 396,69.3 508,56.2 620,48"/>
+            <g>
+              <circle class="dot" cx="60" cy="190" r="3.5"/><text class="axis" x="60" y="228" text-anchor="middle">Jul 5</text>
+              <circle class="dot" cx="172" cy="145" r="3.5"/><text class="axis" x="172" y="228" text-anchor="middle">Jul 8</text>
+              <circle class="dot" cx="284" cy="71.6" r="3.5"/><text class="axis" x="284" y="228" text-anchor="middle">Jul 12</text>
+              <circle class="dot" cx="396" cy="69.3" r="3.5"/><text class="axis" x="396" y="228" text-anchor="middle">Jul 13</text>
+              <circle class="dot" cx="508" cy="56.2" r="3.5"/><text class="axis" x="508" y="228" text-anchor="middle">Jul 15</text>
+              <circle class="dot" cx="620" cy="48" r="4.5" fill="var(--amber)"/><text class="val" x="620" y="38" text-anchor="middle" font-size="11">2,495</text>
+              <text class="axis" x="620" y="228" text-anchor="middle">Jul 16</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="panel framed">
+          <div class="panel-h">Coverage mix · sample of 98 recent</div>
+          <div class="panel-t">All four sectors, balanced</div>
+          <div class="panel-note">Primary tag across a recent scheduled batch — no single sector dominates.</div>
+          <div class="bars">
+            <div class="bar-row"><span class="bar-label">Construction</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span class="bar-val">25</span></div>
+            <div class="bar-row"><span class="bar-label">Manufacturing</span><span class="bar-track"><span class="bar-fill" style="width:76%"></span></span><span class="bar-val">19</span></div>
+            <div class="bar-row"><span class="bar-label">Architecture</span><span class="bar-track"><span class="bar-fill" style="width:72%"></span></span><span class="bar-val">18</span></div>
+            <div class="bar-row"><span class="bar-label">Engineering</span><span class="bar-track"><span class="bar-fill" style="width:72%"></span></span><span class="bar-val">18</span></div>
+            <div class="bar-row"><span class="bar-label">Robotics</span><span class="bar-track"><span class="bar-fill" style="width:36%"></span></span><span class="bar-val">9</span></div>
+            <div class="bar-row"><span class="bar-label">AI</span><span class="bar-track"><span class="bar-fill" style="width:24%"></span></span><span class="bar-val">6</span></div>
+            <div class="bar-row"><span class="bar-label">Policy / other</span><span class="bar-track"><span class="bar-fill" style="width:12%"></span></span><span class="bar-val">3</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rel-row">
+        <div class="metric" style="--accent:var(--green)"><div class="m-val" style="color:var(--green);font-size:28px"><span class="count" data-count="100">0</span>%</div><div class="m-label">SEO Coverage</div></div>
+        <div class="metric" style="--accent:var(--teal)"><div class="m-val" style="color:var(--teal);font-size:28px"><span class="count" data-count="0">0</span></div><div class="m-label">Pipeline Errors / 24h</div></div>
+        <div class="metric" style="--accent:var(--blue)"><div class="m-val" style="color:var(--blue);font-size:28px"><span class="count" data-count="10">0</span>/10</div><div class="m-label">Site Health</div></div>
+        <div class="metric" style="--accent:var(--gold)"><div class="m-val" style="color:var(--gold);font-size:28px"><span class="count" data-count="157">0</span></div><div class="m-label">Referring Domains</div></div>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <div class="foot">
+      <div class="foot-links">
+        <a class="foot-link" href="/">← Dashboard</a>
+        <a class="foot-link" href="/phase1-masterplan.html">P1 · Strategy</a>
+        <a class="foot-link" href="/phase4-build.html">Roadmap</a>
+        <a class="foot-link" href="https://coral-app-74pa4.ondigitalocean.app/" target="_blank">Live Site ↗</a>
+      </div>
+      <div class="foot-text">IndustrialBriefs · REV 5 — The Live Platform</div>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ── theme toggle ──
+      var s = localStorage.getItem('bi-theme') || 'dark';
+      root.setAttribute('data-theme', s);
+      var b = document.getElementById('themeToggle');
+      if (b) {
+        b.textContent = s === 'light' ? '🌙' : '☀️';
+        b.onclick = function () {
+          var c = root.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', n);
+          localStorage.setItem('bi-theme', n);
+          b.textContent = n === 'light' ? '🌙' : '☀️';
+        };
+      }
+
+      // ── cursor spotlight (desktop, motion-ok) ──
+      var sp = document.getElementById('spotlight');
+      if (sp && !reduce && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+        addEventListener('pointermove', function (e) {
+          root.style.setProperty('--mx', e.clientX + 'px');
+          root.style.setProperty('--my', e.clientY + 'px');
+          sp.classList.add('on');
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () { sp.classList.remove('on'); });
+      }
+
+      // ── count-up ──
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+      function fmt(v, comma) { v = Math.round(v); return comma ? v.toLocaleString('en-US') : String(v); }
+      function countUp(el) {
+        if (el.dataset.done) return; el.dataset.done = '1';
+        var target = parseFloat(el.getAttribute('data-count')) || 0, comma = el.getAttribute('data-comma') === '1';
+        if (reduce || target === 0) { el.textContent = fmt(target, comma); return; }
+        var dur = 1500, t0 = null;
+        function step(ts) { if (!t0) t0 = ts; var p = Math.min((ts - t0) / dur, 1); el.textContent = fmt(target * easeOut(p), comma); if (p < 1) requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      }
+
+      // ── scroll reveal + count trigger ──
+      var sel = '.wrap > header, .wrap > section, .metric, .status-card, .ui-card, .agent, .panel, .tl-item, .flow-wrap';
+      var els = [].slice.call(document.querySelectorAll(sel));
+      var grid = /metric-row|cards-2|ui-grid|roster|rel-row/;
+      els.forEach(function (el) {
+        var p = el.parentNode;
+        if (p && grid.test(p.className || '')) {
+          var i = [].slice.call(p.children).indexOf(el);
+          if (i > 0) el.style.transitionDelay = Math.min(i, 6) * 0.06 + 's';
+        }
+      });
+      function reveal(el) {
+        el.classList.add('in');
+        [].forEach.call(el.querySelectorAll('.count'), countUp);
+      }
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(reveal);
+        return;
+      }
+      function inView(el) { var r = el.getBoundingClientRect(); return r.top < innerHeight * 0.92 && r.bottom > 0; }
+      els.forEach(function (el) { if (inView(el)) reveal(el); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { reveal(en.target); io.unobserve(en.target); } });
+      }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (el) { if (!el.classList.contains('in')) io.observe(el); });
+    })();
+  </script>
+</body>
+
+</html>
