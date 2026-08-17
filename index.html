@@ -7,459 +7,254 @@
   <title>Industrial Briefs — Phase Dashboard</title>
   <meta name="description"
     content="IndustrialBriefs project phases — Strategy, AI Agents, Website Design, and Build execution for the automated ACEM news platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
     rel="stylesheet">
+  <script>document.documentElement.classList.add('js-anim');</script>
   <style>
     :root {
-      --bg: #0d0f14;
-      --glass: rgba(255, 255, 255, 0.04);
-      --glass2: rgba(255, 255, 255, 0.06);
-      --border: rgba(255, 255, 255, 0.07);
-      --border2: rgba(255, 255, 255, 0.12);
-      --text: #f0efe8;
-      --muted: rgba(240, 239, 232, 0.45);
-      --dim: rgba(240, 239, 232, 0.22);
-      --orange: #e8863a;
-      --teal: #3ab8a0;
-      --green: #5cb87a;
-      --grey: rgba(240, 239, 232, 0.25);
-      --blue: #5b9bd5;
-      --display: 'Cormorant Garamond', serif;
-      --body: 'DM Sans', sans-serif;
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #1a1d24;
+      --border: #252830;
+      --border2: #2e3240;
+      --text: #e8eaf0;
+      --muted: #9297a3;
+      --dim: rgba(232, 234, 240, 0.34);
+      --orange: #f5792a;
+      --cyan: #00d4ff;
+      --green: #a8ff3e;
+      --yellow: #ffd60a;
+      --purple: #b06eff;
+      --red: #ff3b5c;
+      --tick: rgba(245, 121, 42, 0.55);
+      --navbg: rgba(10, 12, 16, 0.94);
+      --syne: 'Syne', sans-serif;
+      --serif: 'DM Serif Display', Georgia, serif;
       --mono: 'JetBrains Mono', monospace;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    [data-theme="light"] {
+      --bg: #f2f0eb;
+      --surface: #e8e6e0;
+      --surface2: #dedad3;
+      --border: #ccc9c1;
+      --border2: #b8b4aa;
+      --text: #1a1814;
+      --muted: #6b6760;
+      --dim: rgba(26, 24, 20, 0.38);
+      --orange: #c96b1a;
+      --cyan: #0097b8;
+      --green: #5a9a1e;
+      --yellow: #b8960a;
+      --purple: #7a44cc;
+      --red: #c2213a;
+      --tick: rgba(201, 107, 26, 0.55);
+      --navbg: rgba(242, 240, 235, 0.96);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--body);
+      font-family: var(--syne);
+      font-weight: 400;
+      padding-top: 50px;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
+    /* retro film-grain overlay */
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+    [data-theme="light"] body::before { opacity: 0.14; }
+
+    .aura { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aura span { position: absolute; display: block; border-radius: 50%; filter: blur(90px); opacity: 0.24; will-change: transform; }
+    .aura .a1 { width: 44vw; height: 44vw; max-width: 540px; max-height: 540px; top: -14%; left: 2%; background: radial-gradient(circle, var(--orange), transparent 68%); animation: aura1 28s ease-in-out infinite alternate; }
+    .aura .a2 { width: 38vw; height: 38vw; max-width: 480px; max-height: 480px; top: 8%; right: 0%; background: radial-gradient(circle, var(--purple), transparent 68%); opacity: 0.16; animation: aura2 33s ease-in-out infinite alternate; }
+    .aura .a3 { width: 32vw; height: 32vw; max-width: 400px; max-height: 400px; top: 30%; left: 42%; background: radial-gradient(circle, var(--cyan), transparent 70%); opacity: 0.13; animation: aura3 37s ease-in-out infinite alternate; }
+    [data-theme="light"] .aura span { opacity: 0.13; }
+    @keyframes aura1 { from { transform: translate(0, 0) scale(1); } to { transform: translate(7%, 9%) scale(1.16); } }
+    @keyframes aura2 { from { transform: translate(0, 0) scale(1.06); } to { transform: translate(-8%, 6%) scale(1); } }
+    @keyframes aura3 { from { transform: translate(0, 0) scale(1); } to { transform: translate(6%, -7%) scale(1.14); } }
+
+    .spotlight { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .5s ease;
+      background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 121, 42, 0.09), transparent 42%); }
+    .spotlight.on { opacity: 1; }
+
+    .framed { position: relative; }
+    .framed::after {
+      content: ''; position: absolute; inset: 7px; pointer-events: none; z-index: 3;
       background:
-        radial-gradient(ellipse 70% 50% at 30% 30%, rgba(232, 134, 58, 0.05) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(58, 184, 160, 0.04) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
+        linear-gradient(var(--tick), var(--tick)) left top / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) left top / 1px 9px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right top / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right top / 1px 9px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) left bottom / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) left bottom / 1px 9px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right bottom / 9px 1px no-repeat,
+        linear-gradient(var(--tick), var(--tick)) right bottom / 1px 9px no-repeat;
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.4;
-    }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 
-    /* ── LIGHT MODE ── */
-    [data-theme="light"] {
-      --bg: #f4f3ef;
-      --glass: rgba(0, 0, 0, 0.03);
-      --glass2: rgba(0, 0, 0, 0.05);
-      --border: rgba(0, 0, 0, 0.08);
-      --border2: rgba(0, 0, 0, 0.14);
-      --text: #1a1814;
-      --muted: rgba(26, 24, 20, 0.5);
-      --dim: rgba(26, 24, 20, 0.3);
-      --orange: #c96b1a;
-      --teal: #2a9080;
-      --green: #3a8f54;
-      --grey: rgba(26, 24, 20, 0.3);
-      --blue: #3a72a8;
-      --display: 'Cormorant Garamond', serif;
-      --body: 'DM Sans', sans-serif;
-      --mono: 'JetBrains Mono', monospace;
+    /* ── NAV ── */
+    .pnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: var(--navbg);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      height: 50px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 22px; font-family: var(--mono);
     }
-
-    [data-theme="light"] body::before {
-      background:
-        radial-gradient(ellipse 70% 50% at 30% 30%, rgba(201, 107, 26, 0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(42, 144, 128, 0.05) 0%, transparent 60%);
+    .pnav-brand { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; }
+    .pnav-logo { height: 22px; width: auto; display: block; }
+    .pnav-logo.logo-light { display: none; }
+    [data-theme="light"] .pnav-logo.logo-dark { display: none; }
+    [data-theme="light"] .pnav-logo.logo-light { display: block; }
+    .pnav-phases { display: flex; align-items: center; gap: 3px; flex: 1; justify-content: center; }
+    .pnav-btn {
+      padding: 4px 12px; font-family: inherit; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+      background: transparent; border: 1px solid transparent; border-radius: 3px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; white-space: nowrap;
     }
-
-    [data-theme="light"] body::after {
-      opacity: 0.12;
-    }
-
-    [data-theme="light"] .card {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    }
-
-    /* ── THEME TOGGLE ── */
+    .pnav-btn:hover { color: var(--text); background: var(--surface); border-color: var(--border); }
+    .pnav-btn.active { color: var(--orange); background: rgba(245, 121, 42, 0.1); border-color: rgba(245, 121, 42, 0.32); }
+    .pnav-btn.done { color: rgba(168, 255, 62, 0.65); }
+    .pnav-btn.done:hover { color: var(--green); background: rgba(168, 255, 62, 0.07); border-color: rgba(168, 255, 62, 0.2); }
+    .pnav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; animation: pnd 2s ease-in-out infinite; }
+    @keyframes pnd { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.6); } }
+    .pnav-sep { width: 14px; height: 1px; background: var(--border); flex-shrink: 0; }
+    .pnav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .pnav-rev { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; color: var(--yellow); border: 1px solid rgba(255, 214, 10, 0.32); background: rgba(255, 214, 10, 0.08); padding: 3px 9px; border-radius: 3px; }
     .theme-toggle {
-      position: fixed;
-      top: 16px;
-      right: 20px;
-      z-index: 9999;
-      background: var(--glass2);
-      border: 2px solid var(--orange);
-      color: var(--text);
-      font-size: 16px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.25s;
-      flex-shrink: 0;
-      box-shadow: 0 0 8px rgba(232, 134, 58, 0.25);
+      background: rgba(245, 121, 42, 0.1); border: 1.5px solid var(--orange); color: var(--text);
+      font-size: 14px; width: 32px; height: 32px; border-radius: 3px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; transition: all 0.25s;
+      flex-shrink: 0; box-shadow: 0 0 8px rgba(245, 121, 42, 0.25);
     }
-
-    .theme-toggle:hover {
-      background: rgba(232, 134, 58, 0.15);
-      border-color: var(--orange);
-      box-shadow: 0 0 14px rgba(232, 134, 58, 0.45);
-      transform: rotate(20deg) scale(1.1);
-    }
+    .theme-toggle:hover { background: rgba(245, 121, 42, 0.2); box-shadow: 0 0 16px rgba(245, 121, 42, 0.5); }
 
     /* ── LAYOUT ── */
-    .wrap {
-      position: relative;
-      z-index: 1;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 80px 40px 120px;
+    .wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 66px 48px 120px; }
+    section { margin-top: 92px; }
+
+    .eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); margin-bottom: 22px; }
+    .eyebrow .fig { color: var(--yellow); font-weight: 600; }
+    .eyebrow .rule { flex: 1; height: 8px; position: relative; min-width: 40px; }
+    .eyebrow .rule::before { content: ''; position: absolute; left: 0; right: 6px; top: 50%; height: 1px;
+      background: repeating-linear-gradient(90deg, var(--border2) 0 5px, transparent 5px 10px); }
+    .eyebrow .rule::after { content: ''; position: absolute; right: 0; top: calc(50% - 3.5px); width: 1px; height: 8px; background: var(--border2); }
+
+    h2.sec-h { font-family: var(--serif); font-size: clamp(28px, 4.2vw, 46px); font-weight: 400; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 14px; }
+    h2.sec-h em { font-style: italic; color: var(--orange); }
+    .sec-lead { font-size: 15px; color: var(--muted); max-width: 660px; line-height: 1.75; font-weight: 400; }
+
+    /* ── HERO ── */
+    .dwg-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--dim); margin-bottom: 22px; }
+    .hero-chip {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--green); background: rgba(168, 255, 62, 0.08); border: 1px solid rgba(168, 255, 62, 0.28);
+      padding: 6px 15px; border-radius: 3px; display: inline-flex; align-items: center; gap: 9px; margin-bottom: 30px;
+      text-decoration: none; transition: all 0.2s;
     }
+    .hero-chip:hover { background: rgba(168, 255, 62, 0.14); border-color: rgba(168, 255, 62, 0.45); }
+    .hero-chip .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pnd 2s ease-in-out infinite; }
+    .hero-logo { display: block; margin-bottom: 26px; position: relative; }
+    .hero-logo img { display: block; width: min(100%, 560px); height: auto; }
+    .hero-logo img.logo-light { display: none; }
+    [data-theme="light"] .hero-logo img.logo-dark { display: none; }
+    [data-theme="light"] .hero-logo img.logo-light { display: block; }
+    .hero-sub { font-size: 18px; color: var(--muted); max-width: 600px; line-height: 1.7; font-weight: 400; margin-bottom: 30px; }
+    .ver-track { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 40px; }
+    .ver-pill { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; padding: 5px 11px; border-radius: 3px; border: 1px solid var(--border); color: var(--dim); text-decoration: none; transition: all 0.2s; }
+    .ver-pill.done { color: rgba(168, 255, 62, 0.65); border-color: rgba(168, 255, 62, 0.22); }
+    .ver-pill.done:hover { color: var(--green); border-color: rgba(168, 255, 62, 0.42); background: rgba(168, 255, 62, 0.07); }
+    .ver-pill.now { color: var(--orange); border-color: rgba(245, 121, 42, 0.42); background: rgba(245, 121, 42, 0.08); }
+    .ver-arrow { color: var(--dim); font-size: 11px; }
 
-    /* ── HEADER ── */
-    .brand {
-      font-family: var(--display);
-      font-size: clamp(48px, 8vw, 72px);
-      font-weight: 700;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
+    .titleblock { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--border2); background: var(--surface); max-width: 620px; }
+    .titleblock div { padding: 12px 16px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+    .titleblock div:last-child { border-right: none; }
+    .titleblock .k { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
+    .titleblock .v { font-family: var(--syne); font-weight: 700; font-size: 12px; color: var(--text); }
 
-    .brand em {
-      font-style: italic;
-      color: var(--orange);
-    }
+    /* ── METRIC BAND ── */
+    .metric-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: 44px; border: 1px solid var(--border); }
+    .metric { background: var(--surface); padding: 24px 14px; text-align: center; position: relative; overflow: hidden; border-right: 1px solid var(--border); }
+    .metric:last-child { border-right: none; }
+    .metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent, var(--orange)); opacity: 0.9; }
+    .m-val { font-family: var(--mono); font-size: 30px; font-weight: 700; line-height: 1; margin-bottom: 9px; letter-spacing: -0.01em; }
+    .m-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); line-height: 1.4; }
 
-    .tagline {
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+    /* ── TIMELINE (the journey) ── */
+    .timeline { margin-top: 34px; position: relative; padding-left: 30px; }
+    .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--green), var(--orange)); opacity: 0.5; }
+    .tl-item { position: relative; display: block; padding: 0 14px 34px 8px; text-decoration: none; color: inherit; border-radius: 4px; transition: background 0.2s; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item:hover { background: var(--surface); }
+    .tl-dot { position: absolute; left: -30px; top: 3px; width: 12px; height: 12px; background: var(--bg); border: 2px solid var(--green); border-radius: 50%; }
+    .tl-item.now .tl-dot { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(245, 121, 42, 0.16); }
+    .tl-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 7px; flex-wrap: wrap; }
+    .tl-ver { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: var(--green); }
+    .tl-item.now .tl-ver { color: var(--orange); }
+    .tl-title { font-family: var(--syne); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+    .tl-badge { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 9px; border-radius: 3px; border: 1px solid rgba(168, 255, 62, 0.3); color: var(--green); }
+    .tl-item.now .tl-badge { border-color: rgba(245, 121, 42, 0.42); color: var(--orange); background: rgba(245, 121, 42, 0.07); }
+    .tl-body { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 400; max-width: 680px; }
+    .tl-body strong { color: var(--text); font-weight: 700; }
+    .tl-go { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 10px; transition: color 0.2s; }
+    .tl-item:hover .tl-go { color: var(--orange); }
 
-    .sub {
-      font-size: 16px;
-      color: var(--muted);
-      max-width: 560px;
-      line-height: 1.75;
-      font-weight: 300;
-      margin-bottom: 56px;
-    }
-
-    /* ── VERSION CHIP ── */
-    .version-chip {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--green);
-      background: rgba(92, 184, 122, 0.08);
-      border: 1px solid rgba(92, 184, 122, 0.25);
-      padding: 7px 16px;
-      border-radius: 100px;
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      text-decoration: none;
-      margin-bottom: 40px;
-      transition: all 0.2s;
-    }
-
-    .version-chip:hover {
-      background: rgba(92, 184, 122, 0.14);
-      border-color: rgba(92, 184, 122, 0.4);
-    }
-
-    /* ── DIVIDER ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--border2), transparent);
-      margin-bottom: 48px;
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 24px;
-    }
-
-    /* ── PHASE CARDS ── */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-    }
-
-    .card {
-      background: var(--glass);
-      border: 1px solid var(--border);
-      padding: 32px 28px;
-      text-decoration: none;
-      color: var(--text);
-      position: relative;
-      overflow: hidden;
-      transition: background 0.25s, border-color 0.25s, transform 0.25s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      opacity: 0.7;
-      transition: opacity 0.25s;
-    }
-
-    .card:hover {
-      background: var(--glass2);
-      border-color: var(--border2);
-      transform: translateY(-2px);
-    }
-
-    .card:hover::before {
-      opacity: 1;
-    }
-
-    /* Card accent lines */
-    .card-done::before {
-      background: linear-gradient(to right, var(--green), transparent);
-    }
-
-    .card-progress::before {
-      background: linear-gradient(to right, var(--orange), transparent);
-    }
-
-    .card-planned::before {
-      background: linear-gradient(to right, var(--grey), transparent);
-    }
-
-    /* ── FEATURED CARD (Version 5) ── */
-    .card-featured {
-      grid-column: 1 / -1;
-      background: rgba(92, 184, 122, 0.045);
-      border-color: rgba(92, 184, 122, 0.18);
-    }
-
-    .card-featured::before {
-      height: 2px;
-      opacity: 1;
-      background: linear-gradient(to right, var(--green), var(--orange), transparent);
-    }
-
-    .card-featured:hover {
-      background: rgba(92, 184, 122, 0.08);
-      border-color: rgba(92, 184, 122, 0.3);
-    }
-
-    .card-featured .card-title {
-      font-size: 30px;
-    }
-
-    .card-featured .card-desc {
-      max-width: 640px;
-    }
-
-    /* ── CARD CONTENT ── */
-    .card-phase {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      font-family: var(--display);
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      line-height: 1.15;
-      margin-bottom: 10px;
-    }
-
-    .card-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.7;
-      font-weight: 300;
-      margin-bottom: 16px;
-      flex: 1;
-    }
-
-    /* ── STATUS BADGES ── */
-    .status {
-      font-family: var(--mono);
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 100px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      width: fit-content;
-    }
-
-    .status-done {
-      color: var(--green);
-      background: rgba(92, 184, 122, 0.08);
-      border: 1px solid rgba(92, 184, 122, 0.2);
-    }
-
-    .status-progress {
-      color: var(--orange);
-      background: rgba(232, 134, 58, 0.08);
-      border: 1px solid rgba(232, 134, 58, 0.2);
-    }
-
-    .status-planned {
-      color: var(--grey);
-      background: rgba(240, 239, 232, 0.03);
-      border: 1px solid rgba(240, 239, 232, 0.08);
-    }
-
-    /* ── PULSING DOT ── */
-    .pulse-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--orange);
-      flex-shrink: 0;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.3;
-        transform: scale(0.6);
-      }
-    }
-
-    /* ── CHECK ICON ── */
-    .check-icon {
-      flex-shrink: 0;
-    }
-
-    /* ── CARD ARROW ── */
-    .card-arrow {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      color: var(--dim);
-      margin-top: 14px;
-      transition: color 0.2s;
-    }
-
-    .card:hover .card-arrow {
-      color: var(--orange);
-    }
+    /* ── EXPLORE LINKS ── */
+    .explore-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 34px; }
+    .explore-link { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--orange); background: rgba(245, 121, 42, 0.07); border: 1px solid rgba(245, 121, 42, 0.26); padding: 8px 13px; border-radius: 3px; text-decoration: none; transition: all 0.2s; }
+    .explore-link:hover { background: rgba(245, 121, 42, 0.15); border-color: rgba(245, 121, 42, 0.45); }
 
     /* ── FOOTER ── */
-    .footer {
-      margin-top: 64px;
-      text-align: center;
-    }
+    .foot { margin-top: 96px; padding-top: 30px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+    .foot-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .foot-link { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 7px 13px; border-radius: 3px; text-decoration: none; transition: all 0.2s; }
+    .foot-link:hover { color: var(--text); border-color: var(--border2); background: var(--surface); }
+    .foot-text { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
 
-    .footer-text {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--dim);
+    /* ── SCROLL REVEAL ── */
+    .js-anim .wrap > header, .js-anim .wrap > section, .js-anim .metric, .js-anim .tl-item {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1);
     }
+    .js-anim .in { opacity: 1 !important; transform: none !important; }
+    .count { font-variant-numeric: tabular-nums; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 700px) {
-      .wrap {
-        padding: 48px 20px 80px;
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .card-title {
-        font-size: 22px;
-      }
+    @media (max-width: 900px) {
+      .metric-row { grid-template-columns: repeat(3, 1fr); }
+      .metric:nth-child(3n) { border-right: none; }
+      .titleblock { grid-template-columns: repeat(2, 1fr); }
+      .titleblock div:nth-child(2) { border-right: none; }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 52px 18px 90px; }
+      section { margin-top: 66px; }
+      .metric-row { grid-template-columns: 1fr 1fr; }
+      .metric:nth-child(3n) { border-right: 1px solid var(--border); }
+      .metric:nth-child(2n) { border-right: none; }
+      .pnav-phases .pnav-btn:not(.active) { display: none; }
     }
 
-    /* ── ENTRANCE ANIMATION ── */
-    .card {
-      opacity: 0;
-      transform: translateY(16px);
-      animation: fadeIn 0.5s ease forwards;
-    }
-
-    .card:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    .card:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .card:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-
-    .card:nth-child(4) {
-      animation-delay: 0.4s;
-    }
-
-    .card:nth-child(5) {
-      animation-delay: 0.5s;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
+    @media (prefers-reduced-motion: reduce) {
+      .aura span, .spotlight { animation: none !important; }
+      .js-anim .wrap > header, .js-anim .wrap > section, .js-anim .metric, .js-anim .tl-item {
+        opacity: 1; transform: none; transition: none;
       }
     }
   </style>
@@ -467,107 +262,205 @@
 
 <body>
 
+  <div class="aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+  <nav class="pnav">
+    <a href="/" class="pnav-brand">
+      <img class="pnav-logo logo-dark" src="assets/logo/logo-reverse.png" alt="IndustrialBriefs">
+      <img class="pnav-logo logo-light" src="assets/logo/logo-color.png" alt="IndustrialBriefs">
+    </a>
+    <div class="pnav-phases">
+      <span class="pnav-btn active"><span class="pnav-dot"></span> Home</span>
+      <div class="pnav-sep"></div>
+      <a href="/phase1-masterplan.html" class="pnav-btn done">P1 — Strategy</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase3.1-ui-showcase.html" class="pnav-btn done">UI Showcase</a>
+      <div class="pnav-sep"></div>
+      <a href="/phase3.5-pipeline.html" class="pnav-btn done">Pipeline</a>
+      <div class="pnav-sep"></div>
+      <a href="/version5-platform.html" class="pnav-btn">P5 — Platform</a>
+    </div>
+    <div class="pnav-right">
+      <span class="pnav-rev">REV 5</span>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">☀️</button>
+    </div>
+  </nav>
+
   <div class="wrap">
 
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"
-      title="Toggle light/dark mode">☀️</button>
-    <div class="tagline">AI + ACEM News Platform</div>
-    <h1 class="brand">Industrial<em>Briefs</em></h1>
-    <p class="sub">The complete blueprint for an automated news intelligence platform — from strategy through AI agents,
-      website design, and production build.</p>
-    <a href="/version5-platform.html" class="version-chip">
-      <span class="pulse-dot"></span> Now on Version 5 — The Live Platform →
-    </a>
+    <!-- ══ HERO ══ -->
+    <header>
+      <div class="dwg-label">DWG. IB—INDEX · Phase Dashboard</div>
+      <a href="/version5-platform.html" class="hero-chip"><span class="pulse"></span> Phase 5 · Live &amp; Publishing</a>
+      <h1 class="hero-logo">
+        <img class="logo-dark" src="assets/logo/logo-reverse.png" alt="IndustrialBriefs">
+        <img class="logo-light" src="assets/logo/logo-color.png" alt="IndustrialBriefs">
+      </h1>
+      <p class="hero-sub">An automated newsroom for architecture, construction, engineering, manufacturing &amp; AI —
+        strategy through live agents, in one connected system.</p>
+      <div class="ver-track">
+        <a href="/phase1-masterplan.html" class="ver-pill done">v1 · Strategy</a><span class="ver-arrow">→</span>
+        <a href="/phase2-agents.html" class="ver-pill done">v2 · Agents</a><span class="ver-arrow">→</span>
+        <a href="/phase3-website.html" class="ver-pill done">v3 · Website</a><span class="ver-arrow">→</span>
+        <a href="/phase3.5-pipeline.html" class="ver-pill done">v4 · Pipeline Live</a><span class="ver-arrow">→</span>
+        <a href="/version5-platform.html" class="ver-pill now">p5 · Intelligence</a>
+      </div>
+      <div class="titleblock framed">
+        <div><span class="k">Project</span><span class="v">IndustrialBriefs</span></div>
+        <div><span class="k">Revision</span><span class="v">05 — Live</span></div>
+        <div><span class="k">Agents</span><span class="v">15 · 13 live</span></div>
+        <div><span class="k">Status</span><span class="v" style="color:var(--green)">● Publishing</span></div>
+      </div>
+    </header>
 
-    <div class="divider"></div>
-    <div class="section-label">Project Phases</div>
-
-    <div class="cards">
-
-      <!-- Version 5 — Live (featured, merges old Phase 2 + Phase 3) -->
-      <a href="/version5-platform.html" class="card card-featured" id="version5-card">
-        <div class="card-phase">Version 5 · Live</div>
-        <div class="card-title">AI Agents + Website — The Live Platform</div>
-        <div class="card-desc">The newsroom (16 AI agents) and the reader experience are now one connected system —
-          2,495+ articles published, 100% SEO coverage, 0 errors/24h. See the full workflow map, the version history,
-          and the new UI.</div>
-        <div class="status status-done">
-          <span class="pulse-dot"></span>
-          Live &amp; Publishing
-        </div>
-        <div class="card-arrow">View Version 5 →</div>
-      </a>
-
-      <!-- Phase 1 — Done -->
-      <a href="/phase1-masterplan.html" class="card card-done" id="phase1-card">
-        <div class="card-phase">Phase 01</div>
-        <div class="card-title">Strategy &amp; Master Plan</div>
-        <div class="card-desc">Complete technical blueprint — data pipeline architecture, tech stack selection, SEO
-          strategy, GPT-readable design, MCP server plan, and build roadmap.</div>
-        <div class="status status-done">
-          <span class="check-icon">✓</span>
-          Done
-        </div>
-        <div class="card-arrow">View Phase →</div>
-      </a>
-
-      <!-- Phase 3.1 — Done -->
-      <a href="/phase3.1-ui-showcase.html" class="card card-done" id="phase3-1-card">
-        <div class="card-phase">Phase 3.1</div>
-        <div class="card-title">UI Design Showcase</div>
-        <div class="card-desc">Interactive showcase of all platform UI designs — mobile app mockup, desktop redesign, and ACEM markets widget. Includes downloadable AI-executable design spec.</div>
-        <div class="status status-done">
-          <span class="check-icon">✓</span>
-          Done
-        </div>
-        <div class="card-arrow">View Phase →</div>
-      </a>
-
-      <!-- Phase 3.5 — In Progress -->
-      <a href="/phase3.5-pipeline.html" class="card card-progress" id="phase3-5-card">
-        <div class="card-phase">Phase 3.5</div>
-        <div class="card-title">Pipeline Live</div>
-        <div class="card-desc">AI newsroom fully automated — Scout, Writer &amp; Publisher agents running 24/7. 27 feeds, ~15 articles/day published directly to Ghost CMS.</div>
-        <div class="status status-progress">
-          <span class="pulse-dot"></span>
-          In Progress
-        </div>
-        <div class="card-arrow">View Phase →</div>
-      </a>
-
-      <!-- Phase 4 — Planned -->
-      <a href="/phase4-build.html" class="card card-planned" id="phase4-card">
-        <div class="card-phase">Phase 04</div>
-        <div class="card-title">Intelligence Upgrade</div>
-        <div class="card-desc">Advanced pipeline — trending clustering, 1,500-word long-form journalism, automated SEO Agent, regulatory intelligence, and LinkedIn distribution.</div>
-        <div class="status status-planned">
-          Planned
-        </div>
-        <div class="card-arrow">View Phase →</div>
-      </a>
-
+    <!-- ══ METRIC BAND ══ -->
+    <div class="metric-row">
+      <div class="metric" style="--accent:var(--orange)"><div class="m-val" style="color:var(--orange)"><span class="count" data-count="2900" data-comma="1">0</span><span style="font-size:20px">+</span></div><div class="m-label">Articles Published</div></div>
+      <div class="metric" style="--accent:var(--green)"><div class="m-val" style="color:var(--green)"><span class="count" data-count="99">0</span>%</div><div class="m-label">SEO Coverage</div></div>
+      <div class="metric" style="--accent:var(--cyan)"><div class="m-val" style="color:var(--cyan)"><span class="count" data-count="0">0</span></div><div class="m-label">Errors / 24h</div></div>
+      <div class="metric" style="--accent:var(--purple)"><div class="m-val" style="color:var(--purple)"><span class="count" data-count="15">0</span></div><div class="m-label">AI Agents</div></div>
+      <div class="metric" style="--accent:var(--yellow)"><div class="m-val" style="color:var(--yellow)"><span class="count" data-count="4.4" data-decimal="1">0</span>/5</div><div class="m-label">Content Quality</div></div>
+      <div class="metric" style="--accent:var(--orange)"><div class="m-val" style="color:var(--orange)"><span class="count" data-count="27">0</span></div><div class="m-label">Live Sources</div></div>
     </div>
 
-    <div class="footer">
-      <div class="footer-text">Industrial Briefs — Automated ACEM News Intelligence</div>
+    <!-- ══ THE JOURNEY ══ -->
+    <section>
+      <div class="eyebrow"><span class="fig">FIG.01</span> How it got built <span class="rule"></span></div>
+      <h2 class="sec-h">The journey to <em>IndustrialBriefs</em></h2>
+      <p class="sec-lead">Nothing here was built once and left alone. Every revision tightened the loop — from a
+        blank strategy doc to a newsroom that writes, edits, and publishes itself. Click any stage to open it.</p>
+
+      <div class="timeline">
+        <a href="/phase1-masterplan.html" class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V1</span><span class="tl-title">Strategy &amp; Master Plan</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The full blueprint — data-pipeline architecture, tech-stack decisions, SEO playbook,
+            GPT-readable design, and an MCP server plan. The map before the build.</div>
+          <div class="tl-go">View Phase 01 →</div>
+        </a>
+        <a href="/phase2-agents.html" class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V2</span><span class="tl-title">Agent Architecture</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The AI newsroom designed like a company — Scout, Writer, and Publisher as the core
+            worker agents, with a safety layer and clear hand-offs between them.</div>
+          <div class="tl-go">View Phase 02 →</div>
+        </a>
+        <a href="/phase3-website.html" class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V3</span><span class="tl-title">Website &amp; UI Locked</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The reader experience — modern dark theme, editorial type, mobile-first
+            navigation, hot-keyword highlighting, and the MCP connection panel.</div>
+          <div class="tl-go">View Phase 03 →</div>
+        </a>
+        <a href="/phase3.5-pipeline.html" class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">V4</span><span class="tl-title">Pipeline Live · 24/7</span><span class="tl-badge">Shipped</span></div>
+          <div class="tl-body">The switch flipped — Scout, Writer and Publisher running on their own around the
+            clock, publishing straight to Ghost. The plan became a working machine.</div>
+          <div class="tl-go">View Phase 3.5 →</div>
+        </a>
+        <a href="/version5-platform.html" class="tl-item now">
+          <div class="tl-dot"></div>
+          <div class="tl-head"><span class="tl-ver">P5</span><span class="tl-title">Intelligence Upgrade</span><span class="tl-badge">Now — In Progress</span></div>
+          <div class="tl-body">Where it stands today — automated <strong>SEO tagging</strong> and
+            <strong>contract intelligence</strong> are already live in production. Trend clustering and
+            long-form journalism are the current build target. 15 agents, 2,900+ articles, 0 errors a day.</div>
+          <div class="tl-go">View Phase 5 →</div>
+        </a>
+      </div>
+
+      <div class="explore-row">
+        <a href="/phase3.1-ui-showcase.html" class="explore-link">↗ UI Design Showcase</a>
+        <a href="/version5-platform.html" class="explore-link">↗ Full Platform Deep-Dive</a>
+        <a href="/phase4-build.html" class="explore-link">↗ Build Roadmap</a>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <div class="foot">
+      <div class="foot-links">
+        <a class="foot-link" href="/phase1-masterplan.html">P1 · Strategy</a>
+        <a class="foot-link" href="/version5-platform.html">P5 · Platform</a>
+        <a class="foot-link" href="/phase4-build.html">Roadmap</a>
+        <a class="foot-link" href="https://coral-app-74pa4.ondigitalocean.app/" target="_blank">Live Site ↗</a>
+      </div>
+      <div class="foot-text">Industrial Briefs — Automated ACEM News Intelligence</div>
     </div>
 
   </div>
 
   <script>
     (function () {
-      var saved = localStorage.getItem('bi-theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', saved);
-      var btn = document.getElementById('themeToggle');
-      if (btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';
-      function toggle() {
-        var cur = document.documentElement.getAttribute('data-theme');
-        var next = cur === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('bi-theme', next);
-        btn.textContent = next === 'light' ? '🌙' : '☀️';
+      var root = document.documentElement;
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ── theme toggle ──
+      var s = localStorage.getItem('bi-theme') || 'dark';
+      root.setAttribute('data-theme', s);
+      var b = document.getElementById('themeToggle');
+      if (b) {
+        b.textContent = s === 'light' ? '🌙' : '☀️';
+        b.onclick = function () {
+          var c = root.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', n);
+          localStorage.setItem('bi-theme', n);
+          b.textContent = n === 'light' ? '🌙' : '☀️';
+        };
       }
-      if (btn) btn.addEventListener('click', toggle);
+
+      // ── cursor spotlight (desktop, motion-ok) ──
+      var sp = document.getElementById('spotlight');
+      if (sp && !reduce && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+        addEventListener('pointermove', function (e) {
+          root.style.setProperty('--mx', e.clientX + 'px');
+          root.style.setProperty('--my', e.clientY + 'px');
+          sp.classList.add('on');
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () { sp.classList.remove('on'); });
+      }
+
+      // ── count-up ──
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+      function fmt(v, comma, decimal) {
+        if (decimal) return v.toFixed(decimal);
+        v = Math.round(v); return comma ? v.toLocaleString('en-US') : String(v);
+      }
+      function countUp(el) {
+        if (el.dataset.done) return; el.dataset.done = '1';
+        var target = parseFloat(el.getAttribute('data-count')) || 0, comma = el.getAttribute('data-comma') === '1';
+        var decimal = parseInt(el.getAttribute('data-decimal') || '0', 10);
+        if (reduce || target === 0) { el.textContent = fmt(target, comma, decimal); return; }
+        var dur = 1500, t0 = null;
+        function step(ts) { if (!t0) t0 = ts; var p = Math.min((ts - t0) / dur, 1); el.textContent = fmt(target * easeOut(p), comma, decimal); if (p < 1) requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      }
+
+      // ── scroll reveal + count trigger ──
+      var sel = '.wrap > header, .wrap > section, .metric, .tl-item';
+      var els = [].slice.call(document.querySelectorAll(sel));
+      var grid = /metric-row/;
+      els.forEach(function (el) {
+        var p = el.parentNode;
+        if (p && grid.test(p.className || '')) {
+          var i = [].slice.call(p.children).indexOf(el);
+          if (i > 0) el.style.transitionDelay = Math.min(i, 6) * 0.06 + 's';
+        }
+      });
+      function reveal(el) {
+        el.classList.add('in');
+        [].forEach.call(el.querySelectorAll('.count'), countUp);
+      }
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(reveal);
+        return;
+      }
+      function inView(el) { var r = el.getBoundingClientRect(); return r.top < innerHeight * 0.92 && r.bottom > 0; }
+      els.forEach(function (el) { if (inView(el)) reveal(el); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { reveal(en.target); io.unobserve(en.target); } });
+      }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (el) { if (!el.classList.contains('in')) io.observe(el); });
     })();
   </script>
 </body>
