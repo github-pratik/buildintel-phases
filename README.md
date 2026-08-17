@@ -25,13 +25,18 @@ A public documentation hub for the **industrialBriefs** project — an AI-powere
 | Phase | Title | Status | HTML | MD |
 |-------|-------|--------|------|----|
 | **P1** | Strategy & Master Plan | ✅ Done | [phase1-masterplan.html](https://coral-app-74pa4.ondigitalocean.app/phase1-masterplan.html) | [phase1-masterplan.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase1-masterplan.md) |
-| **P2** | AI Agent Architecture | 🟠 In Progress | [phase2-agents.html](https://coral-app-74pa4.ondigitalocean.app/phase2-agents.html) | [phase2-agents.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase2-agents.md) |
-| **P2.2** | Regulatory Automation | ✅ Done | [phase2.2-regulatory-automation.md](News-plan/phase2.2-regulatory-automation.md) |
-| **P5** | Visibility & Monetization | ✅ Done | [phase5-monetization-visibility.md](News-plan/phase5-monetization-visibility.md) |
-| **P-ALL** | **CONSOLIDATED ROADMAP** | 🚀 Ready | [ROADMAP-CONSOLIDATED.md](News-plan/ROADMAP-CONSOLIDATED.md) |
-| **P-BUILD** | **MASTER BUILD PLAN** | 🛠️ Active | [MASTER_BUILD_PLAN.md](News-plan/MASTER_BUILD_PLAN.md) |
-| **P3** | Website Design & UI | ⬜ Planned | [phase3-website.html](https://coral-app-74pa4.ondigitalocean.app/phase3-website.html) | [phase3-website.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase3-website.md) |
-| **P4** | Build & Execution | ⬜ Planned | [phase4-build.html](https://coral-app-74pa4.ondigitalocean.app/phase4-build.html) | [phase4-build.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase4-build.md) |
+| **P2** | AI Agent Architecture | ✅ Done | [phase2-agents.html](https://coral-app-74pa4.ondigitalocean.app/phase2-agents.html) | [phase2-agents.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase2-agents.md) |
+| **P2.2** | Regulatory Automation | ✅ Done | — | [phase2.2-regulatory-automation.md](News-plan/phase2.2-regulatory-automation.md) |
+| **P3** | Website Design & UI | ✅ Done | [phase3-website.html](https://coral-app-74pa4.ondigitalocean.app/phase3-website.html) | [phase3-website.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase3-website.md) |
+| **P3.1** | UI Design Showcase | ✅ Done | [phase3.1-ui-showcase.html](https://coral-app-74pa4.ondigitalocean.app/phase3.1-ui-showcase.html) | — |
+| **P3.5** | Pipeline Live · 24/7 | ✅ Done | [phase3.5-pipeline.html](https://coral-app-74pa4.ondigitalocean.app/phase3.5-pipeline.html) | — |
+| **P4** | Build & Execution Roadmap | ✅ Done | [phase4-build.html](https://coral-app-74pa4.ondigitalocean.app/phase4-build.html) | [phase4-build.md](https://raw.githubusercontent.com/github-pratik/industrialbriefs/master/phase4-build.md) |
+| **P5** | Intelligence Upgrade — **the live platform, current milestone** | 🟠 In Progress | [version5-platform.html](https://coral-app-74pa4.ondigitalocean.app/version5-platform.html) | — |
+| **P6** | Visibility & Monetization | ✅ Done | — | [phase5-monetization-visibility.md](News-plan/phase5-monetization-visibility.md)¹ |
+| **P-ALL** | **CONSOLIDATED ROADMAP** | 🚀 Ready | [ROADMAP-CONSOLIDATED.md](News-plan/ROADMAP-CONSOLIDATED.md) | — |
+| **P-BUILD** | **MASTER BUILD PLAN** | 🛠️ Active | [MASTER_BUILD_PLAN.md](News-plan/MASTER_BUILD_PLAN.md) | — |
+
+¹ filename kept as `phase5-monetization-visibility.md` for link stability — it's Phase 6 in the roadmap now that P5 refers to the live Intelligence Upgrade milestone.
 
 ---
 
@@ -74,24 +79,38 @@ Production build sequence:
 - Week-by-week milestones: infra → CMS → agents → website → newsletter → MCP → monetization
 - Target metrics: $109/mo ops cost, Day 90 Google News, 500+ subscribers Day 90
 
+### Phase 5 — Intelligence Upgrade (live platform, current milestone)
+Where the newsroom and the reader website merged into one running system:
+- 15 AI agents (13 live) — Scout, Writer, Publisher, SEO, Clustering, Fact Sheet, Content Intel, Contracts, and more
+- 2,900+ articles published autonomously, 99% SEO coverage, 0 errors/24h
+- Automated SEO tagging and contract intelligence already in production; trend clustering and long-form journalism are the current build target
+- See [version5-platform.html](https://coral-app-74pa4.ondigitalocean.app/version5-platform.html) for the full workflow map and metrics
+
 ---
 
 ## Design System
 
-All pages share a consistent dark glassmorphism design system:
+The homepage (`index.html`) runs a **retro-technical** design system — a blend of the Phase 1 doc's
+neon-on-black palette and the Version 5 platform page's technical/blueprint structure:
 
 | Token | Value |
 |-------|-------|
-| Background | `#0d0f14` |
-| Orange accent | `#e8863a` |
-| Teal accent | `#3ab8a0` |
-| Gold accent | `#d4a843` |
-| Blue accent | `#5b9bd5` |
-| Display font | Cormorant Garamond |
+| Background | `#0a0c10` |
+| Orange accent (primary/brand) | `#f5792a` |
+| Cyan accent | `#00d4ff` |
+| Green accent | `#a8ff3e` |
+| Yellow accent | `#ffd60a` |
+| Purple accent | `#b06eff` |
+| Display font | Syne |
+| Serif accent font | DM Serif Display (italic) |
 | Mono font | JetBrains Mono |
-| Body font | DM Sans |
 
-Pages support **light/dark mode** toggle (persisted in `localStorage`).
+Individual phase documents (`phase1-masterplan.html`, etc.) each carry their own bespoke design system —
+see each file's `<style>` block for its specific tokens.
+
+Pages support **light/dark mode** toggle (persisted in `localStorage`). The homepage uses the real
+IndustrialBriefs brand logo (`assets/logo/`), theme-swapped between the reverse (dark-mode) and
+color (light-mode) variants.
 
 ---
 
@@ -100,7 +119,7 @@ Pages support **light/dark mode** toggle (persisted in `localStorage`).
 - **Live site:** [DigitalOcean App Platform](https://coral-app-74pa4.ondigitalocean.app/) (`coral-app-74pa4.ondigitalocean.app`)
 - **Repos:** [github-pratik/industrialbriefs](https://github.com/github-pratik/industrialbriefs) (primary) · [visioneeritsolutions/industrialbriefs](https://github.com/visioneeritsolutions/industrialbriefs) (company org → DO deploy)
 - **Build:** Static HTML — no framework, no build step
-- **Fonts:** Google Fonts (Cormorant Garamond, JetBrains Mono, DM Sans)
+- **Fonts:** Google Fonts (homepage: Syne, DM Serif Display, JetBrains Mono; other pages: Cormorant Garamond, JetBrains Mono, DM Sans)
 - **Auto-deploy:** Push to `master` on the App Platform–connected GitHub repo triggers a new DigitalOcean deploy
 
 ---
@@ -109,16 +128,22 @@ Pages support **light/dark mode** toggle (persisted in `localStorage`).
 
 ```
 industrialbriefs/
-├── index.html              # Phase dashboard homepage
-├── phase1-masterplan.html  # Phase 1 interactive document
-├── phase1-masterplan.md    # Phase 1 AI memory file
-├── phase2-agents.html      # Phase 2 interactive document
-├── phase2-agents.md        # Phase 2 AI memory file
-├── phase3-website.html     # Phase 3 interactive document
-├── phase3-website.md       # Phase 3 AI memory file
-├── phase4-build.html       # Phase 4 interactive document
-├── phase4-build.md         # Phase 4 AI memory file
-└── vercel.json             # Optional — if using Vercel alongside DO (clean URLs, no-cache)
+├── index.html               # Phase dashboard homepage (retro/technical redesign)
+├── assets/logo/              # Real brand logo assets (reverse = dark mode, color = light mode)
+├── phase1-masterplan.html   # Phase 1 interactive document
+├── phase1-masterplan.md     # Phase 1 AI memory file
+├── phase2-agents.html       # Phase 2 interactive document
+├── phase2-agents.md         # Phase 2 AI memory file
+├── phase2.2-regulatory-automation.md
+├── phase3-website.html      # Phase 3 interactive document
+├── phase3-website.md        # Phase 3 AI memory file
+├── phase3.1-ui-showcase.html
+├── phase3.5-pipeline.html
+├── phase4-build.html        # Phase 4 interactive document
+├── phase4-build.md          # Phase 4 AI memory file
+├── phase5-monetization-visibility.md  # Phase 6 content — filename kept for link stability
+├── version5-platform.html   # Phase 5 — the live platform (current milestone)
+└── vercel.json               # Optional — if using Vercel alongside DO (clean URLs, no-cache)
 ```
 
 ---

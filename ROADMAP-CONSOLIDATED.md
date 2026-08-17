@@ -56,7 +56,7 @@ The core differentiators are **Accuracy**, **Regulatory Expertise**, and **AI-Re
 | **Phase 2.2** | **Accuracy & Policy** (WF6 + Fact-Check) | 🚨 High | GPT-4o |
 | **Phase 3.0** | **LLM-SEO & Machine Readiness** (JSON-LD + llms.txt) | 🟠 Med | GPT-4o-mini |
 | **Phase 4.0** | **Automated B2B Distribution** (LinkedIn Agent) | 🟠 Med | GPT-4o-mini |
-| **Phase 5.0** | **Monetization Layer** (Lead Gen + CTAs) | 🟢 Low | GPT-4o-mini |
+| **Phase 6.0** | **Monetization Layer** (Lead Gen + CTAs) | 🟢 Low | GPT-4o-mini |
 
 ---
 

@@ -1,4 +1,6 @@
-# IndustrialBriefs — Phase 5: Dual-Audience Visibility & Monetization Strategy
+# IndustrialBriefs — Phase 6: Dual-Audience Visibility & Monetization Strategy
+
+> Note: filename kept as `phase5-monetization-visibility.md` to avoid breaking existing links, but this is now Phase 6 in the roadmap — "Phase 5" refers to the live Intelligence Upgrade milestone (see [version5-platform.html](https://coral-app-74pa4.ondigitalocean.app/version5-platform.html)).
 **GPT Memory Context File | Created: April 2026**
 
 ---

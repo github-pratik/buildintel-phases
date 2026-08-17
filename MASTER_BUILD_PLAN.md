@@ -18,8 +18,8 @@ Transition IndustrialBriefs from a commodity RSS rewriter to a **High-Authority 
 | **2** | **Fact Extraction** | Data-dense synthesis | ⬜ Pending |
 | **3** | **Regulatory Intelligence** | Legal & Compliance deep-fetch | ⬜ Pending |
 | **4** | **Editorial Production** | Semafor-style longform + Fact-Check | ⬜ Pending |
-| **5** | **Growth & AI-SEO** | Schema.org + LinkedIn Automation | ⬜ Pending |
-| **6** | **Monetization Layer** | B2B Lead-Gen CTAs | ⬜ Pending |
+| **6** | **Growth & AI-SEO** | Schema.org + LinkedIn Automation | ⬜ Pending |
+| **7** | **Monetization Layer** | B2B Lead-Gen CTAs | ⬜ Pending |
 
 ---
 
@@ -91,7 +91,7 @@ Transition IndustrialBriefs from a commodity RSS rewriter to a **High-Authority 
 
 ---
 
-## 👁️ Phase 5: Visibility & Machine-Readiness (WF7)
+## 👁️ Phase 6: Visibility & Machine-Readiness (WF7)
 *Target: Be the primary citation for AI Agents.*
 
 ### 5.1: AI-SEO (Schema.org)
@@ -104,7 +104,7 @@ Transition IndustrialBriefs from a commodity RSS rewriter to a **High-Authority 
 
 ---
 
-## 💰 Phase 6: B2B Monetization Engine (WF8)
+## 💰 Phase 7: B2B Monetization Engine (WF8)
 *Target: Automated Lead-Generation.*
 
 ### 6.1: High-Intent Matching
